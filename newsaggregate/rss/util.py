@@ -1,0 +1,22 @@
+from urllib.parse import urljoin, urlparse
+import re
+from bs4 import BeautifulSoup
+from datetime import datetime
+import time
+
+class Utils:
+    def clean_link(url):
+        url = "http://" + url if not url.startswith("http") else url
+        return urljoin(url, urlparse(url).path)  
+    def clean_text(text):
+        parser = "html.parser"
+        text = BeautifulSoup(text, parser).get_text()
+        text = " ".join(text.split())
+        text = re.sub('[^A-Za-z0-9äöüß.,!?#+-]+', ' ', text)
+        return text
+    def clean_date(struct_date):
+        return datetime.fromtimestamp(time.mktime(struct_date))
+    def clean_date_string(datetime):
+        return datetime.strftime("%Y-%m-%d %H:%M:%S")
+    def clean_date_direct_string(struct_date):
+        return datetime.fromtimestamp(time.mktime(struct_date)).strftime("%Y-%m-%d %H:%M:%S")
