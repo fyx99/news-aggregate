@@ -1,5 +1,5 @@
 import unittest
-from newsaggregate.rss.articleprocessing import ArticleProcessing
+from newsaggregate.rss.articleprocessing import ArticleProcessing, ArticleProcessingManager
 
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from bs4 import BeautifulSoup
@@ -29,7 +29,7 @@ class TestHTMLCrawler(unittest.TestCase):
     </article></main></body>"""
 
 
-    test3 =  """<!DOCTYPE html><body><main><article>
+    test3 =  """<!DOCTYPE html><body><main><article><p>Veröffentlicht 2022-01-02</p>
     <p>Normal Text</p>
     <p>scamksackmsakcmlmkscamscmklö</p>
     <p>sa csakopcsa kcsakmopsca kcsapocsa csa</p>
@@ -44,19 +44,40 @@ class TestHTMLCrawler(unittest.TestCase):
     <div class="alaa"><span>Das ist recht 1234 unique </span><p>Das ist Werbung und unnötig</p></div>
     </article></main></body>"""
 
+    test5 = """<!DOCTYPE html><body><main><article><p>Veröffentlicht 2022-01-02</p>
+    <p>34r34r3f3 4 34 t3t 54 45 45 q  gt uz665 </p>
+    <p>unique sdöflmd dsm fds klfkdslfsd fnopsdfds foksd fklsd flk sdfklj sdf</p>
+    <p>N i ds jdsoi  ds üiodnd sdü äoin dsd säüdjjkk jö  oä jk dsft</p>
+    <div class="alaa"><span>Das ist recht 1234 unique </span><div class="test"><p>Das ist Werbung und unnötig</p></div></div>
+    </article></main></body>"""
+
+
     testsoup1 = BeautifulSoup(test1, "html.parser").find("article")
     testsoup2 = BeautifulSoup(test2, "html.parser").find("article")
     testsoup3 = BeautifulSoup(test3, "html.parser").find("article")
     testsoup4 = BeautifulSoup(test4, "html.parser").find("article")
+    testsoup5 = BeautifulSoup(test5, "html.parser").find("article")
         
     def test_compare_two_tags(self):
-        # res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup2, 0.8)
-        # print(res)
+        res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup2, 0.8)
         res = ArticleProcessing.compare_two_tags(self.testsoup3, self.testsoup4, 0.8)
         self.assertEqual(res[0][0], "div")
-        print(res)
-        # res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup4, 0.8)
-        # print(res)
+        res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup4, 0.8)
+        self.assertEqual(res[0][2], "Das ist Werbung und unnötig")
+        res = ArticleProcessing.compare_two_tags(self.testsoup4, self.testsoup5, 0.8)
+        self.assertEqual(res[0][1], """{"class": ["alaa"]}""")
+        res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup5, 0.8)
+        self.assertEqual(res[0][0], "p")
+
+        return
+
+    def test_compare_n_tags(self):
+        res = ArticleProcessing.compare_n_tags([self.testsoup1, self.testsoup2, self.testsoup4, self.testsoup3, self.testsoup5], n=100)
+
+
+
+
+        ArticleProcessingManager.main()
         return
     
 

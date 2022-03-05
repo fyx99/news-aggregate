@@ -1,4 +1,5 @@
 from newsaggregate.db.databaseinstance import DatabaseInterface
+import json
 
 class Article:
     url: str
@@ -17,9 +18,20 @@ def get_articles(db: DatabaseInterface):
     return [t[0] for t in rows]
 
 
-def get_random_articles(db: DatabaseInterface):
-    rows = db.db.query("SELECT id, url from Articles where RANDOM() < 0.1 LIMIT 100;", result=True)
+def get_random_articles(db: DatabaseInterface, limit=100):
+    rows = db.db.query(f"SELECT id, url from Articles where RANDOM() < 0.1 LIMIT {limit};", result=True)
     return rows
+
+def get_articles_for_reprocessing(db: DatabaseInterface):
+    rows = db.db.query("SELECT id, url from Articles where RANDOM() < 0.1 LIMIT 10;", result=True)
+    print(rows)
+    res = []
+    for row in rows:
+        #print(db.dl.get_json(f"testing/article_html/{row[0]}"))
+        jso = db.dl.get_json(f"testing/article_html/{row[0]}")
+        if jso:
+            res.append(jso["html"])
+    return res
 
 
 def save_rss_article(db: DatabaseInterface, rss_feed: str, url: str, title: str, summary: str, publish_date):
@@ -48,4 +60,12 @@ def set_article_status(db: DatabaseInterface, id: str, status: str):
 def refresh_articles_clean(db: DatabaseInterface):
     insert_sql = "REFRESH MATERIALIZED VIEW articles_clean";
     db.db.query(insert_sql)
+
+
+def save_unnecessary_text(db: DatabaseInterface, url_pattern, tag_name, tag_attrs, tag_text):
+    insert_sql = "INSERT INTO UnnecessaryText (url_pattern, tag_name, tag_attrs, tag_text) values (%s, %s, %s, %s)"
+    insert_data = (url_pattern, tag_name, tag_attrs, tag_text)
+    db.db.query(insert_sql, insert_data)
+
+
 
