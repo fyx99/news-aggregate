@@ -3,6 +3,7 @@ import unittest
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from bs4 import BeautifulSoup
 from newsaggregate.test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
+from newsaggregate.test.test_utils import mock_data
 
 
 class TestHTMLCrawler(unittest.TestCase):
@@ -44,16 +45,6 @@ class TestHTMLCrawler(unittest.TestCase):
         self.assertEqual(HTMLCrawler.get_json_plus_metadata(BeautifulSoup(text, "html.parser"))["description"], "The news2")
 
 
-    def mock_data(self, prefix, filetype=None):
-        if filetype == "html":
-            with open(f"newsaggregate/test/testdata/{prefix}.html") as htmlfile:
-                return htmlfile.read()
-        try:
-            with open(f"newsaggregate/test/testdata/{prefix}.txt") as txtfile, open(f"newsaggregate/test/testdata/{prefix}.html") as htmlfile:
-                return txtfile.read(), htmlfile.read()
-        except FileNotFoundError:
-            print("File not found")
-            return "", ""
 
     def test_article_location(self):
         text = """<!DOCTYPE html><p>Lonely P</p>"""
@@ -76,7 +67,7 @@ class TestHTMLCrawler(unittest.TestCase):
         self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "article")
         self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).attrs["class"], ["1"])
 
-        tag = HTMLCrawler.locate_article(BeautifulSoup(self.mock_data("ajz01", "html"), "html.parser"))
+        tag = HTMLCrawler.locate_article(BeautifulSoup(mock_data("ajz01", "html"), "html.parser"))
         self.assertEqual(tag.name, "main")
 
 
@@ -88,7 +79,7 @@ class TestHTMLCrawler(unittest.TestCase):
 
     def test_article_extraction(self):
         for _, prefix in MOCK_FILE_TO_ARTICLE_MAPPING.items():
-            txt, html = self.mock_data(prefix)
+            txt, html = mock_data(prefix)
             soup  = BeautifulSoup(html, "html.parser")
             article_text, _ = HTMLCrawler.parse_article(soup)
             self.assertEqual(txt, article_text, msg=f"Issue with {prefix}")

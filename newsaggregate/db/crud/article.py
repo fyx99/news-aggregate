@@ -23,15 +23,15 @@ def get_random_articles(db: DatabaseInterface, limit=100):
     return rows
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
-    rows = db.db.query("SELECT id, url from Articles where RANDOM() < 0.1 LIMIT 10;", result=True)
-    print(rows)
-    res = []
+    rows = db.db.query("SELECT id, url from Articles where RANDOM() < 0.1 LIMIT 100;", result=True)
+    article_html = []
     for row in rows:
-        #print(db.dl.get_json(f"testing/article_html/{row[0]}"))
-        jso = db.dl.get_json(f"testing/article_html/{row[0]}")
-        if jso:
-            res.append(jso["html"])
-    return res
+        try:
+            jso = db.dl.get_json(f"testing/article_html/{row[0]}")
+            article_html.append((*row, jso["html"])) if jso else 0
+        except:
+            print("Key")
+    return article_html
 
 
 def save_rss_article(db: DatabaseInterface, rss_feed: str, url: str, title: str, summary: str, publish_date):

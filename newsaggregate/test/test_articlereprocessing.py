@@ -3,6 +3,8 @@ from newsaggregate.rss.articleprocessing import ArticleProcessing, ArticleProces
 
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from bs4 import BeautifulSoup
+from newsaggregate.test.test_utils import test_data_func, first_child_n_deep
+
 
 
 class TestHTMLCrawler(unittest.TestCase):
@@ -63,24 +65,69 @@ class TestHTMLCrawler(unittest.TestCase):
         res = ArticleProcessing.compare_two_tags(self.testsoup3, self.testsoup4, 0.8)
         self.assertEqual(res[0][0], "div")
         res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup4, 0.8)
-        self.assertEqual(res[0][2], "Das ist Werbung und unnötig")
+        self.assertEqual(res[0][3], "Das ist Werbung und unnötig")
         res = ArticleProcessing.compare_two_tags(self.testsoup4, self.testsoup5, 0.8)
         self.assertEqual(res[0][1], """{"class": ["alaa"]}""")
         res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup5, 0.8)
         self.assertEqual(res[0][0], "p")
+        res = ArticleProcessing.compare_two_tags(self.testsoup1, self.testsoup1, 0.8)
+        self.assertEqual(res, [])
 
         return
 
     def test_compare_n_tags(self):
-        res = ArticleProcessing.compare_n_tags([self.testsoup1, self.testsoup2, self.testsoup4, self.testsoup3, self.testsoup5], n=100)
+        #res = ArticleProcessing.compare_n_tags([self.testsoup1, self.testsoup2, self.testsoup4, self.testsoup3, self.testsoup5], n=100)
 
 
-
-
-        ArticleProcessingManager.main()
+        
         return
     
 
+    def test_identifiable_child(self):
+
+        test_text1 = """<article><div><div></div><div><div class="unique"><p>Werbung</p></div></div></div></article>"""
+        soup1 = BeautifulSoup(test_text1, "html.parser")
+        res = ArticleProcessing.identifiable_child(first_child_n_deep(soup1, 2), soup1)
+        self.assertEqual(res.name, "div")
+        self.assertEqual(res.attrs["class"], ["unique"])
+        
+            
+        test_text2 = """<article><a><a></a><a><a class="unique"><p>Werbung</p></a></a></a></article>"""
+        soup2 = BeautifulSoup(test_text2, "html.parser")
+        res = ArticleProcessing.identifiable_child(first_child_n_deep(soup1, 2), soup2)
+        self.assertEqual(res.attrs, {})
+
+
+
+    def test_identifyable(self):
+        test_text1 = """<article><div><div><div class="unique"><p>Werbung</p></div></div></div></article>"""
+        soup1 = BeautifulSoup(test_text1, "html.parser")
+        self.assertFalse(ArticleProcessing.identifyable(first_child_n_deep(soup1, 2), soup1))
+        self.assertTrue(ArticleProcessing.identifyable(first_child_n_deep(soup1, 4), soup1))
+
+        test_text1 = """<article><div><div><div class="unique"><p>Werbung</p></div></div><script>3784h0f7ß4fnh3ß48f743f734ßf3498f734ßf34ß897fbn3489f34f7</script></div></article>"""
+        soup1 = BeautifulSoup(test_text1, "html.parser")
+        self.assertFalse(ArticleProcessing.identifyable(first_child_n_deep(soup1, 2), soup1))
+        self.assertTrue(ArticleProcessing.identifyable(first_child_n_deep(soup1, 4), soup1))
+
+
+
+
+
+    def test_compare_n(self):
+        data = [test_data_func(j) for j in ["sud01","sud02","sud03","sud04"]]
+        case1 = ArticleProcessing.compare_n_tags([BeautifulSoup(d, "html.parser").find("article") for d in [data[2], data[3]]], n=1)
+        self.assertEqual(len(case1), 3)
+        self.assertIn('Lesen Sie mehr zum Thema', [c[3] for c in case1])
+        self.assertIn('27. Februar 2022, 14:31 UhrLesezeit: 1 min', [c[3] for c in case1])
+        self.assertIn('FC Chelsea:Was hinter Abramowitschs Manöver stecktDer Klubeigentümer zieht sich beim FC Chelsea zurück - damit gelingt ihm offenbar ein geschickter strategischer Zug. Denn im Hintergrund droht ihm die Beschlagnahmung all seiner Klubanteile.', [c[3] for c in case1])
+
+
+        # case2 = ArticleProcessing.compare_n_tags([BeautifulSoup(d, "html.parser").find("article") for d in [data[0], data[1]]], n=1)
+
+        # print(case2)
+
+        case3 = ArticleProcessing.compare_n_tags([BeautifulSoup(d, "html.parser").find("article") for d in [data[0], data[3]]], n=1)
 
 
     def test_compare_index(self):
@@ -89,3 +136,8 @@ class TestHTMLCrawler(unittest.TestCase):
         self.assertTrue(a < 2 and b < 2)
         a, b = ArticleProcessing.compare_index(10)
         self.assertTrue(a + b > 0)
+
+
+
+if __name__ == "__main__":
+    ArticleProcessingManager.main()
