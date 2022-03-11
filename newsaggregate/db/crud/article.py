@@ -1,3 +1,4 @@
+from difflib import Match
 from newsaggregate.db.databaseinstance import DatabaseInterface
 import json
 
@@ -23,9 +24,24 @@ def get_random_articles(db: DatabaseInterface, limit=100):
     return rows
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
-    rows = db.db.query("SELECT id, url from Articles where RANDOM() < 0.1 LIMIT 100;", result=True)
+    rows = db.db.query("SELECT id, url from Articles limit 2000;", result=True)
     article_html = []
-    for row in rows:
+    for i, row in enumerate(rows):
+        if i % 20 == 0 and i != 0:
+            print(f"Loaded {i} from {len(rows)}")
+        try:
+            jso = db.dl.get_json(f"testing/article_html/{row[0]}")
+            article_html.append((*row, jso["html"])) if jso else 0
+        except:
+            print("Key")
+    return article_html
+
+def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
+    rows = [(i, "www.example.com") for i in ids]
+    article_html = []
+    for i, row in enumerate(rows):
+        if i % 20 == 0 and i != 0:
+            print(f"Loaded {i} from {len(rows)}")
         try:
             jso = db.dl.get_json(f"testing/article_html/{row[0]}")
             article_html.append((*row, jso["html"])) if jso else 0
@@ -62,10 +78,15 @@ def refresh_articles_clean(db: DatabaseInterface):
     db.db.query(insert_sql)
 
 
-def save_unnecessary_text(db: DatabaseInterface, url_pattern, tag_name, tag_attrs, tag_text):
-    insert_sql = "INSERT INTO UnnecessaryText (url_pattern, tag_name, tag_attrs, tag_text) values (%s, %s, %s, %s)"
-    insert_data = (url_pattern, tag_name, tag_attrs, tag_text)
+def save_unnecessary_text_pattern(db: DatabaseInterface, url_pattern, match: Match):
+    insert_sql = "INSERT INTO UnnecessaryText (url_pattern, tag_name, tag_attrs, tag_text) values (%s, %s, %s, %s) ON CONFLICT ON CONSTRAINT unique_constraint DO UPDATE SET tag_text = %s"
+    insert_data = (url_pattern, match.tag_name, match.tag_attrs, match.tag_text, match.tag_text)
     db.db.query(insert_sql, insert_data)
+
+def get_unnecessary_text_pattern(db: DatabaseInterface):
+    insert_sql = "SELECT tag_name, tag_attrs, tag_text from UnnecessaryText"
+    rows = db.db.query(insert_sql, result=True)
+    return rows
 
 
 

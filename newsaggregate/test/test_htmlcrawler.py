@@ -1,4 +1,5 @@
 import unittest
+from newsaggregate.rss.articleutils import locate_article
 
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from bs4 import BeautifulSoup
@@ -48,31 +49,31 @@ class TestHTMLCrawler(unittest.TestCase):
 
     def test_article_location(self):
         text = """<!DOCTYPE html><p>Lonely P</p>"""
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "[document]")
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).name, "[document]")
 
         
         text = """<!DOCTYPE html><main><p>Lonely P</p></main>"""
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "main")
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).name, "main")
 
         text = """<!DOCTYPE html><body><p>Lonely P</p></body>"""
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "body")
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).name, "body")
 
         text = """<!DOCTYPE html><body><main><p>Lonely P</p></main></body>"""
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "main")
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).name, "main")
 
         text = """<!DOCTYPE html><body><main><article><p>Lonely P</p></article></main></body>"""
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "article")
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).name, "article")
 
         text = """<!DOCTYPE html><body><div><article class="1"><p>300chars_12345678998234ß23874ß23974ß2374ß32ß4897ßj8TB0aGQQaXOGvjhBWJzGRWL1jhEk0YNiR9sUl0vyZ0q5U3SPpeZtL6P070AhJshDuiLgCzAn0PriU1kW6ZKFo5CJvSGTRG8LsSrk7yPZHll0GDVGHQF9f5mVvFtvUSnjVVujTT86hVZn2jaShQgYL9GN9iAMCIOIVhop3X4xXqBFAsJN3nEWPVB4RYdCT8iZUqTW7HfeP6wbv4sHbRu3JnXe473jR9w40FSIqTAUAxWmygF3yhJV6FUceUpP</p></article><article class="2"><p>Lonely P</p></article></div></body>"""
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).name, "article")
-        self.assertEqual(HTMLCrawler.locate_article(BeautifulSoup(text, "html.parser")).attrs["class"], ["1"])
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).name, "article")
+        self.assertEqual(locate_article(BeautifulSoup(text, "html.parser")).attrs["class"], ["1"])
 
-        tag = HTMLCrawler.locate_article(BeautifulSoup(mock_data("ajz01", "html"), "html.parser"))
+        tag = locate_article(BeautifulSoup(mock_data("ajz01", "html"), "html.parser"))
         self.assertEqual(tag.name, "main")
 
 
 
-        #print(HTMLCrawler.locate_article(BeautifulSoup(HTMLCrawler.get_html("https://www.sueddeutsche.de/meinung/krieg-ukraine-russland-kiew-waffen-1.5537278")[0], "html.parser")).name)
+        #print(locate_article(BeautifulSoup(HTMLCrawler.get_html("https://www.sueddeutsche.de/meinung/krieg-ukraine-russland-kiew-waffen-1.5537278")[0], "html.parser")).name)
 
 
 
@@ -81,9 +82,10 @@ class TestHTMLCrawler(unittest.TestCase):
         for _, prefix in MOCK_FILE_TO_ARTICLE_MAPPING.items():
             txt, html = mock_data(prefix)
             soup  = BeautifulSoup(html, "html.parser")
-            article_text, _ = HTMLCrawler.parse_article(soup)
+            article_text, _ = HTMLCrawler.parse_article(soup, "")
             self.assertEqual(txt, article_text, msg=f"Issue with {prefix}")
 
 
 
-        
+if __name__ =="__main__":
+    TestHTMLCrawler().test_article_extraction()

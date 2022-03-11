@@ -1,11 +1,22 @@
+from collections import defaultdict
 from bs4 import BeautifulSoup
 import requests
 import json
 from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import save_article, set_article_status
+from newsaggregate.db.crud.article import save_article, set_article_status, get_unnecessary_text_pattern
 from newsaggregate.db.databaseinstance import DatabaseInterface
+from newsaggregate.rss.articleprocessing import ArticleProcessing, Match
+from newsaggregate.rss.articleutils import locate_article
 
 class HTMLCrawler:
+
+    patterns = defaultdict(list)
+
+    def get_patterns(db):
+        patterns_list = get_unnecessary_text_pattern(db)
+        patterns = defaultdict(list)
+        [patterns[pattern[0]].append(Match(pattern[1], pattern[2])) for pattern in patterns_list]
+
     
     def get_html(url):
         try:
@@ -69,48 +80,16 @@ class HTMLCrawler:
         return HTMLCrawler.any_news_article(markups_flat)
 
     
-    def locate_article(soup):
-        #exactly one article
-        article_hits = soup.findAll("article")
-        if len(article_hits) == 1:
-            return article_hits[0]
-        #exactly one article in content
-        content = soup.find("div", {"class": "content"})
-        content_article_hits = content.findAll("article") if content else []
-        if len(content_article_hits) == 1:
-            return content_article_hits[0]
-        # #parent of h1
-        # content = soup.find("h1")
-
-        def most_text_paragraphs_in_articles(articles):
-            articles_char_len = [len(" ".join([p.get_text() for p in soup.findAll("p")])) for soup in articles]
-            if not len(articles_char_len):
-                return None, -1
-            index = articles_char_len.index(max(articles_char_len)) 
-            return articles[index], articles_char_len[index]
-        #only take longest text 
-        max_article, num_chars = most_text_paragraphs_in_articles(article_hits)
-        if len(article_hits) > 1 and num_chars > 300:
-            return max_article
-
-        #content
-        if content:
-            return content
-        #main
-        main = soup.find("main")
-        if main:
-            return main
-
-        #body
-        body = soup.find("body")
-        if body:
-            return body
+    def clean_unnecessary(soup, url):
+        for pattern in HTMLCrawler.patterns[ArticleProcessing.get_domain(url)]:
+            ps = soup.find_all(pattern.tag_name, attrs=pattern.tag_attrs)
+            [p.clear() for p in ps]
         return soup
-    
+        
 
-    def parse_article(soup):
-        article = HTMLCrawler.locate_article(soup)
-
+    def parse_article(soup, url):
+        article = locate_article(soup)
+        article = HTMLCrawler.clean_unnecessary(soup, url)
         if not article:
             raise Exception("No Article")
 
@@ -132,7 +111,7 @@ class HTMLCrawler:
             soup = BeautifulSoup(html, parser)
             markups = HTMLCrawler.get_json_plus_metadata(soup)
             meta = HTMLCrawler.get_metadata(html)
-            article_text, article_title = HTMLCrawler.parse_article(soup)
+            article_text, article_title = HTMLCrawler.parse_article(soup, url)
             save_article(db, job_id, markups, meta, html, article_text, article_title, status)
         except Exception as e:
             print("ERROR FOR " + url + " " + repr(e))    
