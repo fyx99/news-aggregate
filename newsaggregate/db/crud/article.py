@@ -1,6 +1,8 @@
-from difflib import Match
 from newsaggregate.db.databaseinstance import DatabaseInterface
 import json
+import re
+
+from newsaggregate.rss.articleutils import Match
 
 class Article:
     url: str
@@ -12,19 +14,22 @@ class Article:
 
 
 def hash_text(s):
-    return hash(s).to_bytes(8, "big", signed=True).hex()
+    #clean up before hash
+    s_clean = re.compile('[\W_]+').sub('', s)
+    return hash(s_clean).to_bytes(8, "big", signed=True).hex()
 
 def get_articles(db: DatabaseInterface):
     rows = db.db.query("SELECT url from Articles;", result=True)
     return [t[0] for t in rows]
 
 
-def get_random_articles(db: DatabaseInterface, limit=100):
+def get_random_articles(db: DatabaseInterface, limit=50):
     rows = db.db.query(f"SELECT id, url from Articles where RANDOM() < 0.1 LIMIT {limit};", result=True)
     return rows
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
-    rows = db.db.query("SELECT id, url from Articles limit 2000;", result=True)
+    #where feed = (select url from feeds order by random() limit 1)
+    rows = db.db.query("SELECT id, url from Articles where feed = (select url from feeds order by random() limit 1) limit 200;", result=True)
     article_html = []
     for i, row in enumerate(rows):
         if i % 20 == 0 and i != 0:
@@ -51,10 +56,10 @@ def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
 
 
 def save_rss_article(db: DatabaseInterface, rss_feed: str, url: str, title: str, summary: str, publish_date):
-    insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash) values (%s, %s, %s, %s, %s, %s) ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, publish_date = %s, title_hash = %s  RETURNING id"
+    insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, publish_date = %s, title_hash = %s  RETURNING id, status"
     insert_data = (rss_feed, url, title, summary[:5000], publish_date, hash_text(title), title, summary[:5000], publish_date, hash_text(title))
-    id = db.db.query(insert_sql, insert_data, result=True)[0][0]
-    return id
+    id, status = db.db.query(insert_sql, insert_data, result=True)[0]
+    return id, status
 
 def save_html_article(db: DatabaseInterface, id: str, amp_url: str, image_url: str, storage_key: str, status: str, title: str, text: str):
     insert_sql = "UPDATE Articles SET amp_url = %s, image_url = %s, storage_key = %s, status = %s, title = %s, text = %s, title_hash = %s WHERE id = %s";
@@ -79,12 +84,12 @@ def refresh_articles_clean(db: DatabaseInterface):
 
 
 def save_unnecessary_text_pattern(db: DatabaseInterface, url_pattern, match: Match):
-    insert_sql = "INSERT INTO UnnecessaryText (url_pattern, tag_name, tag_attrs, tag_text) values (%s, %s, %s, %s) ON CONFLICT ON CONSTRAINT unique_constraint DO UPDATE SET tag_text = %s"
-    insert_data = (url_pattern, match.tag_name, match.tag_attrs, match.tag_text, match.tag_text)
+    insert_sql = "INSERT INTO UnnecessaryText (url_pattern, tag_name, tag_attrs, tag_identifyable, tag_text) values (%s, %s, %s, %s, %s) ON CONFLICT ON CONSTRAINT unique_constraint DO UPDATE SET tag_identifyable = %s, tag_text = %s"
+    insert_data = (url_pattern, match.tag_name, match.tag_attrs, match.tag_identifyable, match.tag_text, match.tag_identifyable, match.tag_text)
     db.db.query(insert_sql, insert_data)
 
 def get_unnecessary_text_pattern(db: DatabaseInterface):
-    insert_sql = "SELECT tag_name, tag_attrs, tag_text from UnnecessaryText"
+    insert_sql = "SELECT url_pattern, tag_name, tag_attrs, tag_text, tag_identifyable from UnnecessaryText where tag_identifyable = 'TRUE'"
     rows = db.db.query(insert_sql, result=True)
     return rows
 

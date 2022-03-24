@@ -2,7 +2,7 @@ from newsaggregate.db.databaseinstance import DatabaseInterface
 
 
 def get_feeds(db: DatabaseInterface):
-    rows = db.db.query("SELECT url from Feeds;", result=True)
+    rows = db.db.query("SELECT url from Feeds limit 2;", result=True)
     return [t[0] for t in rows]
 
 

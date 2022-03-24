@@ -1,10 +1,13 @@
 import unittest
+from unittest import mock
+from newsaggregate.db.databaseinstance import DatabaseInterface
+from newsaggregate.rss.articleutils import Match
 from newsaggregate.rss.articleutils import locate_article
 
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from bs4 import BeautifulSoup
 from newsaggregate.test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
-from newsaggregate.test.test_utils import mock_data
+from newsaggregate.test.test_utils import get_datalake_test_data, mock_data
 
 
 class TestHTMLCrawler(unittest.TestCase):
@@ -86,6 +89,42 @@ class TestHTMLCrawler(unittest.TestCase):
             self.assertEqual(txt, article_text, msg=f"Issue with {prefix}")
 
 
+    def test_article_extraction_single(self):
+        html = get_datalake_test_data("3227205")
+        soup  = BeautifulSoup(html, "html.parser")
+        article_text, _ = HTMLCrawler.parse_article(soup, "")
+
+
+    def test_clean_unnecessary(self):
+        test5 = """<!DOCTYPE html><body><main><article><p>Veröffentlicht 2022-01-02</p>
+            <p>34r34r3f3 4 34 t3t 54 45 45 q  gt uz665 </p>
+            <div class="alaa">o<span>Das ist recht 1234 unique </span><div class="test"><p>Das ist Werbung und unnötig</p></div></div>
+            <p>unique sdöflmd dsm fds klfkdslfsd fnopsdfds foksd fklsd flk sdfklj sdf</p>
+            <p>N i ds jdsoi  ds üiodnd sdü äoin dsd säüdjjkk jö  oä jk dsft</p>
+            <div class="alaa">o<span>Das ist recht 1234 unique </span><div class="test"><p>Das ist Werbung und unnötig</p></div></div>
+            </article></main></body>"""
+        testsoup5 = BeautifulSoup(test5, "html.parser")
+        HTMLCrawler.patterns["example.com"] = [Match("div", {"class": "alaa"}, "", "txt", "TRUE")]
+
+        res = HTMLCrawler.clean_unnecessary(testsoup5, "http://example.com")
+        self.assertNotIn("Das ist recht 1234 unique", res.get_text())
+
+        testsoup5 = BeautifulSoup(test5, "html.parser")
+        res = HTMLCrawler.clean_unnecessary(testsoup5, "http://sub.example.com")
+        self.assertIn("Das ist recht 1234 unique", res.get_text())
+
+
+    @mock.patch('newsaggregate.rss.htmlcrawler.get_unnecessary_text_pattern', side_effect=lambda _: [("url_pattern1", "tag_name2", "{}", "tag_text", "true"), ("url_pattern4", "tag_name5", "{}", "tag_text", "true")])
+    def test_get_patterns(self, _):
+        HTMLCrawler.get_patterns(0)
+        print(HTMLCrawler.patterns)
+        self.assertEqual(len(HTMLCrawler.patterns.items()), 2)
+        patterns_for_one = HTMLCrawler.patterns["url_pattern1"]
+        self.assertEqual(len(patterns_for_one), 1)
+        self.assertEqual(patterns_for_one[0].tag_name, "tag_name2")
+        self.assertEqual(patterns_for_one[0].tag_text, "tag_text")
+        self.assertEqual(HTMLCrawler.patterns["url_pattern4"][0].tag_name, "tag_name5")
+
 
 if __name__ =="__main__":
-    TestHTMLCrawler().test_article_extraction()
+    TestHTMLCrawler().test_article_extraction_single()

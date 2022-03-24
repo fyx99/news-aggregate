@@ -7,6 +7,7 @@ import os
 if __name__ == '__main__':
 
     task = os.environ.get("TASK", default="RSS")
+    print(task)
     if task == "RSS":
         RssCrawlManager.main()
     elif task == "FEED":

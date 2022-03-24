@@ -36,3 +36,20 @@ def locate_article(soup):
     if body:
         return body
     return soup
+
+
+
+            
+class Match:
+    def __init__(self, tag_name, tag_attrs, tag_xpath="", tag_text="", tag_identifyable="TRUE"):
+        self.tag_name = tag_name
+        self.tag_attrs = tag_attrs
+        self.tag_text = tag_text
+        self.tag_xpath = tag_xpath
+        self.tag_identifyable = tag_identifyable
+    def __eq__(self, other):
+        return self.tag_name == other.tag_name and self.tag_attrs == other.tag_attrs
+    def __hash__(self):
+        return hash(self.tag_name + self.tag_attrs)
+    def __repr__(self) -> str:
+        return f"{self.tag_name} {self.tag_attrs} {self.tag_xpath} {self.tag_identifyable}"

@@ -26,14 +26,14 @@ class RSSCrawler:
             rss_texts_parsed = [feedparser.parse(text) for text in rss_texts]
             return rss_texts_parsed
         except Exception as e:
-            print(e)
-            
             traceback.print_exc()
             return []
     
     def get_entries(rss_parsed):
         entries = []
         for entry in rss_parsed.entries:
+            if "published_parsed" not in entry:
+                a = 1
             entries.append({field: entry[field] for field in ["title", "link", "id", "summary", "author", "published", "published_parsed"] if field in entry})
         return entries
     
@@ -48,9 +48,9 @@ class RSSCrawler:
     
     def save_entries(db: DatabaseInterface, entries: List[RssEntry], rss_feed: str):
         for entry in entries:
-            job_id = save_rss_article(db, rss_feed, entry["link"], entry["title"], entry["summary"], entry["published_parsed"])
+            job_id, article_status = save_rss_article(db, rss_feed, entry["link"], entry["title"], entry["summary"], entry["published_parsed"])
             db.dl.put_json(f"testing/article_rss/{job_id}", {"rss": {"url": entry["link"], "title": entry["title"], "summary": entry["summary"], "publish_date": entry["published"]}})
-            yield job_id
+            yield (job_id, article_status)
     
     def run_single(db: DatabaseInterface, rss_feed: str) -> List[RssEntry]:
         try:
@@ -59,11 +59,11 @@ class RSSCrawler:
                 raise Exception("Parse Feed return 0 Items")
             entries = RSSCrawler.get_entries(feed[0])
             clean_entries = RSSCrawler.clean_entries(entries)
-            ids = RSSCrawler.save_entries(db, clean_entries, rss_feed)
+            ids_statuses = RSSCrawler.save_entries(db, clean_entries, rss_feed)
             save_feed_last_crawl(db, rss_feed)
-            return clean_entries, ids
+            return clean_entries, ids_statuses
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             return [], []
         
 

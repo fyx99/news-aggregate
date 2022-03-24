@@ -11,6 +11,6 @@ CMD [ "python3", "-m", "unittest"]
 
 FROM base as final
 COPY . .
-CMD [ "python3", "-m", "main"]
+CMD [ "python3", "-u", "-m", "main"]
 
 

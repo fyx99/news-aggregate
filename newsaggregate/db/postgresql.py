@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2 import sql, InterfaceError
 import traceback
 from newsaggregate.db.config import CONNECTION_DETAILS
-from psycopg2.errors import UniqueViolation, AdminShutdown
+from psycopg2.errors import UniqueViolation, AdminShutdown, OperationalError
 
 class Database:
     connection = None
@@ -46,7 +46,9 @@ class Database:
             if result:
                 rows = cursor.fetchall()
             cursor.close()
-        except (InterfaceError, AdminShutdown) as e:
+        except (InterfaceError, AdminShutdown, OperationalError) as e:
+            print(sql, data)
+            print(traceback.print_exc(), flush=True)
             print(e.pgcode)
             if self.closed != 0:
                 self.connect()

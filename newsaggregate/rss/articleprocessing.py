@@ -11,7 +11,7 @@ from collections import defaultdict
 import difflib
 from urllib.parse import urlparse
 from newsaggregate.db.postgresql import Database
-from newsaggregate.rss.articleutils import locate_article
+from newsaggregate.rss.articleutils import Match, locate_article
 from newsaggregate.storage.s3 import Datalake
 from collections import Counter
 
@@ -41,19 +41,6 @@ class ArticleProcessingManager:
             print("got patterns")
             ArticleProcessingManager.save_patterns(di, url_text_pattern)
             print("saved pattern")
-            
-class Match:
-    def __init__(self, tag_name, tag_attrs, tag_xpath="", tag_text=""):
-        self.tag_name = tag_name
-        self.tag_attrs = tag_attrs
-        self.tag_text = tag_text
-        self.tag_xpath = tag_xpath
-    def __eq__(self, other):
-        return self.tag_name == other.tag_name and self.tag_attrs == other.tag_attrs
-    def __hash__(self):
-        return hash(self.tag_name + self.tag_attrs)
-    def __repr__(self) -> str:
-        return self.tag_name + self.tag_attrs + self.tag_xpath
 
 class ArticleProcessing:
 
@@ -123,14 +110,17 @@ class ArticleProcessing:
 
     def identifiable_child(element, test_soup):
         identifiable_child = element
+        if "Selenskyj rief die Bürger in einer Rede nun dazu auf, weiter Widerstand" in element.get_text():
+            a = 1
         while not ArticleProcessing.identifyable(identifiable_child, test_soup) and ArticleProcessing.get_children(identifiable_child):
             biggest_child = None
             for child in ArticleProcessing.get_children(identifiable_child):
                 biggest_child = child if not biggest_child or (len(biggest_child.get_text()) < len(child.get_text()) and not child.name in ["script", "style"]) else biggest_child
             if not biggest_child:
-                return identifiable_child
+                return identifiable_child, ArticleProcessing.identifyable(identifiable_child, test_soup)
             identifiable_child = biggest_child
-        return identifiable_child
+        # if result element is not identifyable return false -> save as that
+        return identifiable_child, (ArticleProcessing.identifyable(identifiable_child, test_soup) or identifiable_child.attrs != {})
         
 
     def compare_index(length):
@@ -163,8 +153,8 @@ class ArticleProcessing:
         return filtered_matches
 
 
-    def element_saveable(element):
-        return Match(element.name, json.dumps(element.attrs), ArticleProcessing.xpath_soup(element), re.sub('\s+',' ', element.get_text())[:1000])
+    def element_saveable(element, identifyable):
+        return Match(element.name, json.dumps(element.attrs), ArticleProcessing.xpath_soup(element), re.sub('\s+',' ', element.get_text())[:1000], str(identifyable).upper())
         
 
     def too_similar(txt1, txt2):
@@ -174,7 +164,7 @@ class ArticleProcessing:
         return ratio > 0.96
 
 
-    def compare_two_tags(soup1, soup2, min_ratio=0.8):
+    def compare_two_tags(soup1, soup2, min_ratio=0.8, min_len=5, allow_sampling=True):
         p_list1 = [p for p in soup1.findAll("p")]
         p_list2 = [p for p in soup2.findAll("p")]
         matches = []
@@ -194,16 +184,17 @@ class ArticleProcessing:
 
         for t1 in p_list1:
             for t2 in p_list2:
-                if not sampling_factor or random() < sampling_factor:
+                if not allow_sampling or not sampling_factor or random() < sampling_factor:
                     start = time.time()
-                    sq = difflib.SequenceMatcher(None, t1.get_text(), t2.get_text())
-                    if sq.ratio() < min_ratio:
+                    t1_txt, t2_txt = t1.get_text(), t2.get_text()
+                    sq = difflib.SequenceMatcher(None, t1_txt, t2_txt)
+                    if sq.ratio() < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
                         #print(time.time()-start)
                         continue
                     useless_parent = ArticleProcessing.identify_useless_parent(t1, t2)
                     if useless_parent:
-                        useless_parent = ArticleProcessing.identifiable_child(useless_parent, soup2)
-                        matches.append(ArticleProcessing.element_saveable(useless_parent))
+                        useless_parent, identifyable = ArticleProcessing.identifiable_child(useless_parent, soup2)
+                        matches.append(ArticleProcessing.element_saveable(useless_parent, identifyable))
                     print(time.time()-start)
         return matches
 
@@ -246,8 +237,16 @@ class ArticleProcessing:
             if len(articles_list) > 5:
                 
                 start = time.time()
-                res[publisher] = ArticleProcessing.compare_n_tags(articles_list, min(len(articles_list) * 2, 20)) 
+                res[publisher] = ArticleProcessing.compare_n_tags(articles_list, min(len(articles_list) * 2, 1000)) 
                 print(f"{publisher} {time.time()-start}")
 
 
         return res
+
+
+
+    
+if __name__ == "__main__":
+    ArticleProcessingManager.main()
+
+        

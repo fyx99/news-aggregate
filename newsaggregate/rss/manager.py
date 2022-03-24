@@ -6,6 +6,7 @@ from newsaggregate.rss.rsscrawler import RSSCrawler
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from queue import Queue
 import threading
+import random
 
 from newsaggregate.storage.s3 import Datalake
 
@@ -31,12 +32,14 @@ class Manager:
             worker = threading.Thread(target=Manager.process, args=(db,))
             worker.start()
         Manager.q.join()
+        print("ALL JOINED")
 
     def process(db):
         while not Manager.empty():# and not Manager.timeout():
             job = Manager.q.get()
             RssCrawlManager.process_job(db, job)
             Manager.q.task_done()
+        print(f"{threading.get_ident()} DONE")
 
 
 RSS_CRAWL = "RSS_CRAWL"
@@ -68,7 +71,14 @@ class RssCrawlManager:
     def process_job(db: DatabaseInterface, job):
         if job["job_type"] == RSS_CRAWL:
             results, ids = RSSCrawler.run_single(db, job["link"])
-            for item, article_id in zip(results, ids):
+            print(len(results))
+            for item, article_id_status in zip(results, ids):
+                article_id, article_status = article_id_status
+                if article_status != "CRAWL":
+                    if random.random() > 0.2:
+                        continue
+                else:
+                    a = 1
                 Manager.add_job(
                     {"job_type": HTML_CRAWL, "link": item["link"], "article_id": article_id}
                 )
