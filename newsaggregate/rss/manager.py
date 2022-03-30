@@ -12,7 +12,7 @@ from newsaggregate.storage.s3 import Datalake
 
 
 class Manager:
-    q = Queue(maxsize=3000)
+    q = Queue()
 
     def add_job(job):
         Manager.q.put(job)
@@ -23,11 +23,7 @@ class Manager:
     def empty():
         return Manager.q.empty()
 
-    # def timeout():
-    #     return time.time() < (Manager.start_time + TIMEOUT)
-
     def run(db):
-        #Manager.start_time = time.time()
         for _ in range(10):
             worker = threading.Thread(target=Manager.process, args=(db,))
             worker.start()
@@ -35,7 +31,7 @@ class Manager:
         print("ALL JOINED")
 
     def process(db):
-        while not Manager.empty():# and not Manager.timeout():
+        while not Manager.empty():
             job = Manager.q.get()
             RssCrawlManager.process_job(db, job)
             Manager.q.task_done()
@@ -75,14 +71,16 @@ class RssCrawlManager:
             for item, article_id_status in zip(results, ids):
                 article_id, article_status = article_id_status
                 if article_status != "CRAWL":
-                    if random.random() > 0.2:
-                        continue
-                else:
-                    a = 1
+                    # if random.random() > 0.2:
+                    #     continue
+                    pass
+
                 Manager.add_job(
                     {"job_type": HTML_CRAWL, "link": item["link"], "article_id": article_id}
                 )
+            print(f"SIZE {Manager.q.qsize()}")
         elif job["job_type"] == HTML_CRAWL:
+            print(f"SIZE {Manager.q.qsize()}")
             HTMLCrawler.run_single(db, job["link"], job["article_id"])
         print("RAN JOB " + job["job_type"] + " " + job["link"])
 

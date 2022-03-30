@@ -12,6 +12,7 @@ import difflib
 from urllib.parse import urlparse
 from newsaggregate.db.postgresql import Database
 from newsaggregate.rss.articleutils import Match, locate_article
+from newsaggregate.rss.util import Utils
 from newsaggregate.storage.s3 import Datalake
 from collections import Counter
 
@@ -44,11 +45,16 @@ class ArticleProcessingManager:
 
 class ArticleProcessing:
 
+    def get_text_no_script(tag):
+        scripts = tag.findAll("script") + tag.findAll("style")
+        [s.clear() for s in scripts]
+        return tag.get_text()
+
     def xpath_soup(element):
 
         components = []
         child = element if element.name else element.parent
-        for parent in child.parents:  # type: bs4.element.Tag
+        for parent in child.parents:
             siblings = parent.find_all(child.name, recursive=False)
             components.append(
                 child.name if 1 == len(siblings) else '%s[%d]' % (
@@ -78,7 +84,7 @@ class ArticleProcessing:
         parent1 = tag1
         parent2 = tag2
         parent1_text, parent2_text = parent1.get_text(), parent2.get_text()
-        res_element = tag1
+        result_elements = tag1, tag2
         while parent1 and parent2 and  parent1.parent and parent2.parent and difflib.SequenceMatcher(None, parent1_text, parent2_text).ratio() > 0.8:
             # my_print(f"Ratio: {difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio()}")
             # my_print(f"Parent1: {parent1.name}, {parent1.attrs}")
@@ -86,7 +92,7 @@ class ArticleProcessing:
 
             if parent1.name == parent2.name:
                 #my_print("hit")
-                res_element = parent1
+                result_elements = parent1, parent2
 
             parent1, parent2, = parent1.parent, parent2.parent
             parent1_text, parent2_text = parent1.get_text(), parent2.get_text()
@@ -102,7 +108,7 @@ class ArticleProcessing:
                     parent1_text = parent1.get_text()
             # my_print(difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio())
             # my_print(len(parent1.parent.get_text()) , len(parent1.get_text()) , len(parent2.parent.get_text()) , len(parent2.get_text()))
-        return res_element
+        return result_elements
     
     def get_children(element, only_tags=True):
         return [c for c in element.children if only_tags and type(c) == Tag]
@@ -149,7 +155,6 @@ class ArticleProcessing:
 
         match_unique_counts = Counter(matches)
         filtered_matches = [match for match, count in match_unique_counts.items() if count >= match_min_occurence]
-        #print(filtered_matches)
         return filtered_matches
 
 
@@ -161,7 +166,7 @@ class ArticleProcessing:
         ratio = difflib.SequenceMatcher(None, txt1, txt2).ratio()
         if len(txt1) > 1500 or len(txt2) > 1500:
             return ratio > 0.75
-        return ratio > 0.96
+        return ratio > 0.8
 
 
     def compare_two_tags(soup1, soup2, min_ratio=0.8, min_len=5, allow_sampling=True):
@@ -173,7 +178,11 @@ class ArticleProcessing:
         # print("".join([p.get_text() for p in p_list2]))
         full_text1 = "".join([p.get_text() for p in p_list1])
         full_text2 = "".join([p.get_text() for p in p_list2])
+        if "€ 19,99 pro Monat" in full_text1 and "€ 19,99 pro Monat" in full_text2:
+            print("pay")
+            a = 1
         if ArticleProcessing.too_similar(full_text1, full_text2):
+            print("skip")
             return []
 
         # if too many entrys just random samples
@@ -191,53 +200,44 @@ class ArticleProcessing:
                     if sq.ratio() < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
                         #print(time.time()-start)
                         continue
-                    useless_parent = ArticleProcessing.identify_useless_parent(t1, t2)
-                    if useless_parent:
-                        useless_parent, identifyable = ArticleProcessing.identifiable_child(useless_parent, soup2)
-                        matches.append(ArticleProcessing.element_saveable(useless_parent, identifyable))
+                    useless_parent1, useless_parent2 = ArticleProcessing.identify_useless_parent(t1, t2)
+                    if "data-article-el" in useless_parent1.attrs and (useless_parent1.attrs["data-article-el"][0] in [ "body"] or useless_parent1.attrs["data-article-el"] == "body"):
+                        a = 1
+                    if useless_parent1 and useless_parent2:
+                        useless_parent_id_child1, identifyable1 = ArticleProcessing.identifiable_child(useless_parent1, soup2)
+                        #useless_parent_id_child2, identifyable2 = ArticleProcessing.identifiable_child(useless_parent2, soup1)
+
+                        matches.append(ArticleProcessing.element_saveable(useless_parent_id_child1, identifyable1))
                     print(time.time()-start)
         return matches
 
-    def get_domain(url):
-        return urlparse(url).netloc.replace("www.", "")
+
+    # def clean_attrs_from_individuals(tag, ref_tag):
+    #     if tag.name == ref_tag.name:
+            
+
+    #     return tag.attrs
 
 
-    # def reprocess_article_unnecessary_tags(articles_sampled):
-    #     # returns list of identifications for unnecessary tags
 
 
-    #     #articles_sampled = [(e[13], e[1]) for e in data]
-    #     articles_publisher = defaultdict(list)
-
-    #     for article in articles_sampled:
-    #         articles_publisher[ArticleProcessing.get_domain(article[1])].append(article[2])
-
-    #     #new_list = articles_publisher.values()
-        
-    #     res = { publisher: ArticleProcessing.compare_n_tags([BeautifulSoup(e, "html.parser") for e in articles_list], len(articles_list) * 2) for publisher, articles_list in articles_publisher.items() if len(articles_list) > 1}
-        
-    #     return res
 
 
     def reprocess_article_unnecessary_tags(articles_sampled):
         # returns list of identifications for unnecessary tags
 
-
-        #articles_sampled = [(e[13], e[1]) for e in data]
         articles_publisher = defaultdict(list)
 
         for article in articles_sampled:
-            articles_publisher[ArticleProcessing.get_domain(article[1])].append(article)
-
-        #new_list = articles_publisher.values()
+            articles_publisher[Utils.get_domain(article[1])].append(article)
 
         print(f"start with {len(articles_publisher.keys())} groups")
         res = {}
         for publisher, articles_list in articles_publisher.items():
-            if len(articles_list) > 5:
+            if len(articles_list) > 20:
                 
                 start = time.time()
-                res[publisher] = ArticleProcessing.compare_n_tags(articles_list, min(len(articles_list) * 2, 1000)) 
+                res[publisher] = ArticleProcessing.compare_n_tags(articles_list, min(len(articles_list) * 2, 1000), 5) 
                 print(f"{publisher} {time.time()-start}")
 
 

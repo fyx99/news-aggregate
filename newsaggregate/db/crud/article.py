@@ -29,7 +29,7 @@ def get_random_articles(db: DatabaseInterface, limit=50):
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
     #where feed = (select url from feeds order by random() limit 1)
-    rows = db.db.query("SELECT id, url from Articles where feed = (select url from feeds order by random() limit 1) limit 200;", result=True)
+    rows = db.db.query("SELECT id, url from Articles where feed = (select url from feeds order by random() limit 1) limit 150;", result=True)
     article_html = []
     for i, row in enumerate(rows):
         if i % 20 == 0 and i != 0:

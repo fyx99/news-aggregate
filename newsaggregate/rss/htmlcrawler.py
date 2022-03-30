@@ -10,6 +10,10 @@ from newsaggregate.rss.articleprocessing import ArticleProcessing
 from newsaggregate.rss.articleutils import locate_article, Match
 import time
 import threading
+import urllib.request
+
+from newsaggregate.rss.util import Utils
+
 
 class HTMLCrawler:
 
@@ -28,6 +32,15 @@ class HTMLCrawler:
             return res.text, "INACTIVE"
         except:
             return "", "INACTIVE"
+
+    def get_url_status_code(url):
+        try:
+            res = urllib.request.urlopen(url, timeout=HTTP_TIMEOUT).getcode()
+            if res == 200:
+                return "ACTIVE"
+            return "INACTIVE"
+        except:
+            return "INACTIVE"
 
     
     def find_tag_with_names(tag, names):
@@ -83,7 +96,7 @@ class HTMLCrawler:
 
     
     def clean_unnecessary(soup, url):
-        for pattern in HTMLCrawler.patterns[ArticleProcessing.get_domain(url)]:
+        for pattern in HTMLCrawler.patterns[Utils.get_domain(url)]:
             if pattern.tag_identifyable == "TRUE":
                 ps = soup.find_all(pattern.tag_name, attrs=pattern.tag_attrs)
                 [p.clear() for p in ps]
@@ -121,16 +134,18 @@ class HTMLCrawler:
             markups = HTMLCrawler.get_json_plus_metadata(soup)
             meta = HTMLCrawler.get_metadata(html)
 
-            _, img_status = HTMLCrawler.get_html(meta["image_url"])
+            article_text, article_title = HTMLCrawler.parse_article(soup, url)
+            parse_html_time = time.time() - start - get_html_time
+
+            img_status = HTMLCrawler.get_url_status_code(meta["image_url"])
             if img_status == "INACTIVE":
                 print(f"INACTIVE IMAGE {url}")
                 return set_article_status(db, job_id, status)
 
-            article_text, article_title = HTMLCrawler.parse_article(soup, url)
-            parse_html_time = time.time() - start - get_html_time
+            img_html_time = time.time() - start - get_html_time - parse_html_time
             save_article(db, job_id, markups, meta, html, article_text, article_title, status)
-            save_article_time = time.time() - start - parse_html_time - get_html_time
-            print(f"{threading.get_ident()}: get_html_time {get_html_time} parse_html_time {parse_html_time} save_article_time {save_article_time}", flush=True)
+            save_article_time = time.time() - start - parse_html_time - get_html_time - img_html_time
+            print(f"{threading.get_ident()}: {get_html_time=} {parse_html_time=} {img_html_time=} {save_article_time=}", flush=True)
         except Exception as e:
             print("ERROR FOR " + url + " " + repr(e)) 
             print(traceback.format_exc())   

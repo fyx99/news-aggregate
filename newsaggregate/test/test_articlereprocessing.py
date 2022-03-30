@@ -3,6 +3,7 @@ from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.rss.articleprocessing import ArticleProcessing, ArticleProcessingManager
 
 from bs4 import BeautifulSoup
+from newsaggregate.rss.util import Utils
 from newsaggregate.storage.s3 import Datalake
 from newsaggregate.test.test_utils import test_data_func, first_child_n_deep, get_datalake_test_data
 from newsaggregate.rss.articleutils import locate_article
@@ -121,24 +122,24 @@ class TestArticleProcessing(unittest.TestCase):
 
     def test_identify_useless_parent(self):
         parent = ArticleProcessing.identify_useless_parent(self.testsoup3.find_all("p")[-1], self.testsoup4.find_all("p")[-1])
-        self.assertEqual(parent.name, "div")
-        self.assertEqual(parent.attrs["class"], ["alaa"])
+        self.assertEqual(parent[0].name, "div")
+        self.assertEqual(parent[0].attrs["class"], ["alaa"])
         parent = ArticleProcessing.identify_useless_parent(self.testsoup3.find_all("p")[-1], self.testsoup5.find_all("p")[-1])
-        self.assertEqual(parent.name, "div")
-        self.assertEqual(parent.attrs["class"], ["alaa"])
+        self.assertEqual(parent[0].name, "div")
+        self.assertEqual(parent[0].attrs["class"], ["alaa"])
         parent = ArticleProcessing.identify_useless_parent(self.testsoup3.find_all("p")[-2], self.testsoup5.find_all("p")[-1])
-        self.assertEqual(parent.name, "p")
+        self.assertEqual(parent[0].name, "p")
         parent = ArticleProcessing.identify_useless_parent(self.testsoup3.find("span"), self.testsoup5.find_all("p")[-1])
-        self.assertEqual(parent.name, "span")
+        self.assertEqual(parent[0].name, "span")
         parent = ArticleProcessing.identify_useless_parent(self.testsoup1.find_all("p")[-1], self.testsoup5.find_all("p")[-1])
-        self.assertEqual(parent.name, "p")
+        self.assertEqual(parent[0].name, "p")
         parent = ArticleProcessing.identify_useless_parent(self.testsoup1.find_all("p")[-1], self.testsoup5.parent.parent.parent)
-        self.assertEqual(parent.name, "p")
+        self.assertEqual(parent[0].name, "p")
 
 
 
     def test_compare_n(self):
-        data = [test_data_func(j) for j in ["sud01","sud02","sud03","sud04", "sud05", "sud06", "tag03", "tag04"]]
+        data = [test_data_func(j + ".html") for j in ["sud01","sud02","sud03","sud04", "sud05", "sud06", "tag03", "tag04"]]
         articles_list = [("", "", data[2]), ("", "", data[3])]
         case1 = ArticleProcessing.compare_n_tags(articles_list, n=1, match_min_occurence=0)
         self.assertEqual(len(case1), 3)
@@ -185,8 +186,8 @@ class TestArticleProcessing(unittest.TestCase):
         self.assertTrue(ArticleProcessing.too_similar(tx1, tx2))
     
     def test_get_domain(self):
-        self.assertEqual(ArticleProcessing.get_domain("https://www.sub.suedzeitung.com/dssdf"), "sub.suedzeitung.com")
-        self.assertEqual(ArticleProcessing.get_domain("https://ex.com/dssdf"), "ex.com")
+        self.assertEqual(Utils.get_domain("https://www.sub.suedzeitung.com/dssdf"), "sub.suedzeitung.com")
+        self.assertEqual(Utils.get_domain("https://ex.com/dssdf"), "ex.com")
 
 
     def test_get_children(self):
@@ -197,24 +198,33 @@ class TestArticleProcessing(unittest.TestCase):
 
 
     def test_full_repro(self):
-        html = get_datalake_test_data("3900432")
+        html = get_datalake_test_data("4031059")
         soup1  = BeautifulSoup(html, "html.parser")
         soup1 = locate_article(soup1)
 
 
 
-        html = get_datalake_test_data("3882704")
+        html = get_datalake_test_data("4044506")
         soup2  = BeautifulSoup(html, "html.parser")
         soup2 = locate_article(soup2)
 
         res = ArticleProcessing.compare_two_tags(soup1, soup2, 0.8, allow_sampling=False)
-        html = get_datalake_test_data("3900432")
+        html = get_datalake_test_data("4733541")
         soup1  = BeautifulSoup(html, "html.parser")     
         with Database() as db, Datalake() as dl:
             di = DatabaseInterface(db, dl)
             HTMLCrawler.get_patterns(di)
-            print(HTMLCrawler.patterns)
-            HTMLCrawler.parse_article(soup1, "https://www.nytimes.com/2022/03/23/us/new-orleans-tornado.html")
+            HTMLCrawler.parse_article(soup1, "https://www.spiegel.de/wirtschaft/russland-stellt-gaszahlung-nicht-sofort-auf-rubel-um-a-717dc31f-f9dc-45be-8fdb-665200d53d5d")
+
+    def test_get_text_no_script(self):
+        html = "<div><style>unnötig</style><p>top text</p><p><script>das hier ist script</script></p></div>"
+        soup  = BeautifulSoup(html, "html.parser")
+        raw_text = soup.get_text()
+        clean_text = ArticleProcessing.get_text_no_script(soup)
+        self.assertEqual(clean_text, "top text")
+        self.assertEqual(raw_text, "top text")
+
+
 
 
 if __name__ == "__main__":

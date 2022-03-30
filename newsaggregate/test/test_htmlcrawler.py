@@ -90,7 +90,7 @@ class TestHTMLCrawler(unittest.TestCase):
 
 
     def test_article_extraction_single(self):
-        html = get_datalake_test_data("3227205")
+        html = get_datalake_test_data("4071105")
         soup  = BeautifulSoup(html, "html.parser")
         article_text, _ = HTMLCrawler.parse_article(soup, "")
 

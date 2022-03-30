@@ -5,7 +5,9 @@ from datetime import datetime
 import time
 
 class Utils:
-    def clean_link(url):
+    def clean_link(url, feed_url):
+        domain = Utils.get_domain(feed_url)
+        url = domain + url if domain and url.startswith("/") else url
         url = "http://" + url if not url.startswith("http") else url
         return urljoin(url, urlparse(url).path)  
     def clean_text(text):
@@ -20,3 +22,6 @@ class Utils:
         return datetime.strftime("%Y-%m-%d %H:%M:%S")
     def clean_date_direct_string(struct_date):
         return datetime.fromtimestamp(time.mktime(struct_date)).strftime("%Y-%m-%d %H:%M:%S")
+
+    def get_domain(url):
+        return urlparse(url).netloc.replace("www.", "")

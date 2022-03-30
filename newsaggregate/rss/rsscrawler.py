@@ -7,6 +7,7 @@ from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.rss.util import Utils
 import traceback
 from typing import List
+import time
 
 
 class RssEntry:
@@ -32,20 +33,24 @@ class RSSCrawler:
     def get_entries(rss_parsed):
         entries = []
         for entry in rss_parsed.entries:
-            if "published_parsed" not in entry:
-                a = 1
             entries.append({field: entry[field] for field in ["title", "link", "id", "summary", "author", "published", "published_parsed"] if field in entry})
         return entries
     
-    def clean_entries(entries: List[RssEntry]):
-        entries = [ { **entry, "link": Utils.clean_link(entry["link"]) } for entry in entries]
-        entries = [ { **entry, "summary": Utils.clean_text(entry["summary"]) } for entry in entries]
-        entries = [ { **entry, "title": Utils.clean_text(entry["title"]) } for entry in entries]
-        entries = [ { **entry, "published_parsed": Utils.clean_date(entry["published_parsed"]) } for entry in entries]
-        entries = [ { **entry, "published": Utils.clean_date_string(entry["published_parsed"]) } for entry in entries]
-        # remove datetime for serialization
-        return entries
-    
+    def clean_entries(entries: List[RssEntry], rss_feed):
+        clean = []
+        for entry in entries:
+            try:
+                clean_obj = { **entry }
+                clean_obj["link"] = Utils.clean_link(clean_obj["link"], rss_feed)
+                clean_obj["summary"] = Utils.clean_text(clean_obj["summary"])
+                clean_obj["title"] = Utils.clean_text(clean_obj["title"]) 
+                clean_obj["published_parsed"] = Utils.clean_date(clean_obj["published_parsed"])
+                clean_obj["published"] = Utils.clean_date_string(clean_obj["published_parsed"])
+                clean.append(clean_obj)
+            except KeyError:
+                pass
+        return clean
+
     def save_entries(db: DatabaseInterface, entries: List[RssEntry], rss_feed: str):
         for entry in entries:
             job_id, article_status = save_rss_article(db, rss_feed, entry["link"], entry["title"], entry["summary"], entry["published_parsed"])
@@ -54,16 +59,18 @@ class RSSCrawler:
     
     def run_single(db: DatabaseInterface, rss_feed: str) -> List[RssEntry]:
         try:
+            start = time.time()
             feed = RSSCrawler.parse_feed([rss_feed])
             if not len(feed):
                 raise Exception("Parse Feed return 0 Items")
             entries = RSSCrawler.get_entries(feed[0])
-            clean_entries = RSSCrawler.clean_entries(entries)
+            clean_entries = RSSCrawler.clean_entries(entries, rss_feed)
             ids_statuses = RSSCrawler.save_entries(db, clean_entries, rss_feed)
             save_feed_last_crawl(db, rss_feed)
+            print(f"RSS TIME {time.time()-start}")
             return clean_entries, ids_statuses
         except Exception as e:
-            traceback.print_exc()
+            #traceback.print_exc()
             return [], []
         
 
