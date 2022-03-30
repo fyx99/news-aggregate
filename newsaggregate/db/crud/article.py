@@ -28,18 +28,21 @@ def get_random_articles(db: DatabaseInterface, limit=50):
     return rows
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
-    #where feed = (select url from feeds order by random() limit 1)
-    rows = db.db.query("SELECT id, url from Articles where feed = (select url from feeds order by random() limit 1) limit 150;", result=True)
-    article_html = []
-    for i, row in enumerate(rows):
-        if i % 20 == 0 and i != 0:
-            print(f"Loaded {i} from {len(rows)}")
-        try:
-            jso = db.dl.get_json(f"testing/article_html/{row[0]}")
-            article_html.append((*row, jso["html"])) if jso else 0
-        except:
-            print("Key")
-    return article_html
+    #where feed = (select feed from articles  group by feed having count(url) > 100 order by random() limit 1)
+    rows = db.db.query("""
+                        SELECT id, url from articles_recent 
+                        where feed = (select feed from articles_recent group by feed having count(url) > 100 order by random() limit 1) 
+                        order by random() limit 200;
+                        """,
+                        result=True)
+    return rows
+
+def get_article_html(db: DatabaseInterface, key: str):
+    try:
+        payload = db.dl.get_json(f"testing/article_html/{key}")
+    except:
+        return None
+    return payload["html"] if "html" in payload else None
 
 def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
     rows = [(i, "www.example.com") for i in ids]
@@ -78,8 +81,10 @@ def set_article_status(db: DatabaseInterface, id: str, status: str):
     insert_data = (status, id)
     db.db.query(insert_sql, insert_data)
 
-def refresh_articles_clean(db: DatabaseInterface):
+def refresh_article_materialized_views(db: DatabaseInterface):
     insert_sql = "REFRESH MATERIALIZED VIEW articles_clean";
+    db.db.query(insert_sql)
+    insert_sql = "REFRESH MATERIALIZED VIEW articles_recent";
     db.db.query(insert_sql)
 
 

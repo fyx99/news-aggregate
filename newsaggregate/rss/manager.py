@@ -1,4 +1,4 @@
-from newsaggregate.db.crud.article import get_random_articles, refresh_articles_clean
+from newsaggregate.db.crud.article import get_random_articles, refresh_article_materialized_views
 from newsaggregate.db.crud.feeds import get_feeds
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.db.postgresql import Database
@@ -62,7 +62,7 @@ class RssCrawlManager:
             add_initial_rss_crawl_jobs(di)
             add_random_status_crawl_jobs(di)
             Manager.run(di)
-            refresh_articles_clean(di)
+            refresh_article_materialized_views(di)
 
     def process_job(db: DatabaseInterface, job):
         if job["job_type"] == RSS_CRAWL:
@@ -71,22 +71,15 @@ class RssCrawlManager:
             for item, article_id_status in zip(results, ids):
                 article_id, article_status = article_id_status
                 if article_status != "CRAWL":
-                    # if random.random() > 0.2:
-                    #     continue
-                    pass
+                    if random.random() > 0.2:
+                        continue
+                Manager.add_job({"job_type": HTML_CRAWL, "link": item["link"], "article_id": article_id})
 
-                Manager.add_job(
-                    {"job_type": HTML_CRAWL, "link": item["link"], "article_id": article_id}
-                )
-            print(f"SIZE {Manager.q.qsize()}")
         elif job["job_type"] == HTML_CRAWL:
-            print(f"SIZE {Manager.q.qsize()}")
             HTMLCrawler.run_single(db, job["link"], job["article_id"])
-        print("RAN JOB " + job["job_type"] + " " + job["link"])
+        print(f"""SIZE {Manager.q.qsize()} RAN JOB {job["job_type"]} {job["link"]}""")
 
 
 if __name__ == "__main__":
     RssCrawlManager.main()
 
-### get rss feeds from db, sequentially request them (possibly many for one site = delay), save rss info
-### check if new rss info, request html (crawl safe), transform data, save site data

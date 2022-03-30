@@ -1,4 +1,6 @@
 from collections import defaultdict
+import difflib
+import re
 import traceback
 from bs4 import BeautifulSoup
 import requests
@@ -99,6 +101,12 @@ class HTMLCrawler:
         for pattern in HTMLCrawler.patterns[Utils.get_domain(url)]:
             if pattern.tag_identifyable == "TRUE":
                 ps = soup.find_all(pattern.tag_name, attrs=pattern.tag_attrs)
+                combined_text =  re.sub('\s+',' ', "".join([p.get_text() for p in ps]))[:1000]
+                if len(combined_text) > 500:
+                    a = 1
+                if len(combined_text) > 500 and difflib.SequenceMatcher(None, pattern.tag_text, combined_text).ratio() < 0.8:
+                    # this is a indicator, that elements are sometimes trash, but sometimes not -> only clear if text is trash
+                    continue
                 [p.clear() for p in ps]
             else:
                 raise NotImplementedError

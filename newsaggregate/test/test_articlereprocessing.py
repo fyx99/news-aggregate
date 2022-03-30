@@ -138,10 +138,12 @@ class TestArticleProcessing(unittest.TestCase):
 
 
 
-    def test_compare_n(self):
+    def test_compare_two_full_html(self):
         data = [test_data_func(j + ".html") for j in ["sud01","sud02","sud03","sud04", "sud05", "sud06", "tag03", "tag04"]]
         articles_list = [("", "", data[2]), ("", "", data[3])]
-        case1 = ArticleProcessing.compare_n_tags(articles_list, n=1, match_min_occurence=0)
+        soup_a = BeautifulSoup(locate_article(BeautifulSoup(data[2], "html.parser")).__str__(), "html.parser")
+        soup_b = BeautifulSoup(locate_article(BeautifulSoup(data[3], "html.parser")).__str__(), "html.parser")
+        case1 = ArticleProcessing.compare_two_tags(soup_a, soup_b, allow_sampling=False)
         self.assertEqual(len(case1), 3)
         tag_texts = [c.tag_text for c in case1]
         self.assertIn('Lesen Sie mehr zum Thema', tag_texts)
@@ -149,16 +151,11 @@ class TestArticleProcessing(unittest.TestCase):
         self.assertIn('FC Chelsea:Was hinter Abramowitschs Manöver stecktDer Klubeigentümer zieht sich beim FC Chelsea zurück - damit gelingt ihm offenbar ein geschickter strategischer Zug. Denn im Hintergrund droht ihm die Beschlagnahmung all seiner Klubanteile.', tag_texts)
 
 
-        # case2 = ArticleProcessing.compare_n_tags([BeautifulSoup(d, "html.parser").find("article") for d in [data[0], data[1]]], n=1)
-
-        # print(case2)
-
-        #case3 = ArticleProcessing.compare_n_tags([BeautifulSoup(d, "html.parser").find("article") for d in [data[0], data[3]]], n=1)
-        articles_list = [("", "", data[4]), ("", "", data[5])]
-        case4 = ArticleProcessing.compare_n_tags(articles_list, n=1)
-        print(case4)
-        articles_list = [("", "", data[6]), ("", "", data[7])]
-        case4 = ArticleProcessing.compare_n_tags(articles_list, n=1)
+        # articles_list = [("", "", data[4]), ("", "", data[5])]
+        # case4 = ArticleProcessing.compare_n_tags(articles_list)
+        # print(case4)
+        # articles_list = [("", "", data[6]), ("", "", data[7])]
+        # case4 = ArticleProcessing.compare_n_tags(articles_list)
 
 
 
@@ -173,7 +170,7 @@ class TestArticleProcessing(unittest.TestCase):
     
     def test_too_similar(self):
         tx1 = "".join([str(i) for i in range(100)])
-        tx2 = "".join([str(i) for i in range(94)]) + "aaaaaa"
+        tx2 = "".join([str(i) for i in range(63)]) + "aaaaaa"
         self.assertFalse(ArticleProcessing.too_similar(tx1, tx2))
         tx1 = "".join([str(i) for i in range(100)])
         tx2 = "".join([str(i) for i in range(97)]) + "aaa"

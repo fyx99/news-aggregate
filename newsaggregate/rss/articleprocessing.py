@@ -4,7 +4,7 @@ from bs4.element import Tag
 import re
 import json
 from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import get_articles_for_reprocessing, get_articles_for_reprocessing_id_list, save_unnecessary_text_pattern
+from newsaggregate.db.crud.article import get_article_html, get_articles_for_reprocessing, get_articles_for_reprocessing_id_list, save_unnecessary_text_pattern
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from random import randrange, random
 from collections import defaultdict
@@ -38,7 +38,7 @@ class ArticleProcessingManager:
             di = DatabaseInterface(db, dl)
             articles_html = get_articles_for_reprocessing(di)
             print("got articles")
-            url_text_pattern = ArticleProcessing.reprocess_article_unnecessary_tags(articles_html)
+            url_text_pattern = ArticleProcessing.reprocess_article_unnecessary_tags(di, articles_html)
             print("got patterns")
             ArticleProcessingManager.save_patterns(di, url_text_pattern)
             print("saved pattern")
@@ -141,14 +141,25 @@ class ArticleProcessing:
         return index_a, index_b
     
 
-    def compare_n_tags(articles_list, n=1, match_min_occurence=2):
-        soups = [BeautifulSoup(locate_article(BeautifulSoup(e[2], "html.parser")).__str__(), "html.parser") for e in articles_list]
+    def compare_n_tags(db: DatabaseInterface, articles_list, match_min_occurence=2):
         matches = []
-        for _ in range(n):
-            index_a, index_b = ArticleProcessing.compare_index(len(soups))
+        html_a, html_b = None, None
+        
+        for index_a in range(len(articles_list) - 1):
+            index_b = index_a + 1
+
+            html_a = html_b if html_b != None else get_article_html(db, articles_list[index_a][0])
+            html_b = get_article_html(db, articles_list[index_b][0])
+
+            if html_a == None or html_b == None:
+                continue
+           
+            soup_a = BeautifulSoup(locate_article(BeautifulSoup(html_a, "html.parser")).__str__(), "html.parser")
+            soup_b = BeautifulSoup(locate_article(BeautifulSoup(html_b, "html.parser")).__str__(), "html.parser")
+
             start = time.time()
             print(f"compare {articles_list[index_a][0]} {articles_list[index_a][1]} and {articles_list[index_b][0]} {articles_list[index_b][1]} ")
-            res_match = ArticleProcessing.compare_two_tags(soups[index_a], soups[index_b], 0.8)
+            res_match = ArticleProcessing.compare_two_tags(soup_a, soup_b, 0.8)
             print(f"{int(time.time()-start)}")
             #print(res_match)
             matches.extend(res_match)
@@ -196,8 +207,8 @@ class ArticleProcessing:
                 if not allow_sampling or not sampling_factor or random() < sampling_factor:
                     start = time.time()
                     t1_txt, t2_txt = t1.get_text(), t2.get_text()
-                    sq = difflib.SequenceMatcher(None, t1_txt, t2_txt)
-                    if sq.ratio() < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
+                    ratio = difflib.SequenceMatcher(None, t1_txt, t2_txt).ratio()
+                    if ratio < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
                         #print(time.time()-start)
                         continue
                     useless_parent1, useless_parent2 = ArticleProcessing.identify_useless_parent(t1, t2)
@@ -223,7 +234,7 @@ class ArticleProcessing:
 
 
 
-    def reprocess_article_unnecessary_tags(articles_sampled):
+    def reprocess_article_unnecessary_tags(db: DatabaseInterface, articles_sampled):
         # returns list of identifications for unnecessary tags
 
         articles_publisher = defaultdict(list)
@@ -237,7 +248,8 @@ class ArticleProcessing:
             if len(articles_list) > 20:
                 
                 start = time.time()
-                res[publisher] = ArticleProcessing.compare_n_tags(articles_list, min(len(articles_list) * 2, 1000), 5) 
+                # old n param , min(len(articles_list) * 2, 1000)
+                res[publisher] = ArticleProcessing.compare_n_tags(db, articles_list, 5) 
                 print(f"{publisher} {time.time()-start}")
 
 
