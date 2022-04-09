@@ -9,8 +9,12 @@ from bs4 import BeautifulSoup
 from newsaggregate.test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
 from newsaggregate.test.test_utils import get_datalake_test_data, mock_data
 
+from newsaggregate.test import CustomTestcase
 
-class TestHTMLCrawler(unittest.TestCase):
+
+class TestHTMLCrawler(CustomTestcase):
+
+
 
     def test_get_html(self):
         html, active = HTMLCrawler.get_html('https://www.bbc.com/news/uk-politics-58552389')
@@ -90,6 +94,7 @@ class TestHTMLCrawler(unittest.TestCase):
 
 
     def test_article_extraction_single(self):
+        
         html = get_datalake_test_data("4071105")
         soup  = BeautifulSoup(html, "html.parser")
         article_text, _ = HTMLCrawler.parse_article(soup, "")

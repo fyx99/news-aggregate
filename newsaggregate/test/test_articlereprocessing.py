@@ -10,12 +10,12 @@ from newsaggregate.storage.s3 import Datalake
 from newsaggregate.test.test_utils import test_data_func, first_child_n_deep, get_datalake_test_data
 from newsaggregate.rss.articleutils import locate_article
 from newsaggregate.db.postgresql import Database
-
+from newsaggregate.test import CustomTestcase
 
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 
 
-class TestArticleProcessing(unittest.TestCase):
+class TestArticleProcessing(CustomTestcase):
 
     test1 =  """<!DOCTYPE html><body><main><article>
     <p>Normal Text</p>

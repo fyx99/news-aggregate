@@ -8,9 +8,11 @@ from bs4 import BeautifulSoup
 from newsaggregate.test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
 from newsaggregate.test.test_utils import get_datalake_test_data, mock_data, test_data_func
 from types import SimpleNamespace
+from newsaggregate.test import CustomTestcase
 
 
-class TestRSSCrawler(unittest.TestCase):
+
+class TestRSSCrawler(CustomTestcase):
 
     @mock.patch('requests.get', side_effect=lambda *args, **kwargs: SimpleNamespace(text=test_data_func("ft.rss.xml")))
     def test_parse_feed(self, _):
