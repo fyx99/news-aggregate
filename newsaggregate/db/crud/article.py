@@ -1,6 +1,8 @@
 from newsaggregate.db.databaseinstance import DatabaseInterface
 import json
 import re
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
 from newsaggregate.rss.articleutils import Match
 
@@ -23,8 +25,8 @@ def get_articles(db: DatabaseInterface):
     return [t[0] for t in rows]
 
 
-def get_random_articles(db: DatabaseInterface, limit=50):
-    rows = db.db.query(f"SELECT id, url from Articles where RANDOM() < 0.1 LIMIT {limit};", result=True)
+def get_random_articles(db: DatabaseInterface, limit=2000):
+    rows = db.db.query(f"SELECT id, url from Articles where status = 'CRAWL' LIMIT {limit};", result=True)
     return rows
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
@@ -49,12 +51,12 @@ def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
     article_html = []
     for i, row in enumerate(rows):
         if i % 20 == 0 and i != 0:
-            print(f"Loaded {i} from {len(rows)}")
+            logger.info(f"Loaded {i} from {len(rows)}")
         try:
             jso = db.dl.get_json(f"testing/article_html/{row[0]}")
             article_html.append((*row, jso["html"])) if jso else 0
         except:
-            print("Key")
+            logger.info("Key")
     return article_html
 
 

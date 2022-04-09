@@ -15,6 +15,7 @@ class Utils:
         text = BeautifulSoup(text, parser).get_text()
         text = " ".join(text.split())
         text = re.sub('[^A-Za-z0-9äöüß.,!?#+-]+', ' ', text)
+        text = text.strip()
         return text
     def clean_date(struct_date):
         return datetime.fromtimestamp(time.mktime(struct_date))

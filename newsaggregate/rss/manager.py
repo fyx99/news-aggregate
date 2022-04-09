@@ -5,8 +5,9 @@ from newsaggregate.db.postgresql import Database
 from newsaggregate.rss.rsscrawler import RSSCrawler
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from queue import Queue
-import threading
-import random
+import threading, random
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
 from newsaggregate.storage.s3 import Datalake
 
@@ -28,14 +29,14 @@ class Manager:
             worker = threading.Thread(target=Manager.process, args=(db,))
             worker.start()
         Manager.q.join()
-        print("ALL JOINED")
+        logger.info("ALL JOINED")
 
     def process(db):
         while not Manager.empty():
             job = Manager.q.get()
             RssCrawlManager.process_job(db, job)
             Manager.q.task_done()
-        print(f"{threading.get_ident()} DONE")
+        logger.info(f"{threading.get_ident()} DONE")
 
 
 RSS_CRAWL = "RSS_CRAWL"
@@ -67,7 +68,7 @@ class RssCrawlManager:
     def process_job(db: DatabaseInterface, job):
         if job["job_type"] == RSS_CRAWL:
             results, ids = RSSCrawler.run_single(db, job["link"])
-            print(len(results))
+            logger.info(len(results))
             for item, article_id_status in zip(results, ids):
                 article_id, article_status = article_id_status
                 if article_status != "CRAWL":
@@ -77,7 +78,7 @@ class RssCrawlManager:
 
         elif job["job_type"] == HTML_CRAWL:
             HTMLCrawler.run_single(db, job["link"], job["article_id"])
-        print(f"""SIZE {Manager.q.qsize()} RAN JOB {job["job_type"]} {job["link"]}""")
+        logger.info(f"""SIZE {Manager.q.qsize()} RAN JOB {job["job_type"]} {job["link"]}""")
 
 
 if __name__ == "__main__":

@@ -3,6 +3,8 @@ from psycopg2 import sql, InterfaceError
 import traceback
 from newsaggregate.db.config import CONNECTION_DETAILS
 from psycopg2.errors import UniqueViolation, AdminShutdown, OperationalError
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
 class Database:
     connection = None
@@ -32,13 +34,13 @@ class Database:
         rows = cursor.fetchall()
         cursor.close()
         assert str(rows) == "[(1,)]"
-        print(f"POSTGRES CONNECTION UP {self.connection}")
+        logger.info(f"POSTGRES CONNECTION UP {self.connection}")
         
-        #print("*** Connection Problem " + repr(e), flush=True)
+        #logger.info("*** Connection Problem " + repr(e))
 
     def query(self, sql, data=(), result=False):
         # query db with reconnect error handling
-        #print("Query: " + str(sql)[0:100] + " ... " + str(len(str(sql))), flush=True)
+        #logger.info("Query: " + str(sql)[0:100] + " ... " + str(len(str(sql))))
         rows = []
         try:
             cursor = self.connection.cursor()
@@ -47,15 +49,15 @@ class Database:
                 rows = cursor.fetchall()
             cursor.close()
         except (InterfaceError, AdminShutdown, OperationalError) as e:
-            print(sql, data)
-            print(traceback.print_exc(), flush=True)
-            print(e.pgcode)
+            logger.error(sql, data)
+            logger.error(traceback.format_exc())
+            logger.error(e.pgcode)
             if self.closed != 0:
                 self.connect()
-                print("*** RECONNECT ***", flush=True)
+                logger.error("*** RECONNECT ***")
         except Exception as e:
-            print(repr(e))
-            print(traceback.print_exc(), flush=True)
+            logger.error(repr(e))
+            logger.error(traceback.format_exc())
         finally:
             if result:
                 return rows

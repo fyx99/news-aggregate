@@ -13,6 +13,9 @@ from newsaggregate.rss.articleutils import locate_article, Match
 import time
 import threading
 import urllib.request
+from newsaggregate.logging import get_logger
+logger = get_logger()
+
 
 from newsaggregate.rss.util import Utils
 
@@ -37,7 +40,8 @@ class HTMLCrawler:
 
     def get_url_status_code(url):
         try:
-            res = urllib.request.urlopen(url, timeout=HTTP_TIMEOUT).getcode()
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"})
+            res = urllib.request.urlopen(req, timeout=HTTP_TIMEOUT).getcode()
             if res == 200:
                 return "ACTIVE"
             return "INACTIVE"
@@ -72,7 +76,7 @@ class HTMLCrawler:
             try:
                 json_parsed.append(json.loads(script.text))
             except Exception as e:
-                print(e)
+                logger.error(e)
         return json_parsed
 
     
@@ -93,7 +97,7 @@ class HTMLCrawler:
                 for n in m:
                     markups_flat.append(n)
         except json.decoder.JSONDecodeError as e:
-            print("JSON DECODE ERROR")
+            logger.error("JSON DECODE ERROR")
         return HTMLCrawler.any_news_article(markups_flat)
 
     
@@ -134,7 +138,7 @@ class HTMLCrawler:
             html, status = HTMLCrawler.get_html(url)
             get_html_time = time.time() - start
             if status == "INACTIVE":
-                print(f"INACTIVE {url}")
+                logger.info(f"INACTIVE {url}")
                 return set_article_status(db, job_id, status)
                 
             parser = "html.parser"
@@ -147,24 +151,24 @@ class HTMLCrawler:
 
             img_status = HTMLCrawler.get_url_status_code(meta["image_url"])
             if img_status == "INACTIVE":
-                print(f"INACTIVE IMAGE {url}")
-                return set_article_status(db, job_id, status)
+                logger.info(f"INACTIVE IMAGE {url}")
+                status = img_status
 
             img_html_time = time.time() - start - get_html_time - parse_html_time
             save_article(db, job_id, markups, meta, html, article_text, article_title, status)
             save_article_time = time.time() - start - parse_html_time - get_html_time - img_html_time
-            print(f"{threading.get_ident()}: {get_html_time=} {parse_html_time=} {img_html_time=} {save_article_time=}", flush=True)
+            logger.info(f"{threading.get_ident()}: {get_html_time=} {parse_html_time=} {img_html_time=} {save_article_time=}")
         except Exception as e:
-            print("ERROR FOR " + url + " " + repr(e)) 
-            print(traceback.format_exc())   
+            logger.error("ERROR FOR " + url + " " + repr(e)) 
+            logger.error(traceback.format_exc())   
             
     def analyze(urls):
         if not isinstance(urls, list):
             urls = [urls]
         for url in urls:
-            print(url)
+            logger.info(url)
             html = HTMLCrawler.get_html(url)
             markups = HTMLCrawler.get_json_plus_metadata(html)
-            print(markups)
+            logger.info(markups)
             meta = HTMLCrawler.get_metadata(html)
-            print(meta)
+            logger.info(meta)

@@ -1,8 +1,11 @@
 from bs4.element import Tag
+import logging
 from newsaggregate.db.databaseinstance import DatabaseInterface
 
 from newsaggregate.db.postgresql import Database
 from newsaggregate.storage.s3 import Datalake
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
 
 def test_data_func(tests):
@@ -18,7 +21,7 @@ def mock_data(prefix, filetype=None):
         with open(f"newsaggregate/test/testdata/{prefix}.txt") as txtfile, open(f"newsaggregate/test/testdata/{prefix}.html") as htmlfile:
             return txtfile.read(), htmlfile.read()
     except FileNotFoundError:
-        print("File not found")
+        logger.error("File not found")
         return "", ""
 
 def get_children(element, only_tags=True):

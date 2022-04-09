@@ -1,6 +1,8 @@
 import unittest
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.rss.articleprocessing import ArticleProcessing, ArticleProcessingManager
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
 from bs4 import BeautifulSoup
 from newsaggregate.rss.util import Utils
@@ -83,7 +85,7 @@ class TestArticleProcessing(unittest.TestCase):
         import time
         start = time.time()
         #ArticleProcessingManager.main()
-        print(time.time()-start)
+        logger.info(time.time()-start)
         
         return
     
@@ -153,7 +155,7 @@ class TestArticleProcessing(unittest.TestCase):
 
         # articles_list = [("", "", data[4]), ("", "", data[5])]
         # case4 = ArticleProcessing.compare_n_tags(articles_list)
-        # print(case4)
+        # logger.info(case4)
         # articles_list = [("", "", data[6]), ("", "", data[7])]
         # case4 = ArticleProcessing.compare_n_tags(articles_list)
 
@@ -206,12 +208,14 @@ class TestArticleProcessing(unittest.TestCase):
         soup2 = locate_article(soup2)
 
         res = ArticleProcessing.compare_two_tags(soup1, soup2, 0.8, allow_sampling=False)
-        html = get_datalake_test_data("4733541")
-        soup1  = BeautifulSoup(html, "html.parser")     
+        # html = get_datalake_test_data("6654762")
+        # soup1  = BeautifulSoup(html, "html.parser")     
         with Database() as db, Datalake() as dl:
             di = DatabaseInterface(db, dl)
             HTMLCrawler.get_patterns(di)
-            HTMLCrawler.parse_article(soup1, "https://www.spiegel.de/wirtschaft/russland-stellt-gaszahlung-nicht-sofort-auf-rubel-um-a-717dc31f-f9dc-45be-8fdb-665200d53d5d")
+            HTMLCrawler.run_single(di, "https://www.westernjournal.com/breaking-academy-announces-will-smiths-punishment-slap-heard-around-world/", "000111")
+
+            #HTMLCrawler.parse_article(soup1, "https://www.westernjournal.com/breaking-academy-announces-will-smiths-punishment-slap-heard-around-world/")
 
     def test_get_text_no_script(self):
         html = "<div><style>unnötig</style><p>top text</p><p><script>das hier ist script</script></p></div>"

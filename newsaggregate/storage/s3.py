@@ -1,8 +1,8 @@
-import traceback
-import json
+import traceback, json
 from boto3 import Session
-import traceback
 
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
 secret = {
     "access_key_id": "AKIAQT4HBU75VQSE6IET",
@@ -28,7 +28,7 @@ class Datalake:
 
 
     def __exit__(self, type, value, traceback):
-        """Close Postgres Connection
+        """Close S3 Connection
         """
         pass
 
@@ -48,11 +48,11 @@ class Datalake:
             )
             self.connection = session.client("s3")
             self.bucket = s3key["bucket"]
-            print(f"S3 CONNECTION UP {self.connection}")
+            logger.info(f"S3 CONNECTION UP {self.connection}")
 
             
         except Exception as e:
-            print("*** Connection Problem " + repr(e), flush=True)
+            logger.error("*** CONNECTION PROBLEM " + repr(e))
 
 
     def put_json(self, path, json_data=()):
@@ -60,15 +60,15 @@ class Datalake:
         try:
             self.connection.put_object(Body=json.dumps(json_data), Bucket=self.bucket, Key=path)
         except Exception as e:
-            print(repr(e))
-            print(traceback.print_exc(), flush=True)
+            logger.error(repr(e))
+            logger.error(traceback.format_exc())
 
     def get_json(self, path):
         obj = self.connection.get_object(Bucket=self.bucket, Key=path)
         try:
             return json.loads(obj['Body'].read())
         except:
-            print(traceback.print_exc(), flush=True)
+            logger.error(traceback.format_exc())
         return {}
 
         

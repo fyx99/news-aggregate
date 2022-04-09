@@ -76,7 +76,7 @@ class TestHTMLCrawler(unittest.TestCase):
 
 
 
-        #print(locate_article(BeautifulSoup(HTMLCrawler.get_html("https://www.sueddeutsche.de/meinung/krieg-ukraine-russland-kiew-waffen-1.5537278")[0], "html.parser")).name)
+        #logger.info(locate_article(BeautifulSoup(HTMLCrawler.get_html("https://www.sueddeutsche.de/meinung/krieg-ukraine-russland-kiew-waffen-1.5537278")[0], "html.parser")).name)
 
 
 
@@ -117,7 +117,6 @@ class TestHTMLCrawler(unittest.TestCase):
     @mock.patch('newsaggregate.rss.htmlcrawler.get_unnecessary_text_pattern', side_effect=lambda _: [("url_pattern1", "tag_name2", "{}", "tag_text", "true"), ("url_pattern4", "tag_name5", "{}", "tag_text", "true")])
     def test_get_patterns(self, _):
         HTMLCrawler.get_patterns(0)
-        print(HTMLCrawler.patterns)
         self.assertEqual(len(HTMLCrawler.patterns.items()), 2)
         patterns_for_one = HTMLCrawler.patterns["url_pattern1"]
         self.assertEqual(len(patterns_for_one), 1)

@@ -15,11 +15,9 @@ from newsaggregate.rss.articleutils import Match, locate_article
 from newsaggregate.rss.util import Utils
 from newsaggregate.storage.s3 import Datalake
 from collections import Counter
+from newsaggregate.logging import get_logger
+logger = get_logger()
 
-
-def my_print(*args):
-    argss = [str(arg)[:500] for arg in args]
-    #print(*argss)
 
 def longer(str1, str2):
     if len(str1) > len(str2):
@@ -34,14 +32,15 @@ class ArticleProcessingManager:
                 save_unnecessary_text_pattern(db, url_pattern, match)
 
     def main():
+        
         with Database() as db, Datalake() as dl:
             di = DatabaseInterface(db, dl)
             articles_html = get_articles_for_reprocessing(di)
-            print("got articles")
+            logger.info("got articles")
             url_text_pattern = ArticleProcessing.reprocess_article_unnecessary_tags(di, articles_html)
-            print("got patterns")
+            logger.info("got patterns")
             ArticleProcessingManager.save_patterns(di, url_text_pattern)
-            print("saved pattern")
+            logger.info("saved pattern")
 
 class ArticleProcessing:
 
@@ -67,7 +66,7 @@ class ArticleProcessing:
         return '/%s' % '/'.join(components)
     
     def attrs_similar(x, y):
-        #my_print(x,y )
+        #logger.info(x,y )
         matches = {k: x[k] for k in x if k in y and x[k] == y[k]}
         if len(matches.keys()) == len(x.keys()):
             return True
@@ -80,18 +79,18 @@ class ArticleProcessing:
         return True
 
     def identify_useless_parent(tag1, tag2):
-        #my_print("identify usedless")
+        #logger.info("identify usedless")
         parent1 = tag1
         parent2 = tag2
         parent1_text, parent2_text = parent1.get_text(), parent2.get_text()
         result_elements = tag1, tag2
         while parent1 and parent2 and  parent1.parent and parent2.parent and difflib.SequenceMatcher(None, parent1_text, parent2_text).ratio() > 0.8:
-            # my_print(f"Ratio: {difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio()}")
-            # my_print(f"Parent1: {parent1.name}, {parent1.attrs}")
-            # my_print(f"Parent2: {parent2.name}, {parent2.attrs}")
+            # logger.info(f"Ratio: {difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio()}")
+            # logger.info(f"Parent1: {parent1.name}, {parent1.attrs}")
+            # logger.info(f"Parent2: {parent2.name}, {parent2.attrs}")
 
             if parent1.name == parent2.name:
-                #my_print("hit")
+                #logger.info("hit")
                 result_elements = parent1, parent2
 
             parent1, parent2, = parent1.parent, parent2.parent
@@ -101,13 +100,13 @@ class ArticleProcessing:
                 if len(parent1_text) > len(parent2_text):
                     parent2 = parent2.parent
                     parent2_text = parent2.get_text()
-                    my_print("go parent2 up")
+                    logger.info("go parent2 up")
                 else:
-                    my_print("go parent1 up")
+                    logger.info("go parent1 up")
                     parent1 = parent1.parent
                     parent1_text = parent1.get_text()
-            # my_print(difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio())
-            # my_print(len(parent1.parent.get_text()) , len(parent1.get_text()) , len(parent2.parent.get_text()) , len(parent2.get_text()))
+            # logger.info(difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio())
+            # logger.info(len(parent1.parent.get_text()) , len(parent1.get_text()) , len(parent2.parent.get_text()) , len(parent2.get_text()))
         return result_elements
     
     def get_children(element, only_tags=True):
@@ -158,10 +157,10 @@ class ArticleProcessing:
             soup_b = BeautifulSoup(locate_article(BeautifulSoup(html_b, "html.parser")).__str__(), "html.parser")
 
             start = time.time()
-            print(f"compare {articles_list[index_a][0]} {articles_list[index_a][1]} and {articles_list[index_b][0]} {articles_list[index_b][1]} ")
+            logger.info(f"compare {articles_list[index_a][0]} {articles_list[index_a][1]} and {articles_list[index_b][0]} {articles_list[index_b][1]} ")
             res_match = ArticleProcessing.compare_two_tags(soup_a, soup_b, 0.8)
-            print(f"{int(time.time()-start)}")
-            #print(res_match)
+            logger.info(f"{int(time.time()-start)}")
+            #logger.info(res_match)
             matches.extend(res_match)
 
         match_unique_counts = Counter(matches)
@@ -184,16 +183,16 @@ class ArticleProcessing:
         p_list1 = [p for p in soup1.findAll("p")]
         p_list2 = [p for p in soup2.findAll("p")]
         matches = []
-        # print(difflib.SequenceMatcher(None, "".join([p.get_text() for p in p_list1]), "".join([p.get_text() for p in p_list2])).ratio())
-        # print("".join([p.get_text() for p in p_list1]))
-        # print("".join([p.get_text() for p in p_list2]))
+        # logger.info(difflib.SequenceMatcher(None, "".join([p.get_text() for p in p_list1]), "".join([p.get_text() for p in p_list2])).ratio())
+        # logger.info("".join([p.get_text() for p in p_list1]))
+        # logger.info("".join([p.get_text() for p in p_list2]))
         full_text1 = "".join([p.get_text() for p in p_list1])
         full_text2 = "".join([p.get_text() for p in p_list2])
         if "€ 19,99 pro Monat" in full_text1 and "€ 19,99 pro Monat" in full_text2:
-            print("pay")
+            logger.info("pay")
             a = 1
         if ArticleProcessing.too_similar(full_text1, full_text2):
-            print("skip")
+            logger.info("skip")
             return []
 
         # if too many entrys just random samples
@@ -209,7 +208,7 @@ class ArticleProcessing:
                     t1_txt, t2_txt = t1.get_text(), t2.get_text()
                     ratio = difflib.SequenceMatcher(None, t1_txt, t2_txt).ratio()
                     if ratio < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
-                        #print(time.time()-start)
+                        #logger.info(time.time()-start)
                         continue
                     useless_parent1, useless_parent2 = ArticleProcessing.identify_useless_parent(t1, t2)
                     if "data-article-el" in useless_parent1.attrs and (useless_parent1.attrs["data-article-el"][0] in [ "body"] or useless_parent1.attrs["data-article-el"] == "body"):
@@ -219,7 +218,7 @@ class ArticleProcessing:
                         #useless_parent_id_child2, identifyable2 = ArticleProcessing.identifiable_child(useless_parent2, soup1)
 
                         matches.append(ArticleProcessing.element_saveable(useless_parent_id_child1, identifyable1))
-                    print(time.time()-start)
+                    logger.info(time.time()-start)
         return matches
 
 
@@ -242,7 +241,7 @@ class ArticleProcessing:
         for article in articles_sampled:
             articles_publisher[Utils.get_domain(article[1])].append(article)
 
-        print(f"start with {len(articles_publisher.keys())} groups")
+        logger.info(f"start with {len(articles_publisher.keys())} groups")
         res = {}
         for publisher, articles_list in articles_publisher.items():
             if len(articles_list) > 20:
@@ -250,7 +249,7 @@ class ArticleProcessing:
                 start = time.time()
                 # old n param , min(len(articles_list) * 2, 1000)
                 res[publisher] = ArticleProcessing.compare_n_tags(db, articles_list, 5) 
-                print(f"{publisher} {time.time()-start}")
+                logger.info(f"{publisher} {time.time()-start}")
 
 
         return res
