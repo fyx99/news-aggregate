@@ -1,0 +1,11 @@
+docker build -t fxxy/news-aggregate . ; docker push fxxy/news-aggregate
+
+docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432' fxxy/news-aggregate-test;
+
+
+
+docker run -m 1000m --cpus 0.25 -e TASK='REPROCESS_TEXT' -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate
+
+docker run -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432' fxxy/news-aggregate
+
+ssh root@drop
