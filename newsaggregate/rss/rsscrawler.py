@@ -2,8 +2,8 @@ import requests, time, feedparser, traceback
 from typing import List
 
 from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import save_rss_article
-from newsaggregate.db.crud.feeds import save_feed_last_crawl
+from newsaggregate.db.crud.article import Article, save_rss_article
+from newsaggregate.db.crud.feeds import Feed, save_feed_last_crawl
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.rss.util import Utils
 from newsaggregate.logging import get_logger
@@ -11,13 +11,18 @@ logger = get_logger()
 
 
 class RssEntry:
-    title:str
-    link:str
-    entry_id: str
-    summary:str
-    author: str
-    published: str
-    published_parsed: any
+    title:str = ""
+    link:str = ""
+    entry_id: str = ""
+    summary:str = ""
+    author: str = ""
+    published: str = ""
+    published_parsed: any = ""
+
+    def dict_to_entry(entry_dict):
+        entry = RssEntry()
+        [setattr(entry, field, entry_dict[field]) for field in ["title", "link", "id", "summary", "author", "published", "published_parsed"] if field in entry_dict]
+        return entry
 
 class RSSCrawler:
 
@@ -31,49 +36,44 @@ class RSSCrawler:
             return []
     
     def get_entries(rss_parsed):
-        entries = []
-        for entry in rss_parsed.entries:
-            entries.append({field: entry[field] for field in ["title", "link", "id", "summary", "author", "published", "published_parsed"] if field in entry})
-        return entries
+        return [RssEntry.dict_to_entry(entry_dict) for entry_dict in rss_parsed.entries]
     
     def clean_entries(entries: List[RssEntry], rss_feed):
-        clean = []
+        clean_entries = []
         for entry in entries:
             try:
-                clean_obj = { **entry }
-                clean_obj["link"] = Utils.clean_link(clean_obj["link"], rss_feed)
-                clean_obj["summary"] = Utils.clean_text(clean_obj["summary"])
-                clean_obj["title"] = Utils.clean_text(clean_obj["title"]) 
-                clean_obj["published_parsed"] = Utils.clean_date(clean_obj["published_parsed"])
-                clean_obj["published"] = Utils.clean_date_string(clean_obj["published_parsed"])
-                clean.append(clean_obj)
-            except KeyError:
+                entry.link = Utils.clean_link(entry.link, rss_feed)
+                entry.summary = Utils.clean_text(entry.summary)
+                entry.title = Utils.clean_text(entry.title) 
+                entry.published_parsed = Utils.clean_date_direct_string(entry.published_parsed)
+                #entry.published = Utils.clean_date_string(entry.published_parsed)
+                clean_entries.append(entry)
+            except (KeyError, AttributeError):
                 pass
-        return clean
+        return [Article.article_from_entry(e, rss_feed) for e in clean_entries]
 
-    def save_entries(db: DatabaseInterface, entries: List[RssEntry], rss_feed: str):
-        for entry in entries:
-            job_id, article_status = save_rss_article(db, rss_feed, entry["link"], entry["title"], entry["summary"], entry["published_parsed"])
-            db.dl.put_json(f"testing/article_rss/{job_id}", {"rss": {"url": entry["link"], "title": entry["title"], "summary": entry["summary"], "publish_date": entry["published"]}})
-            yield (job_id, article_status)
+    def save_entries(db: DatabaseInterface, articles: List[Article]):
+        for article in articles:
+            article = save_rss_article(db, article)
+            yield article
     
-    def run_single(db: DatabaseInterface, rss_feed: str) -> List[RssEntry]:
+    def run_single(db: DatabaseInterface, feed: Feed) -> List[RssEntry]:
         try:
             start = time.time()
-            feed = RSSCrawler.parse_feed([rss_feed])
-            if not len(feed):
+            parsed_feed = RSSCrawler.parse_feed([feed.url])
+            if not len(parsed_feed):
                 raise Exception("Parse Feed return 0 Items")
-            entries = RSSCrawler.get_entries(feed[0])
-            clean_entries = RSSCrawler.clean_entries(entries, rss_feed)
-            ids_statuses = RSSCrawler.save_entries(db, clean_entries, rss_feed)
-            save_feed_last_crawl(db, rss_feed)
+            entries = RSSCrawler.get_entries(parsed_feed[0])
+            entries_articles = RSSCrawler.clean_entries(entries, feed.url)
+            rss_articles = RSSCrawler.save_entries(db, entries_articles)
+            save_feed_last_crawl(db, feed)
             logger.info(f"RSS TIME {time.time()-start}")
-            return clean_entries, ids_statuses
+            return rss_articles
         except Exception as e:
             logger.error(traceback.format_exc())
-            return [], []
+            return []
         
 
             
-    def top_n_entries(feed_entries, n=2):
-        return [feed[index] for index in range(n) for feed in feed_entries] 
+    # def top_n_entries(feed_entries, n=2):
+    #     return [feed[index] for index in range(n) for feed in feed_entries] 

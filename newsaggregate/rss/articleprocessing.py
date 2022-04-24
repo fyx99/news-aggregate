@@ -4,14 +4,15 @@ from bs4.element import Tag
 import re
 import json
 from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import get_article_html, get_articles_for_reprocessing, get_articles_for_reprocessing_id_list, save_unnecessary_text_pattern
+from newsaggregate.db.crud.article import get_article_html, get_articles_for_reprocessing, get_articles_for_reprocessing_id_list
+from newsaggregate.db.crud.textpattern import Match, save_unnecessary_text_pattern
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from random import randrange, random
 from collections import defaultdict
 import difflib
 from urllib.parse import urlparse
 from newsaggregate.db.postgresql import Database
-from newsaggregate.rss.articleutils import Match, locate_article
+from newsaggregate.rss.articleutils import locate_article
 from newsaggregate.rss.util import Utils
 from newsaggregate.storage.s3 import Datalake
 from collections import Counter
@@ -26,10 +27,11 @@ def longer(str1, str2):
 
 class ArticleProcessingManager:
 
-    def save_patterns(db, url_text_patterns):
+    def save_patterns(db: DatabaseInterface, url_text_patterns):
         for url_pattern, pattern_list in url_text_patterns.items():
             for match in pattern_list:
-                save_unnecessary_text_pattern(db, url_pattern, match)
+                match.url_pattern = url_pattern
+                save_unnecessary_text_pattern(db, match)
 
     def main():
         
@@ -169,7 +171,7 @@ class ArticleProcessing:
 
 
     def element_saveable(element, identifyable):
-        return Match(element.name, json.dumps(element.attrs), ArticleProcessing.xpath_soup(element), re.sub('\s+',' ', element.get_text())[:1000], str(identifyable).upper())
+        return Match(tag_name=element.name, tag_attrs=json.dumps(element.attrs), tag_xpath=ArticleProcessing.xpath_soup(element), tag_text=re.sub('\s+',' ', element.get_text())[:1000], tag_identifyable=str(identifyable).upper())
         
 
     def too_similar(txt1, txt2):
@@ -242,17 +244,17 @@ class ArticleProcessing:
             articles_publisher[Utils.get_domain(article[1])].append(article)
 
         logger.info(f"start with {len(articles_publisher.keys())} groups")
-        res = {}
+        publisher_patterns = {}
         for publisher, articles_list in articles_publisher.items():
             if len(articles_list) > 20:
                 
                 start = time.time()
                 # old n param , min(len(articles_list) * 2, 1000)
-                res[publisher] = ArticleProcessing.compare_n_tags(db, articles_list, 5) 
+                publisher_patterns[publisher] = ArticleProcessing.compare_n_tags(db, articles_list, 5) 
                 logger.info(f"{publisher} {time.time()-start}")
 
 
-        return res
+        return publisher_patterns
 
 
 

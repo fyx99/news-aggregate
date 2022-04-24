@@ -3,6 +3,8 @@ from psycopg2 import sql, InterfaceError
 import traceback
 from newsaggregate.db.config import CONNECTION_DETAILS
 from psycopg2.errors import UniqueViolation, AdminShutdown, OperationalError
+import psycopg2.extras
+
 from newsaggregate.logging import get_logger
 logger = get_logger()
 
@@ -43,7 +45,7 @@ class Database:
         #logger.info("Query: " + str(sql)[0:100] + " ... " + str(len(str(sql))))
         rows = []
         try:
-            cursor = self.connection.cursor()
+            cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
             cursor.execute(sql, data)
             if result:
                 rows = cursor.fetchall()
@@ -58,6 +60,7 @@ class Database:
         except Exception as e:
             logger.error(repr(e))
             logger.error(traceback.format_exc())
+            print(traceback.format_exc())
         finally:
             if result:
                 return rows

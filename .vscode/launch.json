@@ -2,6 +2,22 @@
 
     "version": "0.2.0",
     "configurations": [
+        {
+            "name": "FeedManager",
+            "type": "python",
+            "request": "launch",
+            "program": "newsaggregate/feed/manager.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}",
+            "env": {
+                "PYTHONPATH": "${cwd}",
+                "DB_NAME":"newsaggregate",
+                "DB_HOST":"138.68.74.3",
+                "DB_USER": "postgres",
+                "DB_PW":"u3fph3ßü98fg43f34f3",
+                "DB_PORT":"5432"
+            }
+        }, 
         
         {
             "name": "Current File",

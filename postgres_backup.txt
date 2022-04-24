@@ -1,0 +1,7 @@
+ssh root@drop
+
+docker exec -t postgres pg_dumpall -c -U postgres > pgdumps/dump_`date +%d-%m-%Y`.sql
+
+exit
+
+scp root@drop:"/root/dump_$(get-date -f dd-MM-yyyy).sql" c:\GH\postgresdumps\

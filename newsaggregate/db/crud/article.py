@@ -1,33 +1,44 @@
+from newsaggregate.db.crud.feeds import Feed
 from newsaggregate.db.databaseinstance import DatabaseInterface
-import json
+from dataclasses import dataclass
 import re
 from newsaggregate.logging import get_logger
 logger = get_logger()
 
-from newsaggregate.rss.articleutils import Match
 
+
+
+@dataclass
 class Article:
-    url: str
-    amp_url: str
-    image_url: str
-    title: str
-    summary: str
-    publish_date: str
+    id: str = ""
+    url: str = ""
+    amp_url: str = ""
+    image_url: str = ""
+    title: str = ""
+    summary: str = ""
+    publish_date: str = ""
+    feed: str = ""
+    title_hash: str = ""
+    status: str = ""
+    text: str = ""
 
+    def article_from_entry(entry, feed):
+        return Article(title=entry.title, url=entry.link, summary=entry.summary, publish_date=entry.published_parsed, feed=feed)
 
-def hash_text(s):
-    #clean up before hash
-    s_clean = re.compile('[\W_]+').sub('', s)
-    return hash(s_clean).to_bytes(8, "big", signed=True).hex()
 
 def get_articles(db: DatabaseInterface):
-    rows = db.db.query("SELECT url from Articles;", result=True)
-    return [t[0] for t in rows]
+    rows = db.db.query("SELECT id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text from Articles;", result=True)
+    return [Article(**r) for r in rows]
+
+def get_article(db: DatabaseInterface, id):
+    row = db.db.query("SELECT id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text from Articles where id = %s;", (id,), result=True)[0]
+    return Article(**row)
 
 
-def get_random_articles(db: DatabaseInterface, limit=2000):
-    rows = db.db.query(f"SELECT id, url from Articles where status = 'CRAWL' LIMIT {limit};", result=True)
-    return rows
+def get_random_articles(db: DatabaseInterface, limit=200):
+    rows = db.db.query(f"SELECT id, a.url, amp_url, image_url, a.title, summary, publish_date, feed, title_hash, status, text, publisher, language, recommend, category, tier, region from Articles as a left join Feeds as f on f.url = feed limit {limit};", result=True)
+    return [(Article(r["id"], r["url"], r["amp_url"], r["image_url"], r["title"], r["summary"], r["publish_date"], r["feed"], r["title_hash"], r["status"], r["text"]), 
+        Feed(r["publisher"], r["feed"], r["category"], r["language"], r["tier"], r["recommend"], r["region"])) for r in rows]
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
     #where feed = (select feed from articles  group by feed having count(url) > 100 order by random() limit 1)
@@ -37,7 +48,21 @@ def get_articles_for_reprocessing(db: DatabaseInterface):
                         order by random() limit 200;
                         """,
                         result=True)
-    return rows
+    return [(r["id"], r["url"]) for r in rows]
+
+
+def get_articles_for_feed(db: DatabaseInterface):
+    
+    rows = db.db.query("""
+                        SELECT id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text from Articles FROM articles as aa 
+                        left join feeds as f on feed = f.url
+                        where f.language = 'EN' and aa.feed in ('https://www.washingtonexaminer.com/tag/news.rss')
+                        and length(aa.text) > 1500 and aa.text is not null
+                        order by random()
+                        LIMIT 10000
+                        """,
+                        result=True)
+    return [Article(**r) for r in rows]
 
 def get_article_html(db: DatabaseInterface, key: str):
     try:
@@ -60,27 +85,32 @@ def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
     return article_html
 
 
-def save_rss_article(db: DatabaseInterface, rss_feed: str, url: str, title: str, summary: str, publish_date):
+def save_rss_article(db: DatabaseInterface, article: Article):
     insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, publish_date = %s, title_hash = %s  RETURNING id, status"
-    insert_data = (rss_feed, url, title, summary[:5000], publish_date, hash_text(title), title, summary[:5000], publish_date, hash_text(title))
-    id, status = db.db.query(insert_sql, insert_data, result=True)[0]
-    return id, status
+    insert_data = (article.feed, article.url, article.title, article.summary[:5000], article.publish_date, hash_text(article.title), 
+        article.title, article.summary[:5000], article.publish_date, hash_text(article.title))
+    row = db.db.query(insert_sql, insert_data, result=True)[0]
+    db.dl.put_json(f"testing/article_rss/{row['id']}", {"rss": {"url": article.url, "title": article.title, "summary": article.summary, "publish_date": article.publish_date}})
+    article.id = row["id"]
+    article.status = row["status"]
+    return article
 
-def save_html_article(db: DatabaseInterface, id: str, amp_url: str, image_url: str, storage_key: str, status: str, title: str, text: str):
-    insert_sql = "UPDATE Articles SET amp_url = %s, image_url = %s, storage_key = %s, status = %s, title = %s, text = %s, title_hash = %s WHERE id = %s";
-    insert_data = (amp_url, image_url, storage_key, status, title, text, hash_text(title), id)
+def save_html_article(db: DatabaseInterface, article: Article):
+    insert_sql = "UPDATE Articles SET amp_url = %s, image_url = %s, storage_key = '', status = %s, title = %s, text = %s, title_hash = %s WHERE id = %s";
+    insert_data = (article.amp_url, article.image_url, article.status, article.title, article.text, hash_text(article.title), article.id)
     db.db.query(insert_sql, insert_data)
 
 
-def save_article(db: DatabaseInterface, job_id, markup, meta, html, article_text, article_title, status):
-    db.dl.put_json(f"testing/article_markup/{job_id}", {"markup": markup})
-    db.dl.put_json(f"testing/article_html/{job_id}", {"html": html})
-    db.dl.put_json(f"testing/article_text/{job_id}", {"text": article_text, "title": article_title})
-    save_html_article(db, job_id, meta["amp_url"], meta["image_url"], "", status, article_title, article_text)
+def save_article(db: DatabaseInterface, markup, html, article: Article):
+    db.dl.put_json(f"testing/article_markup/{article.id}", {"markup": markup})
+    db.dl.put_json(f"testing/article_html/{article.id}", {"html": html})
+    db.dl.put_json(f"testing/article_text/{article.id}", {"text": article.text, "title": article.title})
+    save_html_article(db, article)
 
-def set_article_status(db: DatabaseInterface, id: str, status: str):
+
+def set_article_status(db: DatabaseInterface, article: Article):
     insert_sql = "UPDATE Articles SET status = %s WHERE id = %s";
-    insert_data = (status, id)
+    insert_data = (article.status, article.id)
     db.db.query(insert_sql, insert_data)
 
 def refresh_article_materialized_views(db: DatabaseInterface):
@@ -90,15 +120,20 @@ def refresh_article_materialized_views(db: DatabaseInterface):
     db.db.query(insert_sql)
 
 
-def save_unnecessary_text_pattern(db: DatabaseInterface, url_pattern, match: Match):
-    insert_sql = "INSERT INTO UnnecessaryText (url_pattern, tag_name, tag_attrs, tag_identifyable, tag_text) values (%s, %s, %s, %s, %s) ON CONFLICT ON CONSTRAINT unique_constraint DO UPDATE SET tag_identifyable = %s, tag_text = %s"
-    insert_data = (url_pattern, match.tag_name, match.tag_attrs, match.tag_identifyable, match.tag_text, match.tag_identifyable, match.tag_text)
-    db.db.query(insert_sql, insert_data)
-
-def get_unnecessary_text_pattern(db: DatabaseInterface):
-    insert_sql = "SELECT url_pattern, tag_name, tag_attrs, tag_text, tag_identifyable from UnnecessaryText where tag_identifyable = 'TRUE'"
-    rows = db.db.query(insert_sql, result=True)
-    return rows
 
 
 
+
+
+
+# def get_fields_to_dict(data, names):
+#     if isinstance(data, list):
+#         return [{
+#             name: row[name] for name in names
+#         } for row in data]
+#     return { name: data[name] for name in names }
+
+def hash_text(s):
+    #clean up before hash
+    s_clean = re.compile('[\W_]+').sub('', s)
+    return hash(s_clean).to_bytes(8, "big", signed=True).hex()

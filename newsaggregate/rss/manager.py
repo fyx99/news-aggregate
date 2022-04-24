@@ -1,7 +1,9 @@
-from newsaggregate.db.crud.article import get_random_articles, refresh_article_materialized_views
-from newsaggregate.db.crud.feeds import get_feeds
+from typing import List
+from newsaggregate.db.crud.article import Article, get_random_articles, refresh_article_materialized_views
+from newsaggregate.db.crud.feeds import Feed, get_feeds
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.db.postgresql import Database
+from newsaggregate.feed.manager import FeedManager
 from newsaggregate.rss.rsscrawler import RSSCrawler
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
 from queue import Queue
@@ -25,7 +27,7 @@ class Manager:
         return Manager.q.empty()
 
     def run(db):
-        for _ in range(10):
+        for _ in range(2):
             worker = threading.Thread(target=Manager.process, args=(db,))
             worker.start()
         Manager.q.join()
@@ -41,18 +43,17 @@ class Manager:
 
 RSS_CRAWL = "RSS_CRAWL"
 HTML_CRAWL = "HTML_CRAWL"
+FEATURE_EXTRACTION = "FEATURE_EXTRACTION"
 
 
-def add_initial_rss_crawl_jobs(db):
-    feed_urls = get_feeds(db)
-    for url in feed_urls:
-        Manager.add_job({"job_type": RSS_CRAWL, "link": url})
+def add_initial_rss_crawl_jobs(db: DatabaseInterface):
+    feeds: List[Feed] = get_feeds(db)
+    [Manager.add_job({"job_type": RSS_CRAWL, "feed": feed}) for feed in feeds]
 
-def add_random_status_crawl_jobs(db):
-    article_urls = get_random_articles(db)
-    for id, url in article_urls:
-        Manager.add_job({"job_type": HTML_CRAWL, "link": url, "article_id": id})
-
+def add_random_status_crawl_jobs(db: DatabaseInterface):
+    article_feeds = get_random_articles(db)
+    [Manager.add_job({"job_type": HTML_CRAWL, "article": article, "feed": feed}) for article, feed in article_feeds]
+        
 
 class RssCrawlManager:
     def main():
@@ -66,19 +67,27 @@ class RssCrawlManager:
             refresh_article_materialized_views(di)
 
     def process_job(db: DatabaseInterface, job):
-        if job["job_type"] == RSS_CRAWL:
-            results, ids = RSSCrawler.run_single(db, job["link"])
-            logger.info(len(results))
-            for item, article_id_status in zip(results, ids):
-                article_id, article_status = article_id_status
-                if article_status != "CRAWL":
+        job_type: str = job["job_type"]
+        job_feed: Feed = job["feed"]
+        job_article: Feed = job["article"] if "article" in job else None
+        if job_type == RSS_CRAWL:
+            articles: List[Article] = RSSCrawler.run_single(db, job_feed)
+
+            for article in articles:
+                if article.status != "CRAWL":
                     if random.random() > 0.2:
                         continue
-                Manager.add_job({"job_type": HTML_CRAWL, "link": item["link"], "article_id": article_id})
+                Manager.add_job({"job_type": HTML_CRAWL, "feed": job_feed, "article": article})
 
-        elif job["job_type"] == HTML_CRAWL:
-            HTMLCrawler.run_single(db, job["link"], job["article_id"])
-        logger.info(f"""SIZE {Manager.q.qsize()} RAN JOB {job["job_type"]} {job["link"]}""")
+        elif job_type == HTML_CRAWL:
+            HTMLCrawler.run_single(db, job_article)
+            Manager.add_job({"job_type": FEATURE_EXTRACTION, "article": job_article, "feed": job_feed})
+        
+        elif job_type == FEATURE_EXTRACTION:
+            if job_feed.language != 'EN' and job_feed.language != 'DE':
+                a = 1
+            FeedManager.run_single_article(db, job_article, job_feed)
+        # extra für jeden logger.info(f"""SIZE {Manager.q.qsize()} RAN JOB {job_type} {job["link"]}""")
 
 
 if __name__ == "__main__":

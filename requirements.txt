@@ -1,6 +1,7 @@
 feedparser
 beautifulsoup4
-scrapy
 boto3
 requests
 psycopg2-binary
+numpy
+scikit-learn

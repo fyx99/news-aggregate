@@ -22,7 +22,10 @@ class Utils:
     def clean_date_string(datetime):
         return datetime.strftime("%Y-%m-%d %H:%M:%S")
     def clean_date_direct_string(struct_date):
-        return datetime.fromtimestamp(time.mktime(struct_date)).strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            return datetime.fromtimestamp(time.mktime(struct_date)).strftime("%Y-%m-%d %H:%M:%S")
+        except:
+            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def get_domain(url):
         return urlparse(url).netloc.replace("www.", "")

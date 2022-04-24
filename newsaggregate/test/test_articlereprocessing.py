@@ -1,4 +1,5 @@
 import unittest
+from newsaggregate.db.crud.article import Article
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from newsaggregate.rss.articleprocessing import ArticleProcessing, ArticleProcessingManager
 from newsaggregate.logging import get_logger
@@ -212,8 +213,8 @@ class TestArticleProcessing(CustomTestcase):
         # soup1  = BeautifulSoup(html, "html.parser")     
         with Database() as db, Datalake() as dl:
             di = DatabaseInterface(db, dl)
-            HTMLCrawler.get_patterns(di)
-            HTMLCrawler.run_single(di, "https://www.westernjournal.com/breaking-academy-announces-will-smiths-punishment-slap-heard-around-world/", "000111")
+            #HTMLCrawler.get_patterns(di)
+            #HTMLCrawler.run_single(di, Article(url="https://www.westernjournal.com/breaking-academy-announces-will-smiths-punishment-slap-heard-around-world/"))
 
             #HTMLCrawler.parse_article(soup1, "https://www.westernjournal.com/breaking-academy-announces-will-smiths-punishment-slap-heard-around-world/")
 

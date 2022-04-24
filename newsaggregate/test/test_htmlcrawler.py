@@ -1,7 +1,6 @@
 import unittest
 from unittest import mock
-from newsaggregate.db.databaseinstance import DatabaseInterface
-from newsaggregate.rss.articleutils import Match
+from newsaggregate.db.crud.textpattern import Match
 from newsaggregate.rss.articleutils import locate_article
 
 from newsaggregate.rss.htmlcrawler import HTMLCrawler
@@ -109,7 +108,7 @@ class TestHTMLCrawler(CustomTestcase):
             <div class="alaa">o<span>Das ist recht 1234 unique </span><div class="test"><p>Das ist Werbung und unnötig</p></div></div>
             </article></main></body>"""
         testsoup5 = BeautifulSoup(test5, "html.parser")
-        HTMLCrawler.patterns["example.com"] = [Match("div", {"class": "alaa"}, "", "txt", "TRUE")]
+        HTMLCrawler.patterns["example.com"] = [Match(tag_name="div", tag_attrs={"class": "alaa"}, tag_xpath="", tag_text="txt", tag_identifyable="TRUE")]
 
         res = HTMLCrawler.clean_unnecessary(testsoup5, "http://example.com")
         self.assertNotIn("Das ist recht 1234 unique", res.get_text())
@@ -119,7 +118,7 @@ class TestHTMLCrawler(CustomTestcase):
         self.assertIn("Das ist recht 1234 unique", res.get_text())
 
 
-    @mock.patch('newsaggregate.rss.htmlcrawler.get_unnecessary_text_pattern', side_effect=lambda _: [("url_pattern1", "tag_name2", "{}", "tag_text", "true"), ("url_pattern4", "tag_name5", "{}", "tag_text", "true")])
+    @mock.patch('newsaggregate.rss.htmlcrawler.get_unnecessary_text_pattern', side_effect=lambda _: [Match(tag_name="tag_name2", tag_attrs="{}", tag_text="tag_text", tag_identifyable="true", url_pattern="url_pattern1"), Match(tag_name="tag_name5", tag_attrs="{}", tag_text="tag_text", tag_identifyable="true", url_pattern="url_pattern4")])
     def test_get_patterns(self, _):
         HTMLCrawler.get_patterns(0)
         self.assertEqual(len(HTMLCrawler.patterns.items()), 2)
@@ -131,4 +130,4 @@ class TestHTMLCrawler(CustomTestcase):
 
 
 if __name__ =="__main__":
-    TestHTMLCrawler().test_article_extraction_single()
+    TestHTMLCrawler().test_get_patterns()

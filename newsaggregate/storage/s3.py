@@ -60,13 +60,28 @@ class Datalake:
         try:
             self.connection.put_object(Body=json.dumps(json_data), Bucket=self.bucket, Key=path)
         except Exception as e:
-            logger.error(repr(e))
             logger.error(traceback.format_exc())
 
     def get_json(self, path):
         obj = self.connection.get_object(Bucket=self.bucket, Key=path)
         try:
             return json.loads(obj['Body'].read())
+        except:
+            logger.error(traceback.format_exc())
+        return {}
+
+        
+    def put_obj(self, path, obj=()):
+        # query db with reconnect error handling
+        try:
+            self.connection.put_object(Body=obj, Bucket=self.bucket, Key=path)
+        except Exception as e:
+            logger.error(traceback.format_exc())
+
+    def get_obj(self, path):
+        obj = self.connection.get_object(Bucket=self.bucket, Key=path)
+        try:
+            return obj['Body'].read()
         except:
             logger.error(traceback.format_exc())
         return {}
