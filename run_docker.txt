@@ -6,13 +6,13 @@ docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm -e DB
 
 
 
-docker build -t fxxy/news-aggregate-ml . ; docker run  -e TASK='RSS' -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate-ml
+docker build -t fxxy/news-aggregate-ml . ; docker run  -e TASK='FEED' -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate-ml
 
 docker run -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432' fxxy/news-aggregate
 
 
 
-docker run -m 500m --memory-swap="1500m" -e TASK='FEED' -e DB_NAME='newsaggregate' -e DB_HOST='172.17.0.2' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate-ml
+docker run -m 500m --memory-swap="2500m" -e TASK='RSS' -e DB_NAME='newsaggregate' -e DB_HOST='172.17.0.2' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate-ml
 
 
 docker run -m 2000m --cpus 0.25 docker

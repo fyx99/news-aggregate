@@ -15,7 +15,7 @@ class TextEmbedding:
         pass
 
     def cosine_similarity(self, index):
-        return SimilarityMatrix(cosine_similarity(self.embedding, self.embedding), index)
+        return SimilarityMatrix(cosine_similarity(self.embedding, self.embedding), np.array(index))
 
     
     def save(self, db, processor, text_type, article_id):
@@ -23,6 +23,14 @@ class TextEmbedding:
 
     def load_by_ids(db, processor, text_type, ids):
         return TextEmbedding(np.array([text_to_numpy_2d(get_embeddings(db, processor, text_type, id.item())) for id in ids]))
+
+    
+    def load_by_objs(objs):
+        return TextEmbedding(
+            np.array(
+                [text_to_numpy_2d(obj) for obj in objs]
+            )
+        )
 
 
 class SimilarityMatrix:

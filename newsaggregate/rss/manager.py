@@ -1,3 +1,4 @@
+import time
 from typing import List
 from newsaggregate.db.crud.article import Article, get_random_articles, refresh_article_materialized_views
 from newsaggregate.db.crud.feeds import Feed, get_feeds
@@ -17,6 +18,10 @@ from newsaggregate.storage.s3 import Datalake
 class Manager:
     q = Queue()
 
+    f_job_count = 1
+
+    last_time = time.time()
+
     def add_job(job):
         Manager.q.put(job)
 
@@ -27,7 +32,7 @@ class Manager:
         return Manager.q.empty()
 
     def run(db):
-        for _ in range(2):
+        for _ in range(10):
             worker = threading.Thread(target=Manager.process, args=(db,))
             worker.start()
         Manager.q.join()
@@ -37,6 +42,10 @@ class Manager:
         while not Manager.empty():
             job = Manager.q.get()
             RssCrawlManager.process_job(db, job)
+            Manager.f_job_count += 1
+            if Manager.f_job_count % 50 == 0:
+                logger.info(f"MANAGER 100 JOBS AT {time.time() - Manager.last_time:.2f} TOTAL {(time.time() - Manager.last_time) / 50:.2f} / IT")
+                Manager.last_time = time.time()
             Manager.q.task_done()
         logger.info(f"{threading.get_ident()} DONE")
 
@@ -62,7 +71,7 @@ class RssCrawlManager:
             di = DatabaseInterface(db, dl)
             HTMLCrawler.get_patterns(di)
             add_initial_rss_crawl_jobs(di)
-            add_random_status_crawl_jobs(di)
+            #add_random_status_crawl_jobs(di)
             Manager.run(di)
             refresh_article_materialized_views(di)
 

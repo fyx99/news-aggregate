@@ -13,7 +13,7 @@ class Feed:
     region: str
 
 def get_feeds(db: DatabaseInterface):
-    rows = db.db.query("SELECT publisher, url, category, language, tier, recommend, region from Feeds Limit 3", result=True)
+    rows = db.db.query("SELECT publisher, url, category, language, tier, recommend, region from Feeds", result=True)
     return [Feed(**r) for r in rows]
     
 

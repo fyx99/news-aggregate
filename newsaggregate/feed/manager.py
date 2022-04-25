@@ -23,17 +23,15 @@ class FeedManager:
         with Database() as db, Datalake() as dl:
             di = DatabaseInterface(db, dl)
 
-            demo = ["3299713", "8056613", "7939462", "8060665"]
-            [FeedManager.run_single(di, d) for d in demo]
-            FeedManager.run_batch(di, demo)
+            articles, embeddings = get_articles_for_feed(di)
+            ids = [a.id for a in articles]
+            texts = [a.text for a in articles]
+            textembeddings = TextEmbedding.load_by_objs([e.load(di) for e in embeddings])
 
-    # def load_text(db: DatabaseInterface):
-    #     rows = get_articles_for_feed(db)
-    #     articles = [r[12] for r in rows]
-    #     titles = [r[4] for r in rows]
-    #     summaries = [r[5] for r in rows]
+            FeedManager.process_embedding_batches(di, ids, textembeddings, embeddings[0].processor)
+            FeedManager.process_text_batches(di, ids, texts)
 
-        # return articles, titles, summaries
+
 
 
     def load_text_single(db: DatabaseInterface, id):
@@ -41,16 +39,6 @@ class FeedManager:
 
         return article.text, article.title, article.summary
 
-    # def preprocess_text()
-
-
-    # def calculate_similarities(texts):
-
-    #     bert_processor = BertProcessor()
-    #     bert_processor.setup()
-    #     bert_textembedding = bert_processor.process(texts)
-    #     similarity_matrix = bert_textembedding.cosine_similarity()
-    #     return similarity_matrix
 
     def process_single(db, id, text, language:str):
         #this function performs all processing tasks that are possible with single texts
@@ -65,22 +53,20 @@ class FeedManager:
             textembedding.save(db, type(processor).__name__, "Article", id)
             # hier muss das nur noch gespeichert werden
         logger.info(f"BERT PROCESSOR {time.time() - start}")
-    
-    def process_batch(db, ids, texts):
-        #this function performs all processing tasks that are possible with multiuple texts
+
+    def process_text_batches(db, ids, texts):
         batch_processors = [TfidfProcessor()]
+
         for processor in batch_processors:
             processor.setup()
             textembeddings = processor.process(texts)
             similarties = textembeddings.cosine_similarity(ids)
             similarties.save(db, type(processor).__name__ + "Similarity")
 
-        single_processors = [BertProcessorDistDE()]
-        for processor in single_processors:
-            # -> get all relevant embeddings
-            textembeddings = TextEmbedding.load_by_ids(db, type(processor).__name__, "Article", ids)
-            similarties = textembeddings.cosine_similarity(ids)
-            similarties.save(db, type(processor).__name__ + "Similarity")
+    def process_embedding_batches(db, ids, embeddings: TextEmbedding, processor):
+        similarties = embeddings.cosine_similarity(ids)
+        similarties.save(db, processor + "Similarity")
+    
 
     def run_single(db, id, text, language):
         # if not text:
@@ -107,11 +93,5 @@ class FeedManager:
 
 if __name__ == "__main__":
 
-
-    with Database() as db, Datalake() as dl:
-        di = DatabaseInterface(db, dl)
-
-        demo = ["3299713", "8056613", "7939462", "8060665"]
-        [FeedManager.run_single(di, d) for d in demo]
-        FeedManager.run_batch(di, demo)
+    FeedManager.main()
 
