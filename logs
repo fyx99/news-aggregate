@@ -1,0 +1,2191 @@
+ INFO MainThread RSS
+ DEBUG MainThread Debug level stuff RSS
+ INFO MainThread POSTGRES CONNECTION UP <connection object at 0x7f842b5f0040; dsn: 'user=postgres password=xxx dbname=newsaggregate host=138.68.74.3 port=5432 application_name=NEWSAGGREGATE', closed: 0>
+ INFO MainThread S3 CONNECTION UP <botocore.client.S3 object at 0x7f842b1087f0>
+ INFO MainThread RABBIT CONNECTION UP
+ DEBUG Thread-2 GET
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 GET
+ DEBUG Thread-5 GET
+ DEBUG Thread-6 GET
+ DEBUG MainThread JOINING
+ INFO Thread-4 RSS TIME 0.20
+ INFO Thread-5 RSS TIME 0.30
+ INFO Thread-3 RSS TIME 0.66
+ /usr/local/lib/python3.8/site-packages/bs4/__init__.py:435: MarkupResemblesLocatorWarning: The input looks more like a filename than markup. You may want to open this file and pass the filehandle into Beautiful Soup.
+   warnings.warn(
+ INFO Thread-2 RSS TIME 0.86
+ INFO Thread-6 RSS TIME 1.06
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 1.89
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.20
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.29
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.09
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.14
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.20
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.18
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.19
+ INFO Thread-6 RSS TIME 0.37
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.23
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.16
+ INFO Thread-5 RSS TIME 1.11
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.50
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 RSS TIME 0.12
+ INFO Thread-3 RSS TIME 0.10
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.24
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.17
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.11
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.13
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 RSS TIME 0.10
+ INFO Thread-6 RSS TIME 0.31
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.12
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 RSS TIME 0.15
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 RSS TIME 0.19
+ INFO Thread-4 RSS TIME 0.25
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.28
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.20
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 RSS TIME 0.15
+ INFO Thread-2 RSS TIME 0.19
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 RSS TIME 0.13
+ INFO Thread-4 RSS TIME 0.15
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.89
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 RSS TIME 0.10
+ INFO Thread-3 RSS TIME 0.49
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.27
+ INFO Thread-4 RSS TIME 0.51
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-6 RSS TIME 0.67
+ INFO Thread-5 RSS TIME 0.19
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.14
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.36
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.52
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 RSS TIME 0.55
+ INFO Thread-3 RSS TIME 0.34
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 RSS TIME 0.22
+ INFO Thread-3 RSS TIME 1.04
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.14
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-4 RSS TIME 0.12
+ INFO Thread-5 RSS TIME 0.24
+ DEBUG Thread-5 PROCESSED
+ INFO Thread-5 MANAGER 100 JOBS AT 42.55 TOTAL 0.85 / IT
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.38
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.16
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.17
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-5 RSS TIME 2.74
+ INFO Thread-6 RSS TIME 1.73
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.11
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.10
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.13
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.64
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.18
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 RSS TIME 0.31
+ INFO Thread-4 RSS TIME 0.24
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.42
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 RSS TIME 0.15
+ INFO Thread-4 RSS TIME 1.94
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.34
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.16
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.13
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.12
+ INFO Thread-5 RSS TIME 0.49
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.12
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.10
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-5 RSS TIME 0.55
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.11
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.12
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-5 RSS TIME 0.19
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ INFO Thread-2 RSS TIME 0.82
+ INFO Thread-4 RSS TIME 0.17
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.21
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-5 RSS TIME 0.66
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.18
+ INFO Thread-2 RSS TIME 0.41
+ DEBUG Thread-5 PROCESSED
+ DEBUG Thread-5 TASK DONE
+ DEBUG Thread-5 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 RSS TIME 0.19
+ INFO Thread-6 RSS TIME 0.50
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.38
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.21
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.30
+ ERROR Thread-5 Traceback (most recent call last):
+   File "/usr/local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+     six.raise_from(e, None)
+   File "<string>", line 3, in raise_from
+   File "/usr/local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+     httplib_response = conn.getresponse()
+   File "/usr/local/lib/python3.8/http/client.py", line 1348, in getresponse
+     response.begin()
+   File "/usr/local/lib/python3.8/http/client.py", line 316, in begin
+     version, status, reason = self._read_status()
+   File "/usr/local/lib/python3.8/http/client.py", line 277, in _read_status
+     line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+   File "/usr/local/lib/python3.8/socket.py", line 669, in readinto
+     return self._sock.recv_into(b)
+   File "/usr/local/lib/python3.8/ssl.py", line 1241, in recv_into
+     return self.read(nbytes, buffer)
+   File "/usr/local/lib/python3.8/ssl.py", line 1099, in read
+     return self._sslobj.read(len, buffer)
+ socket.timeout: The read operation timed out
+
+ During handling of the above exception, another exception occurred:
+
+ Traceback (most recent call last):
+   File "/usr/local/lib/python3.8/site-packages/requests/adapters.py", line 440, in send
+     resp = conn.urlopen(
+   File "/usr/local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 785, in urlopen
+     retries = retries.increment(
+   File "/usr/local/lib/python3.8/site-packages/urllib3/util/retry.py", line 550, in increment
+     raise six.reraise(type(error), error, _stacktrace)
+   File "/usr/local/lib/python3.8/site-packages/urllib3/packages/six.py", line 770, in reraise
+     raise value
+   File "/usr/local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+     httplib_response = self._make_request(
+   File "/usr/local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+     self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+   File "/usr/local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+     raise ReadTimeoutError(
+ urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='www.infowars.com', port=443): Read timed out. (read timeout=4)
+
+ During handling of the above exception, another exception occurred:
+
+ Traceback (most recent call last):
+   File "/app/newsaggregate/rss/rsscrawler.py", line 31, in parse_feed
+     rss_texts = [requests.get(rss_url, timeout=HTTP_TIMEOUT, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}).text for rss_url in rss_feeds]
+   File "/app/newsaggregate/rss/rsscrawler.py", line 31, in <listcomp>
+     rss_texts = [requests.get(rss_url, timeout=HTTP_TIMEOUT, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}).text for rss_url in rss_feeds]
+   File "/usr/local/lib/python3.8/site-packages/requests/api.py", line 75, in get
+     return request('get', url, params=params, **kwargs)
+   File "/usr/local/lib/python3.8/site-packages/requests/api.py", line 61, in request
+     return session.request(method=method, url=url, **kwargs)
+   File "/usr/local/lib/python3.8/site-packages/requests/sessions.py", line 529, in request
+     resp = self.send(prep, **send_kwargs)
+   File "/usr/local/lib/python3.8/site-packages/requests/sessions.py", line 645, in send
+     r = adapter.send(request, **kwargs)
+   File "/usr/local/lib/python3.8/site-packages/requests/adapters.py", line 532, in send
+     raise ReadTimeout(e, request=request)
+ requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='www.infowars.com', port=443): Read timed out. (read timeout=4)
+
+ INFO Thread-5 Parse Feed returned 0 Items
+ Exception in thread Thread-5:
+ Traceback (most recent call last):
+   File "/usr/local/lib/python3.8/threading.py", line 932, in _bootstrap_inner
+     self.run()
+   File "/usr/local/lib/python3.8/threading.py", line 870, in run
+     self._target(*self._args, **self._kwargs)
+   File "/app/newsaggregate/rss/manager.py", line 61, in process
+     RssCrawlManager.process_job(db, job)
+   File "/app/newsaggregate/rss/manager.py", line 101, in process_job
+     for article in articles:
+ TypeError: 'NoneType' object is not iterable
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.10
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.13
+ INFO Thread-3 RSS TIME 0.65
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 RSS TIME 0.71
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 RSS TIME 0.13
+ INFO Thread-3 RSS TIME 0.29
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 RSS TIME 0.10
+ INFO Thread-2 RSS TIME 0.29
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.17
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.18
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.09
+ DEBUG Thread-4 PROCESSED
+ INFO Thread-4 MANAGER 100 JOBS AT 36.16 TOTAL 0.72 / IT
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 RSS TIME 0.30
+ INFO Thread-4 RSS TIME 0.33
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.19
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.19
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.19
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.57
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 1.13
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.14
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.17
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.30
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 RSS TIME 2.01
+ INFO Thread-4 RSS TIME 0.32
+ INFO Thread-2 RSS TIME 0.61
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.12
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.11
+ INFO Thread-6 RSS TIME 0.68
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.52
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.11
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.15
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.17
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.39
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 RSS TIME 0.17
+ INFO Thread-3 RSS TIME 0.40
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.31
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.21
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.24
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.12
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.27
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.12
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 RSS TIME 0.14
+ INFO Thread-4 RSS TIME 0.22
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.15
+ INFO Thread-3 RSS TIME 0.78
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 RSS TIME 0.64
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 RSS TIME 0.15
+ INFO Thread-3 RSS TIME 0.09
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 RSS TIME 0.09
+ INFO Thread-4 RSS TIME 0.37
+ INFO Thread-6 RSS TIME 1.17
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.25
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.10
+ INFO Thread-2 RSS TIME 0.29
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.63
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.32
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 RSS TIME 0.91
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 RSS TIME 0.67
+ INFO Thread-2 RSS TIME 0.15
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.13
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.13
+ INFO Thread-4 RSS TIME 1.05
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.14
+ DEBUG Thread-6 PROCESSED
+ INFO Thread-6 MANAGER 100 JOBS AT 36.06 TOTAL 0.72 / IT
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.23
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 RSS TIME 0.15
+ INFO Thread-3 RSS TIME 0.15
+ INFO Thread-4 RSS TIME 0.73
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.14
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.11
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.12
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.58
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.11
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.14
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 RSS TIME 0.23
+ INFO Thread-3 RSS TIME 0.13
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.26
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 RSS TIME 0.16
+ INFO Thread-3 RSS TIME 0.74
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 RSS TIME 0.35
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.77
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.14
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 RSS TIME 0.14
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.12
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.11
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 RSS TIME 0.15
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-3 RSS TIME 0.11
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.50 parse_html_time=0.15 img_html_time=0.13 save_article_time=0.32
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 RABBIT CONNECTION UP
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.12 parse_html_time=0.28 img_html_time=0.10 save_article_time=0.53
+ INFO Thread-6 140205597402880: get_html_time=1.45 parse_html_time=0.12 img_html_time=0.09 save_article_time=0.31
+ INFO Thread-3 140205622580992: get_html_time=0.10 parse_html_time=0.16 img_html_time=0.09 save_article_time=0.37
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 RABBIT CONNECTION UP
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 RABBIT CONNECTION UP
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.07 parse_html_time=0.08 img_html_time=0.07 save_article_time=0.23
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.10 parse_html_time=0.03 img_html_time=0.12 save_article_time=0.24
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.38 parse_html_time=0.11 img_html_time=0.07 save_article_time=0.34
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=2.13 parse_html_time=0.12 img_html_time=0.10 save_article_time=0.38
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=1.33 parse_html_time=0.16 img_html_time=0.12 save_article_time=0.61
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=1.06 parse_html_time=0.35 img_html_time=0.11 save_article_time=0.44
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.07 parse_html_time=0.06 img_html_time=0.08 save_article_time=0.27
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 140205630973696: get_html_time=0.82 parse_html_time=0.04 img_html_time=0.04 save_article_time=0.39
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=1.43 parse_html_time=0.13 img_html_time=0.07 save_article_time=0.33
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.12 parse_html_time=0.08 img_html_time=0.05 save_article_time=0.35
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.08 parse_html_time=0.24 img_html_time=0.06 save_article_time=0.47
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.08 parse_html_time=0.26 img_html_time=0.05 save_article_time=0.33
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=2.47 parse_html_time=0.05 img_html_time=0.04 save_article_time=0.25
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.62 parse_html_time=0.05 img_html_time=0.04 save_article_time=0.26
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.06 parse_html_time=0.28 img_html_time=0.06 save_article_time=0.42
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.80 parse_html_time=0.08 img_html_time=0.07 save_article_time=0.30
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.08 parse_html_time=0.31 img_html_time=0.06 save_article_time=0.37
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.64 parse_html_time=0.05 img_html_time=0.09 save_article_time=0.29
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.12 parse_html_time=0.27 img_html_time=0.04 save_article_time=0.49
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.38 parse_html_time=0.22 img_html_time=0.20 save_article_time=0.51
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ INFO Thread-6 MANAGER 100 JOBS AT 23.76 TOTAL 0.48 / IT
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.35 parse_html_time=0.20 img_html_time=0.13 save_article_time=0.47
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.10 parse_html_time=0.05 img_html_time=0.14 save_article_time=0.37
+ INFO Thread-3 140205622580992: get_html_time=0.50 parse_html_time=0.06 img_html_time=0.12 save_article_time=0.33
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.11 parse_html_time=0.13 img_html_time=0.04 save_article_time=0.37
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 RABBIT CONNECTION UP
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.51 parse_html_time=0.05 img_html_time=0.10 save_article_time=0.38
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.28 parse_html_time=0.16 img_html_time=0.11 save_article_time=0.44
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.59 parse_html_time=0.05 img_html_time=0.04 save_article_time=0.23
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.09 parse_html_time=0.05 img_html_time=0.10 save_article_time=0.23
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.43 parse_html_time=0.05 img_html_time=0.43 save_article_time=0.29
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.49 parse_html_time=0.12 img_html_time=0.10 save_article_time=0.52
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.42 parse_html_time=0.18 img_html_time=0.11 save_article_time=0.30
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.10 parse_html_time=0.83 img_html_time=0.09 save_article_time=0.35
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.16 parse_html_time=0.01 img_html_time=0.07 save_article_time=0.24
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.27 parse_html_time=0.03 img_html_time=0.08 save_article_time=0.36
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.52 parse_html_time=0.11 img_html_time=0.05 save_article_time=0.42
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=1.67 parse_html_time=0.13 img_html_time=0.13 save_article_time=0.49
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.34 parse_html_time=0.74 img_html_time=0.16 save_article_time=1.44
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.45 parse_html_time=0.34 img_html_time=0.30 save_article_time=0.99
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.76 parse_html_time=0.58 img_html_time=0.21 save_article_time=0.53
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.70 parse_html_time=1.04 img_html_time=0.05 save_article_time=0.63
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.05 parse_html_time=0.09 img_html_time=0.07 save_article_time=0.35
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.22 parse_html_time=0.12 img_html_time=0.15 save_article_time=1.00
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.48 parse_html_time=0.43 img_html_time=0.12 save_article_time=0.32
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.44 parse_html_time=0.49 img_html_time=0.21 save_article_time=0.47
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.46 parse_html_time=1.12 img_html_time=0.06 save_article_time=0.72
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.26 parse_html_time=0.18 img_html_time=0.10 save_article_time=0.67
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.14 parse_html_time=0.16 img_html_time=0.10 save_article_time=0.47
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.17 parse_html_time=0.18 img_html_time=0.11 save_article_time=0.92
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.35 parse_html_time=0.84 img_html_time=0.13 save_article_time=0.52
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.19 parse_html_time=0.08 img_html_time=0.07 save_article_time=0.53
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.38 parse_html_time=0.21 img_html_time=0.13 save_article_time=0.56
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 140205614188288: get_html_time=0.21 parse_html_time=0.06 img_html_time=0.11 save_article_time=0.47
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.18 parse_html_time=0.09 img_html_time=0.17 save_article_time=0.52
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.31 parse_html_time=0.83 img_html_time=0.13 save_article_time=0.83
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.56 parse_html_time=0.80 img_html_time=0.13 save_article_time=0.59
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.21 parse_html_time=0.22 img_html_time=0.07 save_article_time=0.57
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.15 parse_html_time=0.16 img_html_time=0.08 save_article_time=0.64
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.23 parse_html_time=0.13 img_html_time=0.30 save_article_time=0.36
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.71 parse_html_time=0.96 img_html_time=0.08 save_article_time=0.91
+ INFO Thread-6 140205597402880: get_html_time=0.51 parse_html_time=0.27 img_html_time=0.04 save_article_time=0.92
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-2 GET
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.20 parse_html_time=0.19 img_html_time=0.17 save_article_time=0.51
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.52 parse_html_time=0.85 img_html_time=0.10 save_article_time=0.43
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.26 parse_html_time=0.10 img_html_time=0.11 save_article_time=0.50
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.34 parse_html_time=0.13 img_html_time=0.05 save_article_time=0.56
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.27 parse_html_time=0.13 img_html_time=0.10 save_article_time=0.43
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.18 parse_html_time=0.26 img_html_time=0.04 save_article_time=0.47
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.24 parse_html_time=0.16 img_html_time=0.08 save_article_time=0.71
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.23 parse_html_time=0.33 img_html_time=0.14 save_article_time=0.42
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.60 parse_html_time=0.55 img_html_time=0.16 save_article_time=0.39
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.34 parse_html_time=0.17 img_html_time=0.04 save_article_time=0.57
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ INFO Thread-3 MANAGER 100 JOBS AT 16.66 TOTAL 0.33 / IT
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.09 parse_html_time=0.21 img_html_time=0.05 save_article_time=0.29
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 INACTIVE IMAGE https://www.dailymail.co.uk/ushome/article-1325758/Sylvia-Caplin.html
+ INFO Thread-6 INACTIVE IMAGE https://www.dailymail.co.uk/ushome/article-1314646/Were-experiencing-technical-difficulties-.html
+ INFO Thread-4 140205614188288: get_html_time=0.45 parse_html_time=0.14 img_html_time=0.21 save_article_time=0.64
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.26 parse_html_time=0.66 img_html_time=0.00 save_article_time=0.37
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.49 parse_html_time=0.69 img_html_time=0.01 save_article_time=0.42
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.32 parse_html_time=0.07 img_html_time=0.31 save_article_time=0.33
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=1.91 parse_html_time=0.15 img_html_time=0.08 save_article_time=0.30
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.77 parse_html_time=0.07 img_html_time=0.22 save_article_time=0.29
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.91 parse_html_time=0.12 img_html_time=0.21 save_article_time=0.41
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.20 parse_html_time=0.10 img_html_time=0.10 save_article_time=0.38
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.15 parse_html_time=0.05 img_html_time=0.14 save_article_time=0.29
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.10 parse_html_time=0.09 img_html_time=0.04 save_article_time=0.25
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.91 parse_html_time=0.14 img_html_time=0.22 save_article_time=0.36
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.25 parse_html_time=0.10 img_html_time=0.48 save_article_time=0.86
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.11 parse_html_time=0.07 img_html_time=0.20 save_article_time=0.39
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.11 parse_html_time=0.11 img_html_time=0.12 save_article_time=0.38
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.28 parse_html_time=0.12 img_html_time=0.12 save_article_time=0.30
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.10 parse_html_time=0.11 img_html_time=0.13 save_article_time=0.30
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.27 parse_html_time=0.13 img_html_time=0.08 save_article_time=0.32
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.60 parse_html_time=0.11 img_html_time=0.07 save_article_time=0.48
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.13 parse_html_time=0.15 img_html_time=0.20 save_article_time=0.83
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.45 parse_html_time=0.94 img_html_time=0.08 save_article_time=0.59
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.26 parse_html_time=0.40 img_html_time=0.06 save_article_time=0.64
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.31 parse_html_time=0.27 img_html_time=0.17 save_article_time=0.86
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=2.21 parse_html_time=1.34 img_html_time=0.10 save_article_time=0.47
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.45 parse_html_time=0.37 img_html_time=0.09 save_article_time=0.60
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.34 parse_html_time=0.78 img_html_time=0.10 save_article_time=0.94
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.27 parse_html_time=0.22 img_html_time=0.10 save_article_time=1.06
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.35 parse_html_time=0.87 img_html_time=0.15 save_article_time=0.82
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.58 parse_html_time=0.95 img_html_time=0.11 save_article_time=1.05
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.63 parse_html_time=0.89 img_html_time=0.12 save_article_time=0.96
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.50 parse_html_time=0.73 img_html_time=0.08 save_article_time=0.48
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.15 parse_html_time=0.21 img_html_time=0.11 save_article_time=0.45
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=2.22 parse_html_time=0.19 img_html_time=0.23 save_article_time=0.56
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.26 parse_html_time=0.50 img_html_time=0.11 save_article_time=0.61
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.24 parse_html_time=1.07 img_html_time=0.06 save_article_time=0.51
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=1.26 parse_html_time=0.07 img_html_time=0.06 save_article_time=0.51
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.08 parse_html_time=0.12 img_html_time=0.13 save_article_time=0.93
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.56 parse_html_time=0.98 img_html_time=0.05 save_article_time=0.53
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.84 parse_html_time=0.25 img_html_time=0.67 save_article_time=0.46
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.44 parse_html_time=0.23 img_html_time=0.08 save_article_time=0.80
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.39 parse_html_time=0.77 img_html_time=0.08 save_article_time=0.43
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.23 parse_html_time=0.12 img_html_time=0.12 save_article_time=0.43
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.61 parse_html_time=0.10 img_html_time=0.08 save_article_time=0.43
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.89 parse_html_time=0.13 img_html_time=0.04 save_article_time=0.26
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-6 140205597402880: get_html_time=0.22 parse_html_time=0.13 img_html_time=0.28 save_article_time=0.87
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=1.43 parse_html_time=0.32 img_html_time=0.09 save_article_time=0.54
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.49 parse_html_time=1.05 img_html_time=0.27 save_article_time=0.72
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.18 parse_html_time=0.11 img_html_time=0.10 save_article_time=0.39
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.84 parse_html_time=1.14 img_html_time=0.15 save_article_time=0.78
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 140205614188288: get_html_time=1.21 parse_html_time=0.25 img_html_time=0.15 save_article_time=0.53
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ INFO Thread-4 MANAGER 100 JOBS AT 22.09 TOTAL 0.44 / IT
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.66 parse_html_time=1.18 img_html_time=0.28 save_article_time=0.80
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.24 parse_html_time=1.77 img_html_time=0.13 save_article_time=0.81
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.90 parse_html_time=1.36 img_html_time=0.08 save_article_time=0.47
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.23 parse_html_time=0.07 img_html_time=0.23 save_article_time=0.49
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.21 parse_html_time=0.10 img_html_time=0.20 save_article_time=0.56
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.24 parse_html_time=0.03 img_html_time=0.37 save_article_time=0.44
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.27 parse_html_time=0.03 img_html_time=0.06 save_article_time=0.38
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.09 parse_html_time=0.10 img_html_time=0.07 save_article_time=0.31
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.41 parse_html_time=0.75 img_html_time=0.06 save_article_time=0.52
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.32 parse_html_time=0.07 img_html_time=0.24 save_article_time=0.32
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.21 parse_html_time=0.03 img_html_time=0.23 save_article_time=0.53
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.45 parse_html_time=0.20 img_html_time=0.27 save_article_time=0.36
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.34 parse_html_time=0.80 img_html_time=0.06 save_article_time=0.80
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.70 parse_html_time=0.06 img_html_time=0.20 save_article_time=0.77
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.46 parse_html_time=0.24 img_html_time=0.14 save_article_time=0.48
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.46 parse_html_time=0.89 img_html_time=0.05 save_article_time=0.78
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.36 parse_html_time=0.13 img_html_time=0.15 save_article_time=0.49
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.30 parse_html_time=0.40 img_html_time=0.14 save_article_time=0.50
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.30 parse_html_time=0.16 img_html_time=0.13 save_article_time=0.51
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.08 parse_html_time=0.13 img_html_time=0.04 save_article_time=0.42
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.41 parse_html_time=0.25 img_html_time=0.09 save_article_time=0.68
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.60 parse_html_time=0.23 img_html_time=0.06 save_article_time=0.38
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.40 parse_html_time=0.85 img_html_time=0.27 save_article_time=0.43
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.53 parse_html_time=0.18 img_html_time=0.12 save_article_time=0.43
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.06 parse_html_time=0.14 img_html_time=0.13 save_article_time=0.43
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.18 parse_html_time=0.20 img_html_time=0.07 save_article_time=0.48
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.25 parse_html_time=0.17 img_html_time=0.06 save_article_time=0.45
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.07 parse_html_time=0.14 img_html_time=0.05 save_article_time=0.51
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.96 parse_html_time=0.27 img_html_time=0.10 save_article_time=0.58
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.18 parse_html_time=0.28 img_html_time=0.19 save_article_time=0.72
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.59 parse_html_time=0.67 img_html_time=0.10 save_article_time=1.10
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.59 parse_html_time=0.52 img_html_time=0.14 save_article_time=0.50
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.71 parse_html_time=0.92 img_html_time=0.06 save_article_time=0.53
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.09 parse_html_time=0.04 img_html_time=0.09 save_article_time=0.31
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.37 parse_html_time=0.08 img_html_time=0.26 save_article_time=0.84
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.11 parse_html_time=0.08 img_html_time=0.10 save_article_time=0.52
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.30 parse_html_time=0.29 img_html_time=0.17 save_article_time=0.57
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.32 parse_html_time=0.10 img_html_time=0.06 save_article_time=0.52
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.32 parse_html_time=0.14 img_html_time=0.12 save_article_time=0.60
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.12 parse_html_time=0.13 img_html_time=0.06 save_article_time=0.47
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.11 parse_html_time=0.10 img_html_time=0.11 save_article_time=0.33
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.14 parse_html_time=0.09 img_html_time=0.08 save_article_time=0.35
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.15 parse_html_time=0.05 img_html_time=0.14 save_article_time=0.26
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.09 parse_html_time=0.06 img_html_time=0.12 save_article_time=0.33
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.12 parse_html_time=0.05 img_html_time=0.10 save_article_time=0.36
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.86 parse_html_time=0.10 img_html_time=0.10 save_article_time=0.45
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.75 parse_html_time=0.09 img_html_time=0.23 save_article_time=0.31
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.18 parse_html_time=0.24 img_html_time=0.14 save_article_time=0.38
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.36 parse_html_time=0.13 img_html_time=0.18 save_article_time=0.41
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.13 parse_html_time=0.14 img_html_time=0.20 save_article_time=0.26
+ INFO Thread-4 140205614188288: get_html_time=0.12 parse_html_time=0.10 img_html_time=0.10 save_article_time=0.24
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ INFO Thread-6 MANAGER 100 JOBS AT 14.58 TOTAL 0.29 / IT
+ DEBUG Thread-6 TASK DONE
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-6 GET
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.09 parse_html_time=0.05 img_html_time=0.10 save_article_time=0.27
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.09 parse_html_time=0.06 img_html_time=0.10 save_article_time=0.53
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.17 parse_html_time=0.39 img_html_time=0.08 save_article_time=0.72
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.26 parse_html_time=0.44 img_html_time=0.14 save_article_time=0.57
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.51 parse_html_time=0.51 img_html_time=0.09 save_article_time=0.30
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.23 parse_html_time=0.28 img_html_time=0.16 save_article_time=0.31
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.05 parse_html_time=0.12 img_html_time=0.04 save_article_time=0.49
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.06 parse_html_time=0.16 img_html_time=0.20 save_article_time=0.37
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.19 parse_html_time=0.19 img_html_time=0.17 save_article_time=0.42
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.35 parse_html_time=0.40 img_html_time=0.05 save_article_time=0.46
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.12 parse_html_time=0.12 img_html_time=0.10 save_article_time=0.24
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.10 parse_html_time=0.05 img_html_time=0.10 save_article_time=0.33
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.06 parse_html_time=0.19 img_html_time=0.14 save_article_time=0.31
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.12 parse_html_time=0.22 img_html_time=0.06 save_article_time=0.35
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.40 parse_html_time=0.07 img_html_time=0.10 save_article_time=0.31
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.20 parse_html_time=0.15 img_html_time=0.13 save_article_time=0.26
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.06 parse_html_time=0.13 img_html_time=0.07 save_article_time=0.36
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.09 parse_html_time=0.22 img_html_time=0.10 save_article_time=0.41
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.67 parse_html_time=0.20 img_html_time=0.17 save_article_time=0.47
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.90 parse_html_time=0.21 img_html_time=0.04 save_article_time=0.54
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 140205630973696: get_html_time=0.17 parse_html_time=0.08 img_html_time=0.07 save_article_time=0.33
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 INACTIVE IMAGE https://www.startup-region-stuttgart.de/news/invest-bw-neuer-foerderaufruf-gestartet/
+ INFO Thread-6 140205597402880: get_html_time=0.29 parse_html_time=0.04 img_html_time=0.00 save_article_time=0.34
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.98 parse_html_time=0.04 img_html_time=0.06 save_article_time=0.47
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.29 parse_html_time=0.05 img_html_time=0.11 save_article_time=0.24
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.95 parse_html_time=0.04 img_html_time=0.04 save_article_time=0.43
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-4 INACTIVE https://www.dailytelegraph.com.au/technology/innovation/aussiedeveloped-worldfirst-coinless-self-tracking-shopping-trolley-to-hit-asia/news-story/9709e1f54685156c83f7e4569a124a0e
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.84 parse_html_time=0.04 img_html_time=0.04 save_article_time=0.55
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=1.04 parse_html_time=0.23 img_html_time=0.04 save_article_time=0.29
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.55 parse_html_time=0.11 img_html_time=0.08 save_article_time=0.27
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.82 parse_html_time=0.04 img_html_time=0.14 save_article_time=0.57
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.99 parse_html_time=0.05 img_html_time=0.15 save_article_time=0.63
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=2.59 parse_html_time=0.07 img_html_time=1.11 save_article_time=0.36
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-2 INACTIVE IMAGE https://frequenzsuche.br.de/
+ INFO Thread-2 140205630973696: get_html_time=0.07 parse_html_time=0.03 img_html_time=0.00 save_article_time=0.36
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=2.46 parse_html_time=0.05 img_html_time=1.10 save_article_time=0.27
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=1.45 parse_html_time=0.11 img_html_time=0.30 save_article_time=0.41
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.15 parse_html_time=0.06 img_html_time=0.08 save_article_time=0.33
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.92 parse_html_time=0.04 img_html_time=0.05 save_article_time=0.45
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=0.06 parse_html_time=0.13 img_html_time=0.11 save_article_time=0.30
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.41 parse_html_time=0.17 img_html_time=0.08 save_article_time=0.25
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.08 parse_html_time=0.05 img_html_time=0.11 save_article_time=0.35
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.09 parse_html_time=0.05 img_html_time=0.42 save_article_time=0.41
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.70 parse_html_time=0.12 img_html_time=0.37 save_article_time=0.36
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=1.77 parse_html_time=0.58 img_html_time=0.05 save_article_time=0.56
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.26 parse_html_time=0.07 img_html_time=0.44 save_article_time=0.23
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 INACTIVE https://www.dailytelegraph.com.au/news/national/federal-election/do-some-boxercise-bill-shortens-onair-clash-with-nine-news-journalist/news-story/07a9edf04600d16fe1fb4e67471f96b8
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 INACTIVE https://www.dailytelegraph.com.au/breaking-news/two-arrested-after-melbourne-cbd-robbery/news-story/3d4f09ea2882cd519f6df6373d6d4377
+ INFO Thread-3 140205622580992: get_html_time=0.13 parse_html_time=0.07 img_html_time=0.14 save_article_time=0.26
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 INACTIVE https://www.dailytelegraph.com.au/news/breaking-news/new-york-amazon-workers-deal-setback-to-union-drive/news-story/cc2458d88b58fda506601b07f83f1592
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 INACTIVE https://www.ndr.de/home/homepagedoku102.html
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ INFO Thread-2 MANAGER 100 JOBS AT 13.79 TOTAL 0.28 / IT
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.07 parse_html_time=0.06 img_html_time=0.26 save_article_time=0.45
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.13 parse_html_time=0.49 img_html_time=0.19 save_article_time=0.56
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.53 parse_html_time=0.21 img_html_time=0.09 save_article_time=0.40
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.24 parse_html_time=0.45 img_html_time=0.25 save_article_time=0.51
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.59 parse_html_time=0.22 img_html_time=0.14 save_article_time=0.46
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.21 parse_html_time=0.06 img_html_time=0.10 save_article_time=0.39
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.09 parse_html_time=0.20 img_html_time=0.12 save_article_time=0.46
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.20 parse_html_time=0.05 img_html_time=0.06 save_article_time=0.55
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.19 parse_html_time=0.05 img_html_time=0.06 save_article_time=0.70
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.08 parse_html_time=0.04 img_html_time=0.29 save_article_time=0.37
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.13 parse_html_time=0.38 img_html_time=0.12 save_article_time=0.44
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.36 parse_html_time=0.13 img_html_time=0.16 save_article_time=0.43
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.44 parse_html_time=0.13 img_html_time=0.14 save_article_time=0.33
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.25 parse_html_time=0.13 img_html_time=0.07 save_article_time=0.35
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.13 parse_html_time=0.12 img_html_time=0.09 save_article_time=0.30
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 INACTIVE IMAGE https://www.ft.com/content/db539487-34d7-4e8e-b38c-5001b4532023
+ INFO Thread-6 INACTIVE IMAGE https://www.ft.com/content/41b887c4-ed52-4cf0-8a6f-394d578ea6a2
+ INFO Thread-3 140205622580992: get_html_time=0.59 parse_html_time=0.19 img_html_time=0.00 save_article_time=0.32
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.11 parse_html_time=0.42 img_html_time=0.13 save_article_time=0.37
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.45 parse_html_time=0.13 img_html_time=0.00 save_article_time=0.44
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.37 parse_html_time=0.11 img_html_time=0.11 save_article_time=0.40
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 INACTIVE IMAGE https://www.ft.com/content/9d077a0a-d3b8-402f-ade4-2ced9afa735b
+ INFO Thread-3 140205622580992: get_html_time=0.24 parse_html_time=0.02 img_html_time=0.14 save_article_time=0.44
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.37 parse_html_time=0.10 img_html_time=0.00 save_article_time=0.21
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.24 parse_html_time=0.13 img_html_time=0.07 save_article_time=0.42
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 INACTIVE IMAGE https://www.ft.com/content/e04e2dda-bb1e-4469-b6b3-fe959e44d422
+ INFO Thread-2 INACTIVE IMAGE https://www.ft.com/content/41b887c4-ed52-4cf0-8a6f-394d578ea6a2
+ INFO Thread-3 140205622580992: get_html_time=0.21 parse_html_time=0.16 img_html_time=0.00 save_article_time=0.41
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.38 parse_html_time=0.17 img_html_time=0.01 save_article_time=0.34
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.27 parse_html_time=0.31 img_html_time=0.15 save_article_time=0.48
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.11 parse_html_time=0.04 img_html_time=0.14 save_article_time=0.27
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=1.11 parse_html_time=0.11 img_html_time=0.20 save_article_time=0.40
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.09 parse_html_time=0.26 img_html_time=0.13 save_article_time=0.37
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.11 parse_html_time=0.44 img_html_time=0.09 save_article_time=0.49
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=1.23 parse_html_time=0.07 img_html_time=0.13 save_article_time=0.24
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.76 parse_html_time=0.17 img_html_time=0.11 save_article_time=0.38
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.51 parse_html_time=0.28 img_html_time=0.16 save_article_time=0.47
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.53 parse_html_time=0.29 img_html_time=0.18 save_article_time=0.68
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.45 parse_html_time=0.24 img_html_time=0.06 save_article_time=0.64
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.08 parse_html_time=0.10 img_html_time=0.14 save_article_time=0.57
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-4 140205614188288: get_html_time=1.54 parse_html_time=0.28 img_html_time=0.33 save_article_time=1.27
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-6 140205597402880: get_html_time=0.29 parse_html_time=1.06 img_html_time=0.12 save_article_time=1.31
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.70 parse_html_time=0.60 img_html_time=0.06 save_article_time=0.53
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.76 parse_html_time=1.11 img_html_time=0.13 save_article_time=0.63
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-4 140205614188288: get_html_time=0.45 parse_html_time=0.13 img_html_time=0.06 save_article_time=0.36
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-2 INACTIVE IMAGE https://www.boerse-frankfurt.de/nachrichten/neuer-etf-klimavertraegliches-abfall-und-recycling-management
+ INFO Thread-6 140205597402880: get_html_time=0.05 parse_html_time=0.14 img_html_time=0.73 save_article_time=0.28
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-2 140205630973696: get_html_time=0.82 parse_html_time=0.05 img_html_time=0.00 save_article_time=0.38
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-3 140205622580992: get_html_time=0.41 parse_html_time=0.43 img_html_time=0.13 save_article_time=1.08
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-6 140205597402880: get_html_time=0.45 parse_html_time=0.25 img_html_time=0.15 save_article_time=0.65
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-4 140205614188288: get_html_time=0.47 parse_html_time=0.87 img_html_time=0.10 save_article_time=1.17
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ DEBUG Thread-4 GET
+ INFO Thread-3 140205622580992: get_html_time=0.49 parse_html_time=0.25 img_html_time=0.08 save_article_time=0.43
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.67 parse_html_time=0.92 img_html_time=0.05 save_article_time=0.55
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ DEBUG Thread-2 TASK DONE
+ DEBUG Thread-2 GET
+ INFO Thread-6 140205597402880: get_html_time=0.45 parse_html_time=0.72 img_html_time=0.07 save_article_time=0.54
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ DEBUG Thread-6 GET
+ INFO Thread-3 140205622580992: get_html_time=0.76 parse_html_time=0.24 img_html_time=0.14 save_article_time=0.77
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ DEBUG Thread-3 GET
+ INFO Thread-2 140205630973696: get_html_time=0.89 parse_html_time=0.40 img_html_time=0.06 save_article_time=0.82
+ INFO Thread-2 ADDED JOB TO RABBIT
+ DEBUG Thread-2 PROCESSED
+ INFO Thread-2 MANAGER 100 JOBS AT 17.77 TOTAL 0.36 / IT
+ DEBUG Thread-2 TASK DONE
+ INFO Thread-2 THREAD DONE
+ INFO Thread-4 140205614188288: get_html_time=0.84 parse_html_time=0.78 img_html_time=0.06 save_article_time=0.92
+ INFO Thread-4 ADDED JOB TO RABBIT
+ DEBUG Thread-4 PROCESSED
+ DEBUG Thread-4 TASK DONE
+ INFO Thread-4 THREAD DONE
+ INFO Thread-6 140205597402880: get_html_time=0.57 parse_html_time=0.77 img_html_time=0.04 save_article_time=0.78
+ INFO Thread-6 ADDED JOB TO RABBIT
+ DEBUG Thread-6 PROCESSED
+ DEBUG Thread-6 TASK DONE
+ INFO Thread-6 THREAD DONE
+ INFO Thread-3 140205622580992: get_html_time=0.52 parse_html_time=0.69 img_html_time=0.06 save_article_time=0.44
+ INFO Thread-3 ADDED JOB TO RABBIT
+ DEBUG Thread-3 PROCESSED
+ DEBUG Thread-3 TASK DONE
+ INFO Thread-3 THREAD DONE
