@@ -1,27 +1,34 @@
-docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-aggregate-ml
-
 docker build -t fxxy/news-aggregate . ; docker push fxxy/news-aggregate
 
- docker pull fxxy/news-aggregate-ml
-docker build -t fxxy/news-aggregate-ml . ;
-docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432' fxxy/news-aggregate-test;
+
+# test
+docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env fxxy/news-aggregate-test;
+
+
+# run ml local
+docker build --target ml -t fxxy/news-aggregate-ml . ; docker run  -e TASK='FEED' --env-file local.env  fxxy/news-aggregate-ml
+
+docker run --env-file local.env fxxy/news-aggregate
+docker run -e TASK='FEED' --env-file local.env fxxy/news-aggregate
 
 
 
-docker build --target ml -t fxxy/news-aggregate-ml . ; docker run  -e TASK='FEED' -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate-ml
-
-docker run -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432' fxxy/news-aggregate
+docker run -m 500m --memory-swap="2500m" -e TASK='FEED' --env-file /env/drop.env  fxxy/news-aggregate-ml
 
 
 
-docker run -m 500m --memory-swap="2500m" -e TASK='RSS' -e DB_NAME='newsaggregate' -e DB_HOST='172.17.0.2' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate-ml
-
-
-docker run -m 2000m --cpus 0.25 docker
-
-
-ssh root@drop
 
 docker sbom fxxy/news-aggregate-ml
 
-docker run  -e TASK='RSS' -e DB_NAME='newsaggregate' -e DB_HOST='138.68.74.3' -e DB_USER='postgres' -e DB_PW='u3fph3ßü98fg43f34f3' -e DB_PORT='5432'  fxxy/news-aggregate
+docker run  -e TASK='RSS'   --env-file local.env  fxxy/news-aggregate
+docker run  -e TASK='FEED'  --env-file local.env  fxxy/news-aggregate-ml
+
+
+
+docker run --network="host" --restart=always --name postgres -e POSTGRES_PASSWORD=u3fph3ßü98fg43f34f3 -d postgres:14.1-alpine
+
+docker run -d --restart=always --hostname rabbit --name rabbitmq -e RABBITMQ_DEFAULT_USER=dog -e RABBITMQ_DEFAULT_PASS="20849hfibfcn82..SADFC" -p 5672:5672 -p 15672:15672 rabbitmq:3.10.0-rc.4-management
+
+
+# old
+docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-aggregate-ml
