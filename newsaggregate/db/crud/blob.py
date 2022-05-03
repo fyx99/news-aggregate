@@ -1,7 +1,7 @@
-from newsaggregate.db.databaseinstance import DatabaseInterface
+from db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 @dataclass

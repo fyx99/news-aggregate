@@ -1,4 +1,4 @@
-from newsaggregate.db.databaseinstance import DatabaseInterface
+from db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 
 

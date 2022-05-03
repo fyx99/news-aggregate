@@ -1,19 +1,16 @@
 import unittest
-from newsaggregate.db.crud.article import Article
-from newsaggregate.db.databaseinstance import DatabaseInterface
-from newsaggregate.rss.articleprocessing import ArticleProcessing, ArticleProcessingManager
-from newsaggregate.logging import get_logger
+from db.databaseinstance import DatabaseInterface
+from reprocessing.articleprocessing import ArticleProcessing
+from logger import get_logger
 logger = get_logger()
 
 from bs4 import BeautifulSoup
-from newsaggregate.rss.util import Utils
-from newsaggregate.storage.s3 import Datalake
-from newsaggregate.test.test_utils import test_data_func, first_child_n_deep, get_datalake_test_data
-from newsaggregate.rss.articleutils import locate_article
-from newsaggregate.db.postgresql import Database
-from newsaggregate.test import CustomTestcase
-
-from newsaggregate.rss.htmlcrawler import HTMLCrawler
+from rss.util import Utils
+from db.s3 import Datalake
+from test.test_utils import test_data_func, first_child_n_deep, get_datalake_test_data
+from rss.articleutils import locate_article
+from db.postgresql import Database
+from test import CustomTestcase
 
 
 class TestArticleProcessing(CustomTestcase):

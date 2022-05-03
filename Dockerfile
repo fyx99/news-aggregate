@@ -6,6 +6,7 @@ RUN pip3 install -r requirements.txt
 
 FROM base as test
 COPY . .
+WORKDIR /app/newsaggregate
 CMD [ "python3", "-m", "unittest"]
 
 
@@ -19,12 +20,13 @@ RUN python3 model_setup.py
 
 FROM ml-base as ml
 COPY . .
+WORKDIR /app/newsaggregate
 CMD [ "python3", "-u", "-m", "main"]
 
 
-FROM base as final
-COPY . .
-RUN rm -rf ./newsaggregate/feed
-CMD [ "python3", "-u", "-m", "main"]
+# FROM base as final
+# COPY . .
+# WORKDIR /app/newsaggregate
+# CMD [ "python3", "-u", "-m", "main"]
 
 

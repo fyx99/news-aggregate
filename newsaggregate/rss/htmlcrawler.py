@@ -5,20 +5,19 @@ import traceback
 from bs4 import BeautifulSoup
 import requests
 import json
-from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import Article, save_article, set_article_status
-from newsaggregate.db.crud.textpattern import get_unnecessary_text_pattern
-from newsaggregate.db.databaseinstance import DatabaseInterface
-from newsaggregate.rss.articleprocessing import ArticleProcessing
-from newsaggregate.rss.articleutils import locate_article
+from db.config import HTTP_TIMEOUT
+from db.crud.article import Article, save_article, set_article_status
+from db.crud.textpattern import get_unnecessary_text_pattern
+from db.databaseinstance import DatabaseInterface
+from rss.articleutils import locate_article
 import time
 import threading
 import urllib.request
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 
-from newsaggregate.rss.util import Utils
+from rss.util import Utils
 
 
 class HTMLCrawler:

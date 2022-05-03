@@ -1,9 +1,9 @@
 # from unittest import mock
 # import numpy as np
-# from newsaggregate.feed.preprocessing.general import SimilarityMatrix
+# from feature.preprocessing.general import SimilarityMatrix
 
 
-# from newsaggregate.test import CustomTestcase
+# from test import CustomTestcase
 
 
 

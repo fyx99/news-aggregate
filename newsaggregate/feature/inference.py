@@ -1,14 +1,14 @@
 
 
 import numpy as np
-from newsaggregate.db.crud.blob import get_similarities
-from newsaggregate.db.databaseinstance import DatabaseInterface
-from newsaggregate.db.postgresql import Database
-from newsaggregate.feed.numpy_utils import text_to_numpy_2d
+from db.crud.blob import get_similarities
+from db.databaseinstance import DatabaseInterface
+from db.postgresql import Database
+from feature.numpy_utils import text_to_numpy_2d
 
-from newsaggregate.feed.preprocessing.general import SimilarityMatrix
-from newsaggregate.logging import get_logger
-from newsaggregate.storage.s3 import Datalake
+from feature.preprocessing.general import SimilarityMatrix
+from logger import get_logger
+from db.s3 import Datalake
 logger = get_logger()
 
 

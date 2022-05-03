@@ -1,10 +1,10 @@
 
 import threading
-from newsaggregate.db.config import RABBIT_CONNECTION_DETAILS
+from db.config import RABBIT_CONNECTION_DETAILS
 import pika
 import json
 
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 EXCHANGE_NAME = "JOBS"
@@ -42,7 +42,7 @@ class MessageBroker:
         self.channels[threading.get_ident()] = new_channel
         new_channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='topic', durable=True)
         for route in ROUTING_KEYS:
-            new_channel.queue_declare(route, durable=True)
+            new_channel.queue_declare(route, durable=True)      #, arguments={"x-queue-mode": "lazy"}
             new_channel.queue_bind(exchange=EXCHANGE_NAME, queue=route, routing_key=route)
         logger.info(f"RABBIT CONNECTION UP")
         return new_channel
@@ -68,6 +68,16 @@ class MessageBroker:
         if method_frame is None:
             return False
         return json.loads(body.decode())
+
+    
+    def get_task_batch(self, route, n):
+        results = []
+        for _ in range(n):
+            method_frame, header_frame, body = self.get_channel().basic_get(route, auto_ack=True)
+            if method_frame is None:
+                break
+            results.append(json.loads(body.decode()))
+        return results
 
 
 

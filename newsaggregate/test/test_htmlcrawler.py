@@ -1,14 +1,14 @@
 import unittest
 from unittest import mock
-from newsaggregate.db.crud.textpattern import Match
-from newsaggregate.rss.articleutils import locate_article
+from db.crud.textpattern import Match
+from rss.articleutils import locate_article
 
-from newsaggregate.rss.htmlcrawler import HTMLCrawler
+from rss.htmlcrawler import HTMLCrawler
 from bs4 import BeautifulSoup
-from newsaggregate.test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
-from newsaggregate.test.test_utils import get_datalake_test_data, mock_data
+from test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
+from test.test_utils import get_datalake_test_data, mock_data
 
-from newsaggregate.test import CustomTestcase
+from test import CustomTestcase
 
 
 class TestHTMLCrawler(CustomTestcase):
@@ -118,7 +118,7 @@ class TestHTMLCrawler(CustomTestcase):
         self.assertIn("Das ist recht 1234 unique", res.get_text())
 
 
-    @mock.patch('newsaggregate.rss.htmlcrawler.get_unnecessary_text_pattern', side_effect=lambda _: [Match(tag_name="tag_name2", tag_attrs="{}", tag_text="tag_text", tag_identifyable="true", url_pattern="url_pattern1"), Match(tag_name="tag_name5", tag_attrs="{}", tag_text="tag_text", tag_identifyable="true", url_pattern="url_pattern4")])
+    @mock.patch('rss.htmlcrawler.get_unnecessary_text_pattern', side_effect=lambda _: [Match(tag_name="tag_name2", tag_attrs="{}", tag_text="tag_text", tag_identifyable="true", url_pattern="url_pattern1"), Match(tag_name="tag_name5", tag_attrs="{}", tag_text="tag_text", tag_identifyable="true", url_pattern="url_pattern4")])
     def test_get_patterns(self, _):
         HTMLCrawler.get_patterns(0)
         self.assertEqual(len(HTMLCrawler.patterns.items()), 2)

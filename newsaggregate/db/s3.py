@@ -1,7 +1,7 @@
 import traceback, json
 from boto3 import Session
 
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 secret = {

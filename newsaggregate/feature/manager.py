@@ -2,19 +2,19 @@ from collections import defaultdict
 import threading
 import traceback
 import numpy as np
-from newsaggregate.db.crud.article import Article, get_article, get_articles_for_feed
-from newsaggregate.db.crud.blob import save_similarities
-from newsaggregate.db.crud.feeds import Feed
-from newsaggregate.db.databaseinstance import DatabaseInterface
-from newsaggregate.db.postgresql import Database
-from newsaggregate.feed.preprocessing.bert import BertProcessorBaseEN, BertProcessorDistDE
-from newsaggregate.feed.preprocessing.general import TextEmbedding
-from newsaggregate.feed.preprocessing.tfidf import TfidfProcessor
-from newsaggregate.message.rabbit import MessageBroker
-from newsaggregate.storage.s3 import Datalake
+from db.crud.article import Article, get_article, get_articles_for_feed
+from db.crud.blob import save_similarities
+from db.crud.feeds import Feed
+from db.databaseinstance import DatabaseInterface
+from db.postgresql import Database
+from feature.preprocessing.bert import BertProcessorBaseEN, BertProcessorDistDE
+from feature.preprocessing.general import TextEmbedding
+from feature.preprocessing.tfidf import TfidfProcessor
+from db.rabbit import MessageBroker
+from db.s3 import Datalake
 import time
 
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 class FeedManager:
@@ -23,15 +23,28 @@ class FeedManager:
     def main():
         with Database() as db, Datalake() as dl, MessageBroker() as rb:
             di = DatabaseInterface(db, dl, rb)
-            has_tasks = True
-            while has_tasks:
-                task = di.rb.get_task("FEATURE")
+            done = False
+            n = 100
+            while not done:
+                tasks = di.rb.get_task_batch("FEATURE", n)
+                if len(tasks) < n:
+                    done = True
+
                 
-                article = Article(**task["article"])
-                feed = Feed(**task["feed"])
-                logger.info(article)
-                logger.info(feed)
-                FeedManager.run_single_article(di, article, feed)
+                articles = [Article(**task["article"]) for task in tasks]
+                feeds = [Feed(**task["feed"]) for task in tasks]
+
+                language_group_tasks = defaultdict(list)
+
+                for article, feed in zip(articles, feeds):
+                    language_group_tasks[feed.language].append((article, feed))
+                
+                list_ordered = []
+                [list_ordered.extend(language_group_tasks[key]) for key in language_group_tasks.keys()]
+
+                [FeedManager.run_single_article(di, article, feed) for article, feed in list_ordered]
+
+            logger.info("ALL SINGLE TASKS DONE")
 
             articles, embeddings = get_articles_for_feed(di)
             ids = [a.id for a in articles]
@@ -40,6 +53,7 @@ class FeedManager:
 
             FeedManager.process_embedding_batches(di, ids, textembeddings, embeddings[0].processor)
             FeedManager.process_text_batches(di, ids, texts)
+            logger.info("ALL BATCH TASKS DONE")
 
 
 
@@ -62,7 +76,7 @@ class FeedManager:
             textembedding = processor.process(text)
             textembedding.save(db, type(processor).__name__, "Article", id)
             # hier muss das nur noch gespeichert werden
-        logger.info(f"BERT PROCESSOR {time.time() - start}")
+        logger.info(f"BERT PROCESSOR {time.time() - start:.2f}")
 
     def process_text_batches(db, ids, texts):
         batch_processors = [TfidfProcessor()]
@@ -85,7 +99,7 @@ class FeedManager:
 
 
     def run_single_article(db, article: Article, feed: Feed):
-        logger.info(f"{threading.get_ident()}: BERT {feed.language}")
+        logger.info(f"LANGUAGE {feed.language}")
         try:
             FeedManager.run_single(db, article.id, article.text, feed.language)
         except:

@@ -1,5 +1,5 @@
-from newsaggregate.db import BaseDataClass
-from newsaggregate.db.databaseinstance import DatabaseInterface
+from db import BaseDataClass
+from db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 
 

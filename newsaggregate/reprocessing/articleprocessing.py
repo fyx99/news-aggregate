@@ -1,22 +1,19 @@
-import time
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-import re
-import json
-from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import get_article_html, get_articles_for_reprocessing, get_articles_for_reprocessing_id_list
-from newsaggregate.db.crud.textpattern import Match, save_unnecessary_text_pattern
-from newsaggregate.db.databaseinstance import DatabaseInterface
+import re, json, time, difflib
 from random import randrange, random
-from collections import defaultdict
-import difflib
-from urllib.parse import urlparse
-from newsaggregate.db.postgresql import Database
-from newsaggregate.rss.articleutils import locate_article
-from newsaggregate.rss.util import Utils
-from newsaggregate.storage.s3 import Datalake
-from collections import Counter
-from newsaggregate.logging import get_logger
+from collections import defaultdict, Counter
+
+from db.crud.article import get_article_html, get_articles_for_reprocessing
+from db.crud.textpattern import Match, save_unnecessary_text_pattern
+from db.databaseinstance import DatabaseInterface
+from db.postgresql import Database
+from db.s3 import Datalake
+
+from rss.articleutils import locate_article
+from rss.util import Utils
+
+from logger import get_logger
 logger = get_logger()
 
 

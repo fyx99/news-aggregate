@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 import numpy as np
 
-from newsaggregate.feed.preprocessing.general import TextEmbedding
+from feature.preprocessing.general import TextEmbedding
 
 class BertProcessorDistDE:
 

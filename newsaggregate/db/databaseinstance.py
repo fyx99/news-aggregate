@@ -1,6 +1,6 @@
-from newsaggregate.db.postgresql import Database
-from newsaggregate.message.rabbit import MessageBroker
-from newsaggregate.storage.s3 import Datalake
+from db.postgresql import Database
+from db.rabbit import MessageBroker
+from db.s3 import Datalake
 
 
 class DatabaseInterface:

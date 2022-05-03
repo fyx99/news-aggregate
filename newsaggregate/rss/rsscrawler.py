@@ -1,12 +1,12 @@
 import requests, time, feedparser, traceback
 from typing import List
 
-from newsaggregate.db.config import HTTP_TIMEOUT
-from newsaggregate.db.crud.article import Article, save_rss_article
-from newsaggregate.db.crud.feeds import Feed, save_feed_last_crawl
-from newsaggregate.db.databaseinstance import DatabaseInterface
-from newsaggregate.rss.util import Utils
-from newsaggregate.logging import get_logger
+from db.config import HTTP_TIMEOUT
+from db.crud.article import Article, save_rss_article
+from db.crud.feeds import Feed, save_feed_last_crawl
+from db.databaseinstance import DatabaseInterface
+from rss.util import Utils
+from logger import get_logger
 logger = get_logger()
 
 
@@ -32,7 +32,7 @@ class RSSCrawler:
             rss_texts_parsed = [feedparser.parse(text) for text in rss_texts]
             return rss_texts_parsed
         except Exception as e:
-            logger.error(traceback.format_exc())
+            logger.info("HTTP ERROR")
             return []
     
     def get_entries(rss_parsed):

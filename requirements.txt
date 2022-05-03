@@ -6,3 +6,6 @@ psycopg2-binary
 numpy
 scikit-learn
 pika
+fastapi
+starlette
+uvicorn

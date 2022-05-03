@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from newsaggregate.db.crud.blob import get_embeddings, get_similarities, save_embeddings, save_similarities
-from newsaggregate.feed.numpy_utils import numpy_2d_array_as_text, text_to_numpy_2d
+from db.crud.blob import get_embeddings, get_similarities, save_embeddings, save_similarities
+from feature.numpy_utils import numpy_2d_array_as_text, text_to_numpy_2d
 
 
 

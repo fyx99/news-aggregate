@@ -1,10 +1,10 @@
-from newsaggregate.db import BaseDataClass
-from newsaggregate.db.crud.blob import Embedding
-from newsaggregate.db.crud.feeds import Feed
-from newsaggregate.db.databaseinstance import DatabaseInterface
+from db import BaseDataClass
+from db.crud.blob import Embedding
+from db.crud.feeds import Feed
+from db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 import re
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 

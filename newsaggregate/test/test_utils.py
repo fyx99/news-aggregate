@@ -1,24 +1,21 @@
 from bs4.element import Tag
-import logging
-from newsaggregate.db.databaseinstance import DatabaseInterface
+from db.s3 import Datalake
 
-from newsaggregate.db.postgresql import Database
-from newsaggregate.storage.s3 import Datalake
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
 
 
 def test_data_func(tests):
-    with open(f"newsaggregate/test/testdata/{tests}", mode="r", encoding="utf-8") as file:
+    with open(f"test/testdata/{tests}", mode="r", encoding="utf-8") as file:
         return file.read()
 
 
 def mock_data(prefix, filetype=None):
     if filetype == "html":
-        with open(f"newsaggregate/test/testdata/{prefix}.html") as htmlfile:
+        with open(f"test/testdata/{prefix}.html") as htmlfile:
             return htmlfile.read()
     try:
-        with open(f"newsaggregate/test/testdata/{prefix}.txt") as txtfile, open(f"newsaggregate/test/testdata/{prefix}.html") as htmlfile:
+        with open(f"test/testdata/{prefix}.txt") as txtfile, open(f"test/testdata/{prefix}.html") as htmlfile:
             return txtfile.read(), htmlfile.read()
     except FileNotFoundError:
         logger.error("File not found")

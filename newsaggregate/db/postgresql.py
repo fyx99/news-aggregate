@@ -1,18 +1,22 @@
 import psycopg2
 from psycopg2 import sql, InterfaceError
 import traceback
-from newsaggregate.db.config import POSTGRES_CONNECTION_DETAILS
+from db.config import POSTGRES_CONNECTION_DETAILS
 from psycopg2.errors import UniqueViolation, AdminShutdown, OperationalError
 import psycopg2.extras
 
-from newsaggregate.logging import get_logger
+from logger import get_logger
 logger = get_logger()
+
+
 
 class Database:
     connection = None
+    instance = None
     
     def __init__(self):
         self.connect()
+        Database.instance = self
 
 
     def __enter__(self):
@@ -24,6 +28,9 @@ class Database:
         """
         if self.connection is not None and self.connection is not None:
             self.connection.close()
+
+    def get():
+        return Database.instance
 
 
     def connect(self):

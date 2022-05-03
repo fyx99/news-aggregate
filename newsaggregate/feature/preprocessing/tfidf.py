@@ -1,7 +1,7 @@
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from newsaggregate.feed.preprocessing.general import TextEmbedding
+from feature.preprocessing.general import TextEmbedding
 
 class TfidfProcessor:
 

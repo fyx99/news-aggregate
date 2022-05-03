@@ -1,9 +1,9 @@
 import unittest
 from unittest import mock
-from newsaggregate.rss.rsscrawler import RSSCrawler
-from newsaggregate.test.test_utils import get_datalake_test_data, mock_data, test_data_func
+from rss.rsscrawler import RSSCrawler
+from test.test_utils import get_datalake_test_data, mock_data, test_data_func
 from types import SimpleNamespace
-from newsaggregate.test import CustomTestcase
+from test import CustomTestcase
 
 
 
