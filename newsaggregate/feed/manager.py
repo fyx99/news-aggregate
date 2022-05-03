@@ -23,6 +23,15 @@ class FeedManager:
     def main():
         with Database() as db, Datalake() as dl, MessageBroker() as rb:
             di = DatabaseInterface(db, dl, rb)
+            has_tasks = True
+            while has_tasks:
+                task = di.rb.get_task("FEATURE")
+                
+                article = Article(**task["article"])
+                feed = Feed(**task["feed"])
+                logger.info(article)
+                logger.info(feed)
+                FeedManager.run_single_article(di, article, feed)
 
             articles, embeddings = get_articles_for_feed(di)
             ids = [a.id for a in articles]

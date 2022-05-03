@@ -19,7 +19,7 @@ RUN python3 model_setup.py
 
 FROM ml-base as ml
 COPY . .
-CMD [ "python3", "-m", "unittest"]
+CMD [ "python3", "-u", "-m", "main"]
 
 
 FROM base as final
