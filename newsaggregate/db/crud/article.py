@@ -1,9 +1,9 @@
-from newsaggregate.db.crud.blob import Embedding, get_embedding_by_id
+from newsaggregate.db import BaseDataClass
+from newsaggregate.db.crud.blob import Embedding
 from newsaggregate.db.crud.feeds import Feed
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 import re
-from newsaggregate.feed.preprocessing.general import TextEmbedding
 from newsaggregate.logging import get_logger
 logger = get_logger()
 
@@ -11,7 +11,7 @@ logger = get_logger()
 
 
 @dataclass
-class Article:
+class Article(BaseDataClass):
     id: str = ""
     url: str = ""
     amp_url: str = ""
@@ -23,6 +23,7 @@ class Article:
     title_hash: str = ""
     status: str = ""
     text: str = ""
+        
 
     def article_from_entry(entry, feed):
         return Article(title=entry.title, url=entry.link, summary=entry.summary, publish_date=entry.published_parsed, feed=feed)
@@ -119,9 +120,9 @@ def set_article_status(db: DatabaseInterface, article: Article):
     db.db.query(insert_sql, insert_data)
 
 def refresh_article_materialized_views(db: DatabaseInterface):
-    insert_sql = "REFRESH MATERIALIZED VIEW articles_clean";
+    insert_sql = "REFRESH MATERIALIZED VIEW articles_clean"
     db.db.query(insert_sql)
-    insert_sql = "REFRESH MATERIALIZED VIEW articles_recent";
+    insert_sql = "REFRESH MATERIALIZED VIEW articles_recent"
     db.db.query(insert_sql)
 
 

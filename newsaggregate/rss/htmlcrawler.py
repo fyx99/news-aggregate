@@ -159,7 +159,7 @@ class HTMLCrawler:
             img_html_time = time.time() - start - get_html_time - parse_html_time
             save_article(db, markups, html, article)
             save_article_time = time.time() - start - parse_html_time - get_html_time - img_html_time
-            logger.info(f"{threading.get_ident()}: {get_html_time=} {parse_html_time=} {img_html_time=} {save_article_time=}")
+            logger.info(f"HTML {get_html_time=:.2f} {parse_html_time=:.2f} {img_html_time=:.2f} {save_article_time=:.2f}")
         except Exception as e:
             logger.error("ERROR FOR " + article.url + " " + repr(e)) 
             logger.error(traceback.format_exc())   

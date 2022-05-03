@@ -1,6 +1,10 @@
 from newsaggregate.rss.manager import RssCrawlManager
-from newsaggregate.feed.manager import FeedManager
 from newsaggregate.rss.articleprocessing import ArticleProcessingManager
+try:
+    from newsaggregate.feed.manager import FeedManager
+except ImportError:
+    FeedManager = None
+
 import os
 from newsaggregate.logging import get_logger
 logger = get_logger()

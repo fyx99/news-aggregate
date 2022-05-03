@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2 import sql, InterfaceError
 import traceback
-from newsaggregate.db.config import CONNECTION_DETAILS
+from newsaggregate.db.config import POSTGRES_CONNECTION_DETAILS
 from psycopg2.errors import UniqueViolation, AdminShutdown, OperationalError
 import psycopg2.extras
 
@@ -29,7 +29,7 @@ class Database:
     def connect(self):
         """Connect to Postgres
         """
-        self.connection = psycopg2.connect(**CONNECTION_DETAILS)
+        self.connection = psycopg2.connect(**POSTGRES_CONNECTION_DETAILS)
         self.connection.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = self.connection.cursor()
         cursor.execute("select 1;")

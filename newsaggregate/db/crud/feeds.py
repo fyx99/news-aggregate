@@ -1,9 +1,10 @@
+from newsaggregate.db import BaseDataClass
 from newsaggregate.db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 
 
 @dataclass
-class Feed:
+class Feed(BaseDataClass):
     publisher: str
     url: str
     category: str

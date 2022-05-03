@@ -2,7 +2,8 @@ import logging
 import os
 
 #basic config for root logger - info to prevent moduls from spamming
-logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+# set this to info and get lots of bullshit from third party libs
+logging.basicConfig(level=logging.ERROR, format="%(levelname)-6s %(threadName)-6s %(message)s")
 
 log_level = os.environ.get("LOG_LEVEL", default="DEBUG")
 

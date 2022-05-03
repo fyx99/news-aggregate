@@ -10,6 +10,7 @@ from newsaggregate.db.postgresql import Database
 from newsaggregate.feed.preprocessing.bert import BertProcessorBaseEN, BertProcessorDistDE
 from newsaggregate.feed.preprocessing.general import TextEmbedding
 from newsaggregate.feed.preprocessing.tfidf import TfidfProcessor
+from newsaggregate.message.rabbit import MessageBroker
 from newsaggregate.storage.s3 import Datalake
 import time
 
@@ -20,8 +21,8 @@ class FeedManager:
 
     
     def main():
-        with Database() as db, Datalake() as dl:
-            di = DatabaseInterface(db, dl)
+        with Database() as db, Datalake() as dl, MessageBroker() as rb:
+            di = DatabaseInterface(db, dl, rb)
 
             articles, embeddings = get_articles_for_feed(di)
             ids = [a.id for a in articles]
