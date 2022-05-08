@@ -1,3 +1,4 @@
+from typing import List
 from db import BaseDataClass
 from db.crud.blob import Embedding
 from db.crud.feeds import Feed
@@ -23,6 +24,7 @@ class Article(BaseDataClass):
     title_hash: str = ""
     status: str = ""
     text: str = ""
+
         
 
     def article_from_entry(entry, feed):
@@ -54,7 +56,7 @@ def get_articles_for_reprocessing(db: DatabaseInterface):
     return [(r["id"], r["url"]) for r in rows]
 
 
-def get_articles_for_feed(db: DatabaseInterface):
+def get_articles_for_feed(db: DatabaseInterface, type):
                         #     SELECT id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text from Articles FROM articles as aa 
                         # left join feeds as f on feed = f.url
                         # where f.language = 'EN' and aa.feed in ('https://www.washingtonexaminer.com/tag/news.rss')
@@ -64,11 +66,22 @@ def get_articles_for_feed(db: DatabaseInterface):
     rows = db.db.query("""
                         SELECT a.id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text, e.id as blob_id, text_type, processor
                         from articles_clean as a
-                        inner join embeddings_latest as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = 'BertProcessorDistDE'
-                        """,
+                        inner join embeddings_latest as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = %s
+                        """, (type,),
                         result=True)
     return ([Article(r["id"], r["url"], r["amp_url"], r["image_url"], r["title"], r["summary"], r["publish_date"], r["feed"], r["title_hash"], r["status"], r["text"]) for r in rows],
             [Embedding(r["blob_id"], r["processor"], r["text_type"], r["id"]) for r in rows])
+
+
+
+
+def get_articles_clean(db: DatabaseInterface) -> List[Article]:
+    rows = db.db.query("""
+                        SELECT id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text from articles_clean
+                        """, 
+                        result=True)
+    return [Article(**article) for article in rows]
+            
 
 def get_article_html(db: DatabaseInterface, key: str):
     try:

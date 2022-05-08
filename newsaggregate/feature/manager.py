@@ -1,9 +1,7 @@
 from collections import defaultdict
-import threading
 import traceback
 import numpy as np
 from db.crud.article import Article, get_article, get_articles_for_feed
-from db.crud.blob import save_similarities
 from db.crud.feeds import Feed
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
@@ -16,6 +14,8 @@ import time
 
 from logger import get_logger
 logger = get_logger()
+
+embedding_types = [type(BertProcessorBaseEN()).__name__, type(BertProcessorDistDE()).__name__]
 
 class FeedManager:
 
@@ -45,13 +45,14 @@ class FeedManager:
                 [FeedManager.run_single_article(di, article, feed) for article, feed in list_ordered]
 
             logger.info("ALL SINGLE TASKS DONE")
+            
+            for embedding_type in embedding_types:
+                articles, embeddings = get_articles_for_feed(di, embedding_type)
+                ids = [a.id for a in articles]
+                texts = [a.text for a in articles]
+                textembeddings = TextEmbedding.load_by_objs([e.load(di) for e in embeddings])
+                FeedManager.process_embedding_batches(di, ids, textembeddings, embedding_type)
 
-            articles, embeddings = get_articles_for_feed(di)
-            ids = [a.id for a in articles]
-            texts = [a.text for a in articles]
-            textembeddings = TextEmbedding.load_by_objs([e.load(di) for e in embeddings])
-
-            FeedManager.process_embedding_batches(di, ids, textembeddings, embeddings[0].processor)
             FeedManager.process_text_batches(di, ids, texts)
             logger.info("ALL BATCH TASKS DONE")
 

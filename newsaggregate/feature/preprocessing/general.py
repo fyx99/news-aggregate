@@ -49,8 +49,16 @@ class SimilarityMatrix:
         top_n_scores = np.array([self.similarities[i][top_n_indices[i]] for i in range(len(top_n_indices))])
         return SimilarityOutput(self.index[top_n_indices], top_n_scores)
 
-    def load(db, type):
-        return SimilarityMatrix(*get_similarities(db, type))
+    def top_n_reference(self, n, ref):
+        # ordered with highest last np.flip(similarityOutput.scores, axis=1) could make the change
+        top_n_indices = np.apply_along_axis(lambda x: np.argsort(x)[-n:], 0, self.similarities).T
+        top_n_scores = np.array([self.similarities[i][top_n_indices[i]] for i in range(len(top_n_indices))])
+        return SimilarityOutput(self.index[top_n_indices], top_n_scores)
+
+    def load(db, embedding_type):
+
+        similarities, index = get_similarities(db, embedding_type)
+        return SimilarityMatrix(text_to_numpy_2d(similarities), text_to_numpy_2d(index))
 
     def save(self, db, type):
         save_similarities(db, numpy_2d_array_as_text(self.similarities), numpy_2d_array_as_text(self.index), type)

@@ -32,3 +32,8 @@ docker run -d --restart=always --hostname rabbit --name rabbitmq -e RABBITMQ_DEF
 
 # old
 docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-aggregate-ml
+
+
+
+docker build --target srv -t fxxy/news-aggregate-srv . 
+docker run --env-file local.env -p 8000:8000 fxxy/news-aggregate-srv

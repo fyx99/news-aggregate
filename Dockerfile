@@ -18,6 +18,15 @@ COPY model_setup.py model_setup.py
 RUN python3 model_setup.py
 
 
+
+
+
+FROM ml-base as srv
+COPY . .
+WORKDIR /app/newsaggregate
+CMD [ "python3", "-m", "uvicorn", "recommend.main:app", "--host=0.0.0.0", "--port=8000"]
+
+
 FROM ml-base as ml
 COPY . .
 WORKDIR /app/newsaggregate

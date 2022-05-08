@@ -6,6 +6,7 @@ from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
 import uvicorn
+from newsaggregate.recommend.services.inference import Inference
 
 from recommend.api import router as endpoint_router
 from db.postgresql import Database
@@ -37,6 +38,7 @@ async def on_app_start():
     """Anything that needs to be done while app starts
     """
     db.connect()
+    Inference.setup()
 
 
 @app.on_event("shutdown")
@@ -50,7 +52,7 @@ async def on_app_shutdown():
 async def ping():
     """
     """
-    return Response("CDE v2")
+    return Response("Pong")
 
 
 @app.get("/json")
