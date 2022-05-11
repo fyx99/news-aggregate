@@ -7,7 +7,14 @@ POSTGRES_CONNECTION_DETAILS = {
     "password": os.environ.get("DB_PW", default=""),
     "port": os.environ.get("DB_PORT", default=""),
     "application_name": "NEWSAGGREGATE",
+}
 
+ASYNC_POSTGRES_CONNECTION_DETAILS = {
+    "database": os.environ.get("DB_NAME", default=""),
+    "host": os.environ.get("DB_HOST", default=""),
+    "user": os.environ.get("DB_USER", default=""),
+    "password": os.environ.get("DB_PW", default=""),
+    "port": os.environ.get("DB_PORT", default="")
 }
 
 RABBIT_CONNECTION_DETAILS = {

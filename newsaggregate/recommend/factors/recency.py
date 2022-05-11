@@ -1,5 +1,4 @@
 import numpy as np
-from db.databaseinstance import DatabaseInterface
 from recommend.factors.general import FactorSetupInput, FactorProcessInput, normalize_array
 
 from logger import get_logger, timeit
@@ -8,7 +7,7 @@ logger = get_logger()
 class RecencyFactor:
 
     @timeit
-    def setup(db: DatabaseInterface, setup_input: FactorSetupInput):
+    def setup(setup_input: FactorSetupInput):
 
 
         publish_dates = [article.publish_date for article in setup_input.articles]

@@ -27,9 +27,11 @@ class MessageBroker:
         """Close Postgres Connection
         """
         #if self.connection is not None:
+        self.disconnect()
+
+    def disconnect(self):
         for connection in self.connections.values():
             connection.close()
-
 
     def connect(self):
         """Connect to Rabbit MQ
@@ -44,7 +46,7 @@ class MessageBroker:
         for route in ROUTING_KEYS:
             new_channel.queue_declare(route, durable=True)      #, arguments={"x-queue-mode": "lazy"}
             new_channel.queue_bind(exchange=EXCHANGE_NAME, queue=route, routing_key=route)
-        logger.info(f"RABBIT CONNECTION UP")
+        logger.debug(f"RABBIT CONNECTION UP")
         return new_channel
         
     # def add_channel(self):

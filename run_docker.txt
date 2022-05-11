@@ -2,14 +2,16 @@ docker build -t fxxy/news-aggregate . ; docker push fxxy/news-aggregate
 
 
 # test
-docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env fxxy/news-aggregate-test;
+docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test; docker push fxxy/news-aggregate-test
 
+docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file drop.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test;
 
 # run ml local
 docker build --target ml -t fxxy/news-aggregate-ml . ; docker run  -e TASK='FEED' --env-file local.env  fxxy/news-aggregate-ml
 
 docker run --env-file local.env fxxy/news-aggregate
 docker run -e TASK='FEED' --env-file local.env fxxy/news-aggregate
+docker run -e TASK='FEED' --env-file /env/drop.env fxxy/news-aggregate
 
 
 
@@ -37,3 +39,8 @@ docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-agg
 
 docker build --target srv -t fxxy/news-aggregate-srv . 
 docker run --env-file local.env -p 8000:8000 fxxy/news-aggregate-srv
+
+
+
+k6 run --duration 30s --vus 30 /newsaggregate/test/k6.js   
+k6 run --out csv=C:/Github/Jupyter_Env/k6_result.csv --duration 120s --vus 3 /newsaggregate/test/k6.js   

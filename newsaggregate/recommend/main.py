@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,13 +8,15 @@ from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
 import uvicorn
-from newsaggregate.recommend.services.inference import Inference
+from recommend.factors.main import setup
 
 from recommend.api import router as endpoint_router
-from db.postgresql import Database
+from db.async_postgresql import AsyncDatabase
 
 
-db = Database()
+db = AsyncDatabase()
+db_back = AsyncDatabase()
+task = None
 
 app = FastAPI(title="data-backend", version="0")
 app.add_middleware(GZipMiddleware, minimum_size=1000)
@@ -37,8 +41,11 @@ app.include_router(endpoint_router, prefix="/api")
 async def on_app_start():
     """Anything that needs to be done while app starts
     """
-    db.connect()
-    Inference.setup()
+    await db.connect()
+    await db_back.connect(1,1)
+
+    task = asyncio.create_task(setup(db_back))
+    
 
 
 @app.on_event("shutdown")
@@ -46,6 +53,8 @@ async def on_app_shutdown():
     """Anything that needs to be done while app shutdown
     """
     db.close()
+    db_back.close()
+    task.cancel() if task else 0
 
 
 @app.get("/ping")
@@ -64,3 +73,11 @@ async def json():
 
 if __name__ == "__main__":
     uvicorn.run(app, log_level="debug", reload=True)
+
+
+
+
+
+
+
+

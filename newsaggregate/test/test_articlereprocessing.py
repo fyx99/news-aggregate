@@ -80,10 +80,7 @@ class TestArticleProcessing(CustomTestcase):
     def test_compare_n_tags(self):
         #res = ArticleProcessing.compare_n_tags([self.testsoup1, self.testsoup2, self.testsoup4, self.testsoup3, self.testsoup5], n=100)
 
-        import time
-        start = time.time()
         #ArticleProcessingManager.main()
-        logger.info(time.time()-start)
         
         return
     

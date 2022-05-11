@@ -32,7 +32,7 @@ class RSSCrawler:
             rss_texts_parsed = [feedparser.parse(text) for text in rss_texts]
             return rss_texts_parsed
         except Exception as e:
-            logger.info("HTTP ERROR")
+            logger.debug("HTTP ERROR")
             return []
     
     def get_entries(rss_parsed):
@@ -62,13 +62,13 @@ class RSSCrawler:
             start = time.time()
             parsed_feed = RSSCrawler.parse_feed([feed.url])
             if not len(parsed_feed):
-                logger.info("Parse Feed returned 0 Items")
+                logger.debug("PARSE FEED RETURNED 0 ITEMS")
                 return []
             entries = RSSCrawler.get_entries(parsed_feed[0])
             entries_articles = RSSCrawler.clean_entries(entries, feed.url)
             rss_articles = RSSCrawler.save_entries(db, entries_articles)
             save_feed_last_crawl(db, feed)
-            logger.info(f"RSS TIME {time.time()-start:.2f}")
+            logger.debug(f"RSS TIME {time.time()-start:.2f}")
             return rss_articles
         except Exception as e:
             logger.error(traceback.format_exc())

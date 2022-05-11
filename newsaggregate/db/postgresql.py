@@ -21,7 +21,7 @@ class Database:
     def __enter__(self):
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self,  *args):
         """Close Postgres Connection"""
         self.close()
 
@@ -43,7 +43,7 @@ class Database:
         rows = cursor.fetchall()
         cursor.close()
         assert str(rows) == "[(1,)]"
-        logger.info(f"POSTGRES CONNECTION UP {self.connection}")
+        logger.debug(f"POSTGRES CONNECTION UP {self.connection}")
 
         # logger.info("*** Connection Problem " + repr(e))
 
@@ -68,7 +68,6 @@ class Database:
         except Exception as e:
             logger.error(repr(e))
             logger.error(traceback.format_exc())
-            print(traceback.format_exc())
         finally:
             if result:
                 return rows

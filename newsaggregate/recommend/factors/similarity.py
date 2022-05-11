@@ -1,8 +1,5 @@
-from collections import Counter, defaultdict
 import numpy as np
-from db.databaseinstance import DatabaseInterface
-from db.crud.interactions import get_read_counts
-from recommend.factors.general import FactorSetupInput, FactorProcessInput, normalize_array
+from recommend.factors.general import FactorSetupInput, FactorProcessInput
 
 
 from logger import get_logger, timeit
@@ -12,7 +9,7 @@ logger = get_logger()
 class SimilarityFactor:
     
     @timeit
-    def setup(db: DatabaseInterface, setup_input: FactorSetupInput):
+    def setup(setup_input: FactorSetupInput):
         # TODO here weight the like"ness of a article
         #article_ids = set(article.id for article in setup_input.articles)
         SimilarityFactor.article_index = setup_input.article_index

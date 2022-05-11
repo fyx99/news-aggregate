@@ -46,7 +46,7 @@ class Manager:
             #Manager.feature_thread = worker
         logger.debug("JOINING")
         Manager.q.join()
-        logger.info("ALL JOINED")
+        logger.debug("ALL JOINED")
 
     def process(db):
 
@@ -65,7 +65,7 @@ class Manager:
                 Manager.last_time = time.time()
             Manager.q.task_done()
             logger.debug("TASK DONE")
-        logger.info(f"THREAD DONE")
+        logger.debug(f"THREAD DONE")
 
 
 
@@ -88,6 +88,7 @@ class RssCrawlManager:
             add_initial_rss_crawl_jobs(di)
             #add_random_status_crawl_jobs(di)
             Manager.run(di)
+            #di.rb.disconnect()  # to prevent long waits without any doing
             
             logger.info("REFRESH MATERIALIZED VIEWS")
             refresh_article_materialized_views(di)
@@ -109,7 +110,7 @@ class RssCrawlManager:
         elif job_type == HTML_CRAWL:
             HTMLCrawler.run_single(db, job_article)
             db.rb.put_task("FEATURE", {"job_type": FEATURE_EXTRACTION, "article": job_article.to_json(), "feed": job_feed.to_json()})
-            logger.info("ADDED JOB TO RABBIT")
+            logger.debug("ADDED JOB TO RABBIT")
 
 
 if __name__ == "__main__":

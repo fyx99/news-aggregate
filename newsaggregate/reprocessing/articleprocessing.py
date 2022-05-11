@@ -35,11 +35,11 @@ class ArticleProcessingManager:
         with Database() as db, Datalake() as dl:
             di = DatabaseInterface(db, dl)
             articles_html = get_articles_for_reprocessing(di)
-            logger.info("got articles")
+            #logger.info("got articles")
             url_text_pattern = ArticleProcessing.reprocess_article_unnecessary_tags(di, articles_html)
-            logger.info("got patterns")
+            #logger.info("got patterns")
             ArticleProcessingManager.save_patterns(di, url_text_pattern)
-            logger.info("saved pattern")
+            #logger.info("saved pattern")
 
 class ArticleProcessing:
 
@@ -99,9 +99,9 @@ class ArticleProcessing:
                 if len(parent1_text) > len(parent2_text):
                     parent2 = parent2.parent
                     parent2_text = parent2.get_text()
-                    logger.info("go parent2 up")
+                    #logger.info("go parent2 up")
                 else:
-                    logger.info("go parent1 up")
+                    #logger.info("go parent1 up")
                     parent1 = parent1.parent
                     parent1_text = parent1.get_text()
             # logger.info(difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio())
@@ -156,7 +156,7 @@ class ArticleProcessing:
             soup_b = BeautifulSoup(locate_article(BeautifulSoup(html_b, "html.parser")).__str__(), "html.parser")
 
             start = time.time()
-            logger.info(f"compare {articles_list[index_a][0]} {articles_list[index_a][1]} and {articles_list[index_b][0]} {articles_list[index_b][1]} ")
+            #logger.info(f"compare {articles_list[index_a][0]} {articles_list[index_a][1]} and {articles_list[index_b][0]} {articles_list[index_b][1]} ")
             res_match = ArticleProcessing.compare_two_tags(soup_a, soup_b, 0.8)
             logger.info(f"{int(time.time()-start)}")
             #logger.info(res_match)
@@ -188,10 +188,10 @@ class ArticleProcessing:
         full_text1 = "".join([p.get_text() for p in p_list1])
         full_text2 = "".join([p.get_text() for p in p_list2])
         if "€ 19,99 pro Monat" in full_text1 and "€ 19,99 pro Monat" in full_text2:
-            logger.info("pay")
+            #logger.info("pay")
             a = 1
         if ArticleProcessing.too_similar(full_text1, full_text2):
-            logger.info("skip")
+            #logger.info("skip")
             return []
 
         # if too many entrys just random samples
@@ -217,7 +217,7 @@ class ArticleProcessing:
                         #useless_parent_id_child2, identifyable2 = ArticleProcessing.identifiable_child(useless_parent2, soup1)
 
                         matches.append(ArticleProcessing.element_saveable(useless_parent_id_child1, identifyable1))
-                    logger.info(time.time()-start)
+                    #logger.info(time.time()-start)
         return matches
 
 

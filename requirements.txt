@@ -9,3 +9,4 @@ pika
 fastapi
 starlette
 uvicorn
+asyncpg

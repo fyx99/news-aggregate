@@ -21,6 +21,10 @@ def save_similarities(db: DatabaseInterface, similarity_data, index_data, type):
     logger.info(f"SAVED SIMILARITY MATRIX {blob_id}")
 
 
+async def async_get_similarities(db: DatabaseInterface, type):
+    blob_id = await db.db.query("select id from similarities where type = %s order by update_date desc limit 1", (type,), result=True)[0]["id"]
+    return db.dl.get_obj(f"testing/similarity/{blob_id}"), db.dl.get_obj(f"testing/similarity_index/{blob_id}")
+    
 def get_similarities(db: DatabaseInterface, type):
     blob_id = db.db.query("select id from similarities where type = %s order by update_date desc limit 1", (type,), result=True)[0]["id"]
     return db.dl.get_obj(f"testing/similarity/{blob_id}"), db.dl.get_obj(f"testing/similarity_index/{blob_id}")
@@ -36,5 +40,4 @@ def get_embeddings(db: DatabaseInterface, processor, text_type, article_id):
     return db.dl.get_obj(f"testing/embedding/{blob_id}")
 
 def get_embedding_by_id(db: DatabaseInterface, blob_id):
-    logger.info(f"LOAD EMBEDDING {blob_id}")
     return db.dl.get_obj(f"testing/embedding/{blob_id}")

@@ -48,7 +48,7 @@ class Datalake:
             )
             self.connection = session.client("s3")
             self.bucket = s3key["bucket"]
-            logger.info(f"S3 CONNECTION UP {self.connection}")
+            logger.debug(f"S3 CONNECTION UP {self.connection}")
 
             
         except Exception as e:

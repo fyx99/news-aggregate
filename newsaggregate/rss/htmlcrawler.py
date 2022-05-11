@@ -11,8 +11,10 @@ from db.crud.textpattern import get_unnecessary_text_pattern
 from db.databaseinstance import DatabaseInterface
 from rss.articleutils import locate_article
 import time
-import threading
 import urllib.request
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
+
 from logger import get_logger
 logger = get_logger()
 
@@ -114,7 +116,6 @@ class HTMLCrawler:
                 [p.clear() for p in ps]
             else:
                 raise NotImplementedError
-
         return soup
         
 
@@ -138,7 +139,7 @@ class HTMLCrawler:
             html, article.status = HTMLCrawler.get_html(article.url)
             get_html_time = time.time() - start
             if article.status == "INACTIVE":
-                logger.info(f"INACTIVE {article.url}")
+                logger.debug(f"INACTIVE {article.url}")
                 return set_article_status(db, article)
                 
             parser = "html.parser"
@@ -152,24 +153,14 @@ class HTMLCrawler:
 
             img_status = HTMLCrawler.get_url_status_code(article.image_url)
             if img_status == "INACTIVE":
-                logger.info(f"INACTIVE IMAGE {article.url}")
+                logger.debug(f"INACTIVE IMAGE {article.url}")
                 status = img_status
 
             img_html_time = time.time() - start - get_html_time - parse_html_time
             save_article(db, markups, html, article)
             save_article_time = time.time() - start - parse_html_time - get_html_time - img_html_time
-            logger.info(f"HTML {get_html_time=:.2f} {parse_html_time=:.2f} {img_html_time=:.2f} {save_article_time=:.2f}")
+            logger.debug(f"HTML {get_html_time=:.2f} {parse_html_time=:.2f} {img_html_time=:.2f} {save_article_time=:.2f}")
         except Exception as e:
             logger.error("ERROR FOR " + article.url + " " + repr(e)) 
             logger.error(traceback.format_exc())   
             
-    def analyze(urls):
-        if not isinstance(urls, list):
-            urls = [urls]
-        for url in urls:
-            logger.info(url)
-            html = HTMLCrawler.get_html(url)
-            markups = HTMLCrawler.get_json_plus_metadata(html)
-            logger.info(markups)
-            meta = HTMLCrawler.get_metadata(html)
-            logger.info(meta)

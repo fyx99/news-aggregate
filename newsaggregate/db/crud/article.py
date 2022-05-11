@@ -6,6 +6,7 @@ from db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
 import re
 from logger import get_logger
+from newsaggregate.db.async_postgresql import AsyncDatabase
 logger = get_logger()
 
 
@@ -75,7 +76,7 @@ def get_articles_for_feed(db: DatabaseInterface, type):
 
 
 
-def get_articles_clean(db: DatabaseInterface) -> List[Article]:
+async def get_articles_clean(db: DatabaseInterface) -> List[Article]:
     rows = db.db.query("""
                         SELECT id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text from articles_clean
                         """, 

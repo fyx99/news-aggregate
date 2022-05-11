@@ -10,7 +10,7 @@ logger = get_logger()
 class OutletRelatedFactor:
 
     @timeit
-    def setup(db: DatabaseInterface, setup_input: FactorSetupInput):
+    def setup(setup_input: FactorSetupInput):
 
         OutletRelatedFactor.outlets = set(article.feed for article in setup_input.articles)
         OutletRelatedFactor.articles = setup_input.articles
@@ -36,5 +36,4 @@ class OutletRelatedFactor:
             article_feeds[OutletRelatedFactor.feed_index[feed]] = count
 
 
-      
         return normalize_array(article_feeds)
