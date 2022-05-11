@@ -2,6 +2,7 @@
 import threading
 from db.config import RABBIT_CONNECTION_DETAILS
 import pika
+from pika.adapters.asyncio_connection import AsyncioConnection
 import json
 
 from logger import get_logger

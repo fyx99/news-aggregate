@@ -1,12 +1,14 @@
+import asyncio
 import time
 from typing import List
 
 from db.crud.article import Article, get_random_articles, refresh_article_materialized_views
 from db.crud.feeds import Feed, get_feeds
 from db.databaseinstance import DatabaseInterface
-from db.postgresql import Database
 from db.s3 import Datalake
 from db.rabbit import MessageBroker
+from db.async_postgresql import AsyncDatabase
+from db.http import Http
 from rss.rsscrawler import RSSCrawler
 from rss.htmlcrawler import HTMLCrawler
 from queue import Queue
@@ -40,24 +42,28 @@ class Manager:
         return Manager.q.empty()
 
     def run(db):
-        for _ in range(5):
-            worker = threading.Thread(target=Manager.process, args=(db,))
-            worker.start()
+        # for _ in range(1):
+        #     worker = threading.Thread(target=asyncio.run, args=(Manager.process(db),))
+        #     worker.start()
             #Manager.feature_thread = worker
+        
         logger.debug("JOINING")
-        Manager.q.join()
+        # Manager.q.join()
         logger.debug("ALL JOINED")
 
-    def process(db):
+    # def process_async(db):
+    #     loop = asyncio.new_event_loop()
+    #     asyncio.set_event_loop(loop)
+    #     loop.run_until_complete(Manager.process(db))
+    #     loop.close()
 
+    async def process(db):
+        futures = []
         while not Manager.empty():
             job = Manager.q.get()
 
-            try:
-                RssCrawlManager.process_job(db, job)
-            except Exception:
-                # if this is not catched errors will halt thread and cause join to fail
-                logger.info("UNEXPECTED EXCEPTION IN PROCESSING JOB")
+            futures.append(RssCrawlManager.process_job(db, job))
+
             logger.debug("PROCESSED")
             Manager.f_job_count += 1
             if Manager.f_job_count % 50 == 0:
@@ -65,41 +71,49 @@ class Manager:
                 Manager.last_time = time.time()
             Manager.q.task_done()
             logger.debug("TASK DONE")
+        asyncio.gather(*futures)
         logger.debug(f"THREAD DONE")
 
 
 
 
-def add_initial_rss_crawl_jobs(db: DatabaseInterface):
-    feeds: List[Feed] = get_feeds(db)
+async def add_initial_rss_crawl_jobs(db: DatabaseInterface):
+    feeds: List[Feed] = await get_feeds(db)
     [Manager.add_job({"job_type": RSS_CRAWL, "feed": feed}) for feed in feeds]
 
-def add_random_status_crawl_jobs(db: DatabaseInterface):
-    article_feeds = get_random_articles(db)
+async def add_random_status_crawl_jobs(db: DatabaseInterface):
+    article_feeds = await get_random_articles(db)
     [Manager.add_job({"job_type": HTML_CRAWL, "article": article, "feed": feed}) for article, feed in article_feeds]
         
 
 class RssCrawlManager:
-    def main():
+    async def main():
         # execute
-        with Database() as db, Datalake() as dl, MessageBroker() as rb:
-            di = DatabaseInterface(db, dl, rb)
-            HTMLCrawler.get_patterns(di)
-            add_initial_rss_crawl_jobs(di)
+        db = AsyncDatabase()
+        await db.connect()
+        dl = Datalake()
+        http = Http()
+        await http.create_session()
+        with Datalake() as dl, MessageBroker() as rb:
+            di = DatabaseInterface(db, dl, rb, http)
+            await HTMLCrawler.get_patterns(di)
+            await add_initial_rss_crawl_jobs(di)
             #add_random_status_crawl_jobs(di)
-            Manager.run(di)
+            await Manager.process(di)
+            
             #di.rb.disconnect()  # to prevent long waits without any doing
             
             logger.info("REFRESH MATERIALIZED VIEWS")
-            refresh_article_materialized_views(di)
+            await refresh_article_materialized_views(di)
             logger.info("REFRESH DONE")
+        await db.close()
 
-    def process_job(db: DatabaseInterface, job):
+    async def process_job(db: DatabaseInterface, job):
         job_type: str = job["job_type"]
         job_feed: Feed = job["feed"]
         job_article: Feed = job["article"] if "article" in job else None
         if job_type == RSS_CRAWL:
-            articles: List[Article] = RSSCrawler.run_single(db, job_feed)
+            articles: List[Article] = await RSSCrawler.run_single(db, job_feed)
 
             for article in articles:
                 if article.status != "CRAWL":
@@ -108,11 +122,11 @@ class RssCrawlManager:
                 Manager.add_job({"job_type": HTML_CRAWL, "feed": job_feed, "article": article})
 
         elif job_type == HTML_CRAWL:
-            HTMLCrawler.run_single(db, job_article)
+            await HTMLCrawler.run_single(db, job_article)
             db.rb.put_task("FEATURE", {"job_type": FEATURE_EXTRACTION, "article": job_article.to_json(), "feed": job_feed.to_json()})
             logger.debug("ADDED JOB TO RABBIT")
 
 
 if __name__ == "__main__":
-    RssCrawlManager.main()
+    asyncio.run(RssCrawlManager.main())
 

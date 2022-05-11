@@ -1,7 +1,8 @@
-import requests, time, feedparser, traceback
+import asyncio
+import time, feedparser, traceback
 from typing import List
+import aiohttp
 
-from db.config import HTTP_TIMEOUT
 from db.crud.article import Article, save_rss_article
 from db.crud.feeds import Feed, save_feed_last_crawl
 from db.databaseinstance import DatabaseInterface
@@ -26,14 +27,17 @@ class RssEntry:
 
 class RSSCrawler:
 
-    def parse_feed(rss_feeds):
+    client = None
+
+    async def parse_feed(db: DatabaseInterface, rss_feed):
         try:
-            rss_texts = [requests.get(rss_url, timeout=HTTP_TIMEOUT, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}).text for rss_url in rss_feeds]
-            rss_texts_parsed = [feedparser.parse(text) for text in rss_texts]
-            return rss_texts_parsed
+            res = await db.http.session.get(rss_feed)
+            rss_content = await res.content.read()
+            rss_parsed = feedparser.parse(rss_content) 
+            return rss_parsed
         except Exception as e:
             logger.debug("HTTP ERROR")
-            return []
+            return None
     
     def get_entries(rss_parsed):
         return [RssEntry.dict_to_entry(entry_dict) for entry_dict in rss_parsed.entries]
@@ -52,29 +56,25 @@ class RSSCrawler:
                 pass
         return [Article.article_from_entry(e, rss_feed) for e in clean_entries]
 
-    def save_entries(db: DatabaseInterface, articles: List[Article]):
-        for article in articles:
-            article = save_rss_article(db, article)
-            yield article
+    async def save_entries(db: DatabaseInterface, articles: List[Article]):
+        article_futures =  [save_rss_article(db, article) for article in articles]
+        return await asyncio.gather(*article_futures)
     
-    def run_single(db: DatabaseInterface, feed: Feed) -> List[RssEntry]:
+    async def run_single(db: DatabaseInterface, feed: Feed) -> List[RssEntry]:
+        logger.debug(f"RSS RUN SINGLE {feed.url}")
         try:
             start = time.time()
-            parsed_feed = RSSCrawler.parse_feed([feed.url])
-            if not len(parsed_feed):
-                logger.debug("PARSE FEED RETURNED 0 ITEMS")
+            parsed_feed = await RSSCrawler.parse_feed(db, feed.url)
+            if not parsed_feed:
+                logger.debug("PARSE FEED RETURNED NOTHING")
                 return []
-            entries = RSSCrawler.get_entries(parsed_feed[0])
+            entries = RSSCrawler.get_entries(parsed_feed)
             entries_articles = RSSCrawler.clean_entries(entries, feed.url)
-            rss_articles = RSSCrawler.save_entries(db, entries_articles)
-            save_feed_last_crawl(db, feed)
+            rss_articles = await RSSCrawler.save_entries(db, entries_articles)
+            await save_feed_last_crawl(db, feed)
             logger.debug(f"RSS TIME {time.time()-start:.2f}")
             return rss_articles
         except Exception as e:
             logger.error(traceback.format_exc())
             return []
         
-
-            
-    # def top_n_entries(feed_entries, n=2):
-    #     return [feed[index] for index in range(n) for feed in feed_entries] 

@@ -3,7 +3,7 @@ import difflib
 import re
 import traceback
 from bs4 import BeautifulSoup
-import requests
+import aiohttp
 import json
 from db.config import HTTP_TIMEOUT
 from db.crud.article import Article, save_article, set_article_status
@@ -11,7 +11,6 @@ from db.crud.textpattern import get_unnecessary_text_pattern
 from db.databaseinstance import DatabaseInterface
 from rss.articleutils import locate_article
 import time
-import urllib.request
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
@@ -24,26 +23,29 @@ from rss.util import Utils
 
 class HTMLCrawler:
 
-    patterns = defaultdict(list)
+    patterns = defaultdict(list)    
+    client = aiohttp.ClientSession(headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}, timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT))
 
-    def get_patterns(db):
-        patterns_list = get_unnecessary_text_pattern(db)
+
+    async def get_patterns(db):
+        patterns_list = await get_unnecessary_text_pattern(db)
         HTMLCrawler.patterns = defaultdict(list)
         [HTMLCrawler.patterns[pattern.url_pattern].append(pattern) for pattern in patterns_list]
 
-    def get_html(url):
+
+    async def get_html(url):
         try:
-            res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}, timeout=HTTP_TIMEOUT)
-            if res.status_code == 200:
-                return res.text, "ACTIVE"
-            return res.text, "INACTIVE"
+            res = await HTMLCrawler.client.get(url)
+            content = await res.text()
+            if res.status == 200:
+                return content, "ACTIVE"
+            return content, "INACTIVE"
         except:
             return "", "INACTIVE"
 
-    def get_url_status_code(url):
+    async def get_url_status_code(url):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"})
-            res = urllib.request.urlopen(req, timeout=HTTP_TIMEOUT).getcode()
+            res = await HTMLCrawler.client.get(url)
             if res == 200:
                 return "ACTIVE"
             return "INACTIVE"
@@ -133,14 +135,15 @@ class HTMLCrawler:
         return article_text, article_title
 
 
-    def run_single(db: DatabaseInterface, article: Article):
+    async def run_single(db: DatabaseInterface, article: Article):
+        logger.debug(f"HTML RUN SINGLE {article.url}")
         try:
             start = time.time()
-            html, article.status = HTMLCrawler.get_html(article.url)
+            html, article.status = await HTMLCrawler.get_html(article.url)
             get_html_time = time.time() - start
             if article.status == "INACTIVE":
                 logger.debug(f"INACTIVE {article.url}")
-                return set_article_status(db, article)
+                return await set_article_status(db, article)
                 
             parser = "html.parser"
             soup = BeautifulSoup(html, parser)
@@ -151,13 +154,13 @@ class HTMLCrawler:
             article.text, article.title = HTMLCrawler.parse_article(soup, article.url)
             parse_html_time = time.time() - start - get_html_time
 
-            img_status = HTMLCrawler.get_url_status_code(article.image_url)
+            img_status = await HTMLCrawler.get_url_status_code(article.image_url)
             if img_status == "INACTIVE":
                 logger.debug(f"INACTIVE IMAGE {article.url}")
                 status = img_status
 
             img_html_time = time.time() - start - get_html_time - parse_html_time
-            save_article(db, markups, html, article)
+            await save_article(db, markups, html, article)
             save_article_time = time.time() - start - parse_html_time - get_html_time - img_html_time
             logger.debug(f"HTML {get_html_time=:.2f} {parse_html_time=:.2f} {img_html_time=:.2f} {save_article_time=:.2f}")
         except Exception as e:

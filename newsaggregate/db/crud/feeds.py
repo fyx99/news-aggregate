@@ -13,12 +13,12 @@ class Feed(BaseDataClass):
     recommend: bool
     region: str
 
-def get_feeds(db: DatabaseInterface):
-    rows = db.db.query("SELECT publisher, url, category, language, tier, recommend, region from Feeds", result=True)
+async def get_feeds(db: DatabaseInterface):
+    rows = await db.db.query("SELECT publisher, url, category, language, tier, recommend, region from Feeds", result=True)
     return [Feed(**r) for r in rows]
     
 
 
-def save_feed_last_crawl(db: DatabaseInterface, feed: Feed):
-    db.db.query(f"UPDATE feeds SET last_crawl_date = current_timestamp WHERE url = %s", (feed.url,))
+async def save_feed_last_crawl(db: DatabaseInterface, feed: Feed):
+    await db.db.query(f"UPDATE feeds SET last_crawl_date = current_timestamp WHERE url = $1", (feed.url,))
 

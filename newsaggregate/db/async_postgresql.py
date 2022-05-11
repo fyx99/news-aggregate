@@ -14,21 +14,17 @@ class AsyncDatabase:
     connection: asyncpg.Connection = None
     instance = None
 
-    def __init__(self):
-        pass
-
     async def __aenter__(self):
         await self.connect()
-        return AsyncDatabase.instance
+        return self
 
     async def __aexit__(self, *args):
         """Close Postgres Connection"""
-        pass
-        #await self.close()
+        await self.close()
 
     
-    async def __await__(self):
-        return self.__aenter__().__await__()
+    # async def __await__(self):
+    #     return self.__aenter__().__await__()
 
     async def close(self):
         if self.connection is not None and self.connection is not None:
@@ -48,21 +44,12 @@ class AsyncDatabase:
         # AsyncDatabase.instance = self
 
     async def query(self, sql, data=(), result=False):
-
         rows = []
         try:
-            
             if result:
                 rows = await self.connection.fetch(sql, *data)
             else:
-                await self.connection.execute(sql)
-        # except (InterfaceError, AdminShutdown, OperationalError) as e:
-        #     logger.error(sql, data)
-        #     logger.error(traceback.format_exc())
-        #     logger.error(e.pgcode)
-        #     if self.closed != 0:
-        #         self.connect()
-        #         logger.error("*** RECONNECT ***")
+                await self.connection.execute(sql, *data)
         except Exception as e:
             logger.error(repr(e))
             logger.error(traceback.format_exc())
@@ -70,3 +57,17 @@ class AsyncDatabase:
             if result:
                 return rows
             return "Saved"
+
+
+async def test():
+
+    async with AsyncDatabase() as db:
+        res = await db.query("select $1 as test1, $1 as test;", ("2",), result=True)
+        print(res)
+        print("in")
+
+    print("out")
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.get_event_loop().run_until_complete(test())

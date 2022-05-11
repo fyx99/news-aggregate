@@ -16,11 +16,11 @@ class TestPostgres(CustomTestcase):
         with Database() as db:
             db = DatabaseInterface(db, None, None)
 
-            res = db.db.query("SELECT 4 as TEST;", result=True)
+            res = await db.db.query("SELECT 4 as TEST;", result=True)
             self.assertEqual(len(res), 1)
             self.assertEqual(res[0]["test"], 4)
 
-            res = db.db.query("SELECT 4 as TEST;", result=True, raw=True)
+            res = await db.db.query("SELECT 4 as TEST;", result=True, raw=True)
             self.assertEqual(len(res), 1)
             self.assertEqual(res[0][0], 4)
 

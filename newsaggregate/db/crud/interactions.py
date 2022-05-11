@@ -29,16 +29,16 @@ class ReadCount:
     count: int = 0
 
 
-def get_reads_for_user(db: DatabaseInterface, user_id) -> List[Read]:
-    rows = db.db.query("select user_id, article_id, start_date, end_date, max_scroll from reads where user_id = %s", (user_id,), result=True)
+async def get_reads_for_user(db: DatabaseInterface, user_id) -> List[Read]:
+    rows = await db.db.query("select user_id, article_id, start_date, end_date, max_scroll from reads where user_id = $1", (user_id,), result=True)
     return [Read(**read) for read in rows]
 
 
-def get_impressions(db: DatabaseInterface, user_id) -> List[Impression]:
-    rows = db.db.query("select user_id, article_id, start_date, end_date, rank from impressions where user_id = %s", (user_id,), result=True)
+async def get_impressions(db: DatabaseInterface, user_id) -> List[Impression]:
+    rows = await db.db.query("select user_id, article_id, start_date, end_date, rank from impressions where user_id = $1", (user_id,), result=True)
     return [Impression(**impression) for impression in rows]
     
 
-def get_read_counts(db: DatabaseInterface) -> np.ndarray:
-    read_count = db.db.query("select article_id, count(article_id) as read_count from reads group by article_id", result=True, raw=True)
+async def get_read_counts(db: DatabaseInterface) -> np.ndarray:
+    read_count = await db.db.query("select article_id, count(article_id) as read_count from reads group by article_id", result=True, raw=True)
     return np.array(read_count)

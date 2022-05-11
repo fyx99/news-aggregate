@@ -13,7 +13,6 @@ from recommend.factors.viral import ViralFactor
 from recommend.factors.general import FactorSetupInput, FactorProcessInput
 from db.databaseinstance import DatabaseInterface
 
-from db.postgresql import Database
 from db.s3 import Datalake
 
 
@@ -116,7 +115,7 @@ def debug(db: DatabaseInterface):
 if __name__ == "__main__":
 	    
     
-	with Database() as db, Datalake() as dl :
+	with AsyncDatabase() as db, Datalake() as dl :
 		di = DatabaseInterface(db, dl, 'None')
 		debug(di)
 		

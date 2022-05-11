@@ -11,7 +11,7 @@ class TestRSSCrawler(CustomTestcase):
 
     @mock.patch('requests.get', side_effect=lambda *args, **kwargs: SimpleNamespace(text=test_data_func("ft.rss.xml")))
     def test_parse_feed(self, _):
-        feed = RSSCrawler.parse_feed(["http://test.com/xml"])
+        feed = RSSCrawler.parse_feed("http://test.com/xml")
         self.assertEqual(len(feed), 1)
         self.assertEqual(len(feed[0].entries), 28)
 
@@ -29,7 +29,7 @@ class TestRSSCrawler(CustomTestcase):
 
     @mock.patch('requests.get', side_effect=lambda *args, **kwargs: SimpleNamespace(text=test_data_func("t3n.rss.xml")))
     def test_parse_feed_2(self, _):
-        feed = RSSCrawler.parse_feed(["http://test.com/xml"])
+        feed = RSSCrawler.parse_feed("http://test.com/xml")
         self.assertEqual(len(feed), 1)
         self.assertEqual(len(feed[0].entries), 20)
 
