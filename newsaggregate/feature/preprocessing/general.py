@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-
-from db.crud.blob import get_embeddings, async_get_similarities, save_embeddings, save_similarities
+from db.async_crud.blob import get_similarities
+from db.crud.blob import get_embeddings, save_embeddings, save_similarities
 from feature.numpy_utils import numpy_2d_array_as_text, text_to_numpy_2d
 
 
@@ -55,9 +55,9 @@ class SimilarityMatrix:
         top_n_scores = np.array([self.similarities[i][top_n_indices[i]] for i in range(len(top_n_indices))])
         return SimilarityOutput(self.index[top_n_indices], top_n_scores)
 
-    async def load(db, embedding_type):
+    async def load(db, dl, embedding_type):
 
-        similarities, index = await async_get_similarities(db, embedding_type)
+        similarities, index = await get_similarities(db, dl, embedding_type)
         return SimilarityMatrix(text_to_numpy_2d(similarities), text_to_numpy_2d(index))
 
     def save(self, db, type):

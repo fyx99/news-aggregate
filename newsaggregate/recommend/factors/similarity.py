@@ -14,7 +14,7 @@ class SimilarityFactor:
         #article_ids = set(article.id for article in setup_input.articles)
         SimilarityFactor.article_index = setup_input.article_index
         SimilarityFactor.article_ids = setup_input.article_ids
-        SimilarityFactor.similarities = np.mean(setup_input.similarities, axis=0)
+        #SimilarityFactor.similarities = np.mean(setup_input.similarities, axis=0)
 
 
 

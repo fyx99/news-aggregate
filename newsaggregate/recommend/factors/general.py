@@ -26,7 +26,7 @@ class FactorSetupInput:
 		self.articles = articles
 		self.article_ids = [article.id for article in self.articles]
 		self.article_index = {article_id: index for index, article_id in enumerate(self.article_ids)}
-		self.similarities = [FactorSetupInput.similarity_matrix_to_article_order(similaritiy, self.article_ids, self.article_index) for similaritiy in similarity_matrixes]
+		#self.similarities = [FactorSetupInput.similarity_matrix_to_article_order(similaritiy, self.article_ids, self.article_index) for similaritiy in similarity_matrixes]
 		self.read_counts = read_counts
 
 	def similarity_matrix_to_article_order(similarities, article_ids, article_index):
