@@ -58,7 +58,7 @@ class SimilarityMatrix:
     async def load(db, dl, embedding_type):
 
         similarities, index = await get_similarities(db, dl, embedding_type)
-        return SimilarityMatrix(text_to_numpy_2d(similarities), text_to_numpy_2d(index))
+        return SimilarityMatrix(text_to_numpy_2d(similarities), text_to_numpy_2d(index).astype(int))
 
     def save(self, db, type):
         save_similarities(db, numpy_2d_array_as_text(self.similarities), numpy_2d_array_as_text(self.index), type)

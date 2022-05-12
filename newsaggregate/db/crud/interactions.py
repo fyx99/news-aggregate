@@ -22,6 +22,13 @@ class Read:
     end_date: str = ""
     max_scroll: str = ""
 
+@dataclass
+class Preference:
+    user_id: str = ""
+    feed_url: str = ""
+    weight: str = ""
+    type: str = ""
+
 
 @dataclass
 class ReadCount:

@@ -30,6 +30,18 @@
             "envFile": "${workspaceFolder}/local.env"
        
         },    
+        
+        {
+            "name": "Recommend Service",
+            "type": "python",
+            "request": "launch",
+            "program": "newsaggregate/recommend/main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}",
+            "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}/newsaggregate"},
+            "envFile": "${workspaceFolder}/local.env"
+       
+        },    
         {
             "name": "Articleprocessing.py",
             "type": "python",

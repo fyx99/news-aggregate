@@ -8,7 +8,7 @@ from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
 import uvicorn
-from db.s3 import Datalake
+from db.async_s3 import AsyncDatalake
 from recommend.factors.main import setup, process
 
 from recommend.api import router as endpoint_router
@@ -16,7 +16,7 @@ from db.async_postgresql import AsyncDatabase
 
 
 db = AsyncDatabase()
-dl = Datalake()
+dl = AsyncDatalake()
 db_back = AsyncDatabase()
 task = None
 
@@ -43,7 +43,7 @@ app.include_router(endpoint_router, prefix="/api")
 async def background_function():
     while True:
         await setup(db_back, dl)
-        await asyncio.sleep(30)
+        await asyncio.sleep(60)
 
 
 @app.on_event("startup")
@@ -52,6 +52,7 @@ async def on_app_start():
     """
     await db.connect()
     await db_back.connect(1,1)
+    await dl.connect()
 
     task = asyncio.create_task(background_function())
     
@@ -63,6 +64,7 @@ async def on_app_shutdown():
     """
     db.close()
     db_back.close()
+    await dl.close()
     task.cancel() if task else 0
 
 
@@ -70,8 +72,8 @@ async def on_app_shutdown():
 async def ping():
     """
     """
-    await process(db_back, "74d06a24-ae32-4cf3-be20-a8d98be251b4")
-    return Response("Pong")
+    top_articles = await process(db_back, "74d06a24-ae32-4cf3-be20-a8d98be251b4")
+    return Response(str(top_articles))
 
 
 @app.get("/json")

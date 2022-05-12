@@ -6,6 +6,7 @@ import numpy as np
 
 from db.async_postgresql import AsyncDatabase
 from db.crud.interactions import Read
+from db.crud.interactions import Preference
 
 
 async def get_read_counts(db: AsyncDatabase) -> np.ndarray:
@@ -16,3 +17,9 @@ async def get_read_counts(db: AsyncDatabase) -> np.ndarray:
 async def get_reads_for_user(db: AsyncDatabase, user_id) -> List[Read]:
     rows = await db.query("select user_id, article_id, start_date, end_date, max_scroll from reads where user_id = $1", (user_id,), result=True)
     return [Read(**read) for read in rows]
+
+
+async def get_preferences_for_user(db: AsyncDatabase, user_id) -> List[Preference]:
+    rows = await db.query("select user_id, feed_url, weight, type from preferences where user_id = $1", (user_id,), result=True)
+    return [Preference(**pref) for pref in rows]
+
