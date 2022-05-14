@@ -1,4 +1,5 @@
 
+import queue
 import threading
 from db.config import RABBIT_CONNECTION_DETAILS
 import pika
@@ -9,6 +10,8 @@ logger = get_logger()
 
 EXCHANGE_NAME = "JOBS"
 ROUTING_KEYS = ["RSS", "HTML", "FEATURE"]
+
+ROUTING_OPTIONS = ["EN", "DE"]
 
 class MessageBroker:
     #connection = None
@@ -43,6 +46,9 @@ class MessageBroker:
         new_channel = new_connection.channel()
         self.channels[threading.get_ident()] = new_channel
         new_channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='topic', durable=True)
+
+
+
         for route in ROUTING_KEYS:
             new_channel.queue_declare(route, durable=True)      #, arguments={"x-queue-mode": "lazy"}
             new_channel.queue_bind(exchange=EXCHANGE_NAME, queue=route, routing_key=route)
@@ -75,13 +81,21 @@ class MessageBroker:
     def get_task_batch(self, route, n):
         results = []
         for _ in range(n):
-            method_frame, header_frame, body = self.get_channel().basic_get(route, auto_ack=True)
+            method_frame, header_frame, body = self.get_channel().basic_get(route, auto_ack=False)
             if method_frame is None:
                 break
-            results.append(json.loads(body.decode()))
+            delivery_tag = method_frame.delivery_tag
+            json_body = json.loads(body.decode())
+            json_body["delivery_tag"] = delivery_tag
+            results.append(json_body)
         return results
 
-
+    def ack_message(self, delivery_tag):
+        channel = self.get_channel()
+        if channel.is_open:
+            channel.basic_ack(delivery_tag)
+        else:
+            logger.info(f"Ack {delivery_tag} not able due channel close")
 
 
 if __name__ == "__main__":
