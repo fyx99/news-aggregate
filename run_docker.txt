@@ -23,7 +23,7 @@ docker run -m 500m --memory-swap="2500m" -e TASK='FEED' --env-file /env/drop.env
 docker sbom fxxy/news-aggregate-ml
 
 docker run  -e TASK='RSS'   --env-file local.env  fxxy/news-aggregate
-docker run  -e TASK='FEED'  --env-file local.env  fxxy/news-aggregate-ml
+docker run  -e TASK='REPROCESS_TEXT'   --env-file local.env  fxxy/news-aggregate
 
 
 
@@ -44,4 +44,4 @@ docker run --env-file local.env -p 8000:8000 fxxy/news-aggregate-srv
 k6 run -i 5 /newsaggregate/test/k6.js   
 
 k6 run --duration 30s --vus 30 /newsaggregate/test/k6.js   
-k6 run --out csv=C:/Github/Jupyter_Env/k6_result.csv --duration 300s --vus 30 /newsaggregate/test/k6.js   
+k6 run --out csv=C:/Github/Jupyter_Env/k6_result.csv --duration 50s --vus 30 /newsaggregate/test/k6.js   
