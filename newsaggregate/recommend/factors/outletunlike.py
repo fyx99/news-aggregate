@@ -9,6 +9,8 @@ logger = get_logger()
 
 class OutletUnlike:
 
+    is_mask = True
+
     @timeit
     def setup(setup_input: FactorSetupInput):
 
@@ -18,6 +20,9 @@ class OutletUnlike:
         feed_dict = defaultdict(list)
         [feed_dict[article.feed].append(index) for index, article in enumerate(setup_input.articles)]
         OutletUnlike.feed_index = feed_dict
+
+
+        OutletUnlike.ready = True
 
     @timeit
     def process(process_input: FactorProcessInput):

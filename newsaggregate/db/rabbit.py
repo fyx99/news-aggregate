@@ -1,6 +1,6 @@
 
-import queue
 import threading
+
 from db.config import RABBIT_CONNECTION_DETAILS
 import pika
 import json
@@ -9,9 +9,9 @@ from logger import get_logger
 logger = get_logger()
 
 EXCHANGE_NAME = "JOBS"
-ROUTING_KEYS = ["RSS", "HTML", "FEATURE"]
+ROUTING_KEYS = ["TEST", "RSS", "HTML", "FEATURE.EN", "FEATURE.DE"]
 
-ROUTING_OPTIONS = ["EN", "DE"]
+
 
 class MessageBroker:
     #connection = None
@@ -47,8 +47,6 @@ class MessageBroker:
         self.channels[threading.get_ident()] = new_channel
         new_channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='topic', durable=True)
 
-
-
         for route in ROUTING_KEYS:
             new_channel.queue_declare(route, durable=True)      #, arguments={"x-queue-mode": "lazy"}
             new_channel.queue_bind(exchange=EXCHANGE_NAME, queue=route, routing_key=route)
@@ -72,10 +70,12 @@ class MessageBroker:
         self.get_channel().basic_publish(exchange=EXCHANGE_NAME, routing_key=route, body=json.dumps(body), properties=pika.BasicProperties(delivery_mode=2, expiration='1800000'))
 
     def get_task(self, route):
-        method_frame, header_frame, body = self.get_channel().basic_get(route, auto_ack=True)
+        method_frame, header_frame, body = self.get_channel().basic_get(route, auto_ack=False)
         if method_frame is None:
-            return False
-        return json.loads(body.decode())
+            return False 
+        json_body = json.loads(body.decode())
+        json_body["delivery_tag"] = method_frame.delivery_tag
+        return json_body
 
     
     def get_task_batch(self, route, n):
@@ -100,11 +100,13 @@ class MessageBroker:
 
 if __name__ == "__main__":
     with MessageBroker() as rb:
-        rb.put_task("RSS", {"a": 1})
+        #rb.put_task("FEATURE.EN", {"a": 1})
         # rb.put_task("RSS", "asdas")
         import time
         time.sleep(.8)
-        rb.get_task("RSS")
+        b = rb.get_task("FEATURE.DE")
+        rb.ack_message(b["delivery_tag"])
+        print(b)
 
         
 

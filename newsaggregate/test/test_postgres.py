@@ -1,7 +1,7 @@
 import unittest
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
-from test import CustomTestcase
+from test.custom_testcase import CustomTestcase
 
 
 class TestPostgres(CustomTestcase):

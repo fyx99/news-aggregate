@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from test.testdata import MOCK_FILE_TO_ARTICLE_MAPPING
 from test.test_utils import get_datalake_test_data, mock_data
 
-from test import CustomTestcase
+from test.custom_testcase import CustomTestcase
 
 
 class TestHTMLCrawler(CustomTestcase):

@@ -6,13 +6,12 @@ from db.async_crud.article import get_articles_clean
 from db.async_crud.interactions import get_reads_for_user
 from feature.preprocessing.general import SimilarityMatrix
 from db.async_postgresql import AsyncDatabase
-from db.async_crud.interactions import get_read_counts, get_preferences_for_user
 from recommend.factors.similarity import SimilarityFactor
 from recommend.factors.outletrelated import OutletRelatedFactor
 from recommend.factors.recency import RecencyFactor
 from recommend.factors.viral import ViralFactor
 from recommend.factors.rank import RankFactors
-from recommend.factors.general import FactorSetupInput, FactorProcessInput
+from recommend.factors.general import FactorSetupInput, FactorProcessInput, BaseFactor
 from db.databaseinstance import DatabaseInterface
 import asyncio
 from db.s3 import Datalake
@@ -22,7 +21,7 @@ import numpy as np
 from logger import get_logger, timeit
 logger = get_logger()
 
-factors = [
+factors: List[BaseFactor] = [
     SimilarityFactor,
     OutletRelatedFactor,
     RecencyFactor,
@@ -33,41 +32,34 @@ factors = [
 async def setup(db, dl):
     try:
         start = time.time()
-        print("start setup")
-        articles_clean = await get_articles_clean(db)
-        print(f"Done Articles Clean {time.time() - start}")
-        start = time.time()
-        matrix = [await SimilarityMatrix.load(db, dl, type) for type in ["BertProcessorDistDESimilarity", "TfidfProcessorSimilarity"]]
-        print(f"Done Matrix {time.time() - start}")
-        setup_input = FactorSetupInput(
-            articles_clean, 
-            matrix,
-            await get_read_counts(db)
-        )
+        logger.debug("start setup")
+
+        setup_input = await FactorSetupInput.load(db, dl)
+        RankFactors.setup(setup_input)
         for factor in factors:
             factor.setup(setup_input)
 
-        RankFactors.setup(setup_input)
-        print(f"Done {time.time() - start}")
+        logger.debug(f"Done {time.time() - start}")
     except Exception as e:
+        logger.error("SETUP FAILED")
         logger.error(traceback.format_exc())
 
 async def process(db, user_id):
-    start = time.time()
-    process_input = FactorProcessInput(
-        user_id, 
-        await get_reads_for_user(db, user_id),
-        await get_preferences_for_user(db, user_id)
-    )
-    #potential speed up on awaiting all together
+    try:
+        start = time.time()
+        process_input = await FactorProcessInput.load(db, user_id)
+        ranks = [factor.process(process_input) for factor in factors if factor.ready]
 
-    ranks = [factor.process(process_input) for factor in factors ]
+    
+        top_n_articles = RankFactors.process(factors, ranks)
 
-  
-    top_n_articles = RankFactors.process(factors, ranks)
+        logger.debug(f"process {time.time() - start}")
+        return top_n_articles
+    except:
+        logger.error("ERROR IN RECOMMEND SERVICE")
+        logger.error(traceback.format_exc())
+    return False
 
-    print(f"process {time.time() - start}")
-    return top_n_articles
 
 @timeit
 def main(db, dl, user_id):
@@ -80,25 +72,25 @@ def main(db, dl, user_id):
     
     res = ViralFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
     
     RecencyFactor.setup(db, setup_input)
     
     res = RecencyFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
 
     OutletRelatedFactor.setup(db, setup_input)
     
     res = OutletRelatedFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
 
     SimilarityFactor.setup(db, setup_input)
     
     res = SimilarityFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
     
     return
 
@@ -122,25 +114,25 @@ def debug(db: DatabaseInterface):
     
     res = ViralFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
     
     RecencyFactor.setup(db, setup_input)
     
     res = RecencyFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
 
     OutletRelatedFactor.setup(db, setup_input)
     
     res = OutletRelatedFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
 
     SimilarityFactor.setup(db, setup_input)
     
     res = SimilarityFactor.process(process_input)
     
-    print(res)
+    logger.debug(res)
     
     return
 

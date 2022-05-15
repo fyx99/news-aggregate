@@ -4,7 +4,6 @@ import numpy as np
 from db.crud.blob import get_similarities
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
-from feature.numpy_utils import text_to_numpy_2d
 
 from feature.preprocessing.general import SimilarityMatrix
 from logger import get_logger
@@ -20,7 +19,7 @@ class SimilarityInference:
     def setup(self, db):
 
         similarities, index = get_similarities(db, self.embedding_type)
-        self.similarities = SimilarityMatrix(text_to_numpy_2d(similarities), text_to_numpy_2d(index))
+        self.similarities = SimilarityMatrix(similarities, index)
 
 
     def top_n(self):

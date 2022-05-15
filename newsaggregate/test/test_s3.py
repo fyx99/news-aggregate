@@ -1,7 +1,7 @@
 import unittest
 from db.databaseinstance import DatabaseInterface
 from db.s3 import Datalake
-from test import CustomTestcase
+from test.custom_testcase import CustomTestcase
 
 
 class TestS3(CustomTestcase):

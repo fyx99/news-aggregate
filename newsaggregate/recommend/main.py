@@ -1,6 +1,6 @@
 import asyncio
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from starlette.middleware.gzip import GZipMiddleware
@@ -13,6 +13,9 @@ from recommend.factors.main import setup, process
 
 from recommend.api import router as endpoint_router
 from db.async_postgresql import AsyncDatabase
+import logging
+from logger import get_logger
+logger = get_logger()
 
 
 db = AsyncDatabase()
@@ -43,13 +46,14 @@ app.include_router(endpoint_router, prefix="/api")
 async def background_function():
     while True:
         await setup(db_back, dl)
-        await asyncio.sleep(60)
+        await asyncio.sleep(600)    # refresh every 10min
 
 
 @app.on_event("startup")
 async def on_app_start():
     """Anything that needs to be done while app starts
     """
+    logging.getLogger("uvicorn").removeHandler(logging.getLogger("uvicorn").handlers[0])
     await db.connect()
     await db_back.connect(1,1)
     await dl.connect()
@@ -68,13 +72,15 @@ async def on_app_shutdown():
     task.cancel() if task else 0
 
 
-@app.get("/content")
-async def ping():
+@app.get("/content/{userId}")
+async def ping(userId):
     """
     """
-    top_articles = await process(db_back, "74d06a24-ae32-4cf3-be20-a8d98be251b4")
-    return Response(str(top_articles))
-
+    top_articles = await process(db_back, userId)
+    if not top_articles:
+        raise HTTPException(status_code=500, detail="NO RECOMMENDATIONS FOUND")
+    return JSONResponse(top_articles)
+    
 
 @app.get("/json")
 async def json():
@@ -84,9 +90,9 @@ async def json():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, log_level="debug")
-
-
+    
+    
+    uvicorn.run(app, log_level="debug", host="0.0.0.0", port=8000)#, log_config=uvicorn_log_config)
 
 
 

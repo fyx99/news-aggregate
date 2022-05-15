@@ -3,7 +3,7 @@ from unittest import mock
 from rss.rsscrawler import RSSCrawler
 from test.test_utils import get_datalake_test_data, mock_data, test_data_func
 from types import SimpleNamespace
-from test import CustomTestcase
+from test.custom_testcase import CustomTestcase
 
 
 

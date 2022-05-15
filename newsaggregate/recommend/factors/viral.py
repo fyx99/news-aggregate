@@ -1,10 +1,10 @@
 import numpy as np
-from recommend.factors.general import FactorSetupInput, FactorProcessInput, normalize_array
+from recommend.factors.general import FactorSetupInput, FactorProcessInput, normalize_array, BaseFactor
 
 from logger import get_logger, timeit
 logger = get_logger()
 
-class ViralFactor:
+class ViralFactor(BaseFactor):
 
     @timeit
     def setup(setup_input: FactorSetupInput):
@@ -16,6 +16,8 @@ class ViralFactor:
 
         # TODO better normalization extremes?
         ViralFactor.read_counts = normalize_array(read_count_array)
+
+        ViralFactor.ready = True
 
     @timeit
     def process(process_input: FactorProcessInput):

@@ -1,20 +1,26 @@
 import numpy as np
-from recommend.factors.general import FactorSetupInput, FactorProcessInput
+from recommend.factors.general import FactorSetupInput, FactorProcessInput, BaseFactor
 
 
 from logger import get_logger, timeit
 logger = get_logger()
 
 
-class SimilarityFactor:
+class SimilarityFactor(BaseFactor):
     
     @timeit
     def setup(setup_input: FactorSetupInput):
         # TODO here weight the like"ness of a article
         #article_ids = set(article.id for article in setup_input.articles)
+        if not setup_input.similarities:
+            SimilarityFactor.ready = False
+            return 
         SimilarityFactor.article_index = setup_input.article_index
         SimilarityFactor.article_ids = setup_input.article_ids
         SimilarityFactor.similarities = np.mean(setup_input.similarities, axis=0)
+
+        if len(SimilarityFactor.similarities.shape) and SimilarityFactor.similarities.shape[0] == len(SimilarityFactor.article_ids):
+            SimilarityFactor.ready = True
 
 
 

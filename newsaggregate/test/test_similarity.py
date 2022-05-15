@@ -3,7 +3,7 @@
 # from feature.preprocessing.general import SimilarityMatrix
 
 
-# from test import CustomTestcase
+# from test.custom_testcase import CustomTestcase
 
 
 

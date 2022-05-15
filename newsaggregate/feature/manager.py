@@ -1,7 +1,7 @@
 from collections import defaultdict
 import traceback
 import numpy as np
-from db.crud.article import Article, get_article, get_articles_for_feed
+from db.crud.article import Article, get_article, get_articles_for_feed, get_articles_clean_language
 from db.crud.feeds import Feed
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
@@ -15,45 +15,56 @@ import time
 from logger import get_logger
 logger = get_logger()
 
-embedding_types = [type(BertProcessorBaseEN()).__name__, type(BertProcessorDistDE()).__name__]
 
 class FeedManager:
 
+
+    single_processors = defaultdict(list, {
+        "EN": [BertProcessorBaseEN()],
+        "DE": [BertProcessorDistDE()]
+    })
+
+    def setup():
+        [processor.setup() for processorlist in FeedManager.single_processors.values() for processor in processorlist]
+
+    def clear():
+        [processor.clear() for processorlist in FeedManager.single_processors.values() for processor in processorlist]
+
+    def process_all_tasks_by_language(db: DatabaseInterface, language: str):
+        while True:
+            task = db.rb.get_task(f"FEATURE.{language}")
+            if not task:
+                break
+            FeedManager.run_single_article(db, Article(**task["article"]), Feed(**task["feed"]), task["delivery_tag"])
     
     def main():
         with Database() as db, Datalake() as dl, MessageBroker() as rb:
             di = DatabaseInterface(db, dl, rb)
-            done = False
-            n = 100
-            while not done:
-                tasks = di.rb.get_task_batch("FEATURE", n)
-                if len(tasks) < n:
-                    done = True
 
-                
-                articles = [Article(**task["article"]) for task in tasks]
-                feeds = [Feed(**task["feed"]) for task in tasks]
-
-                language_group_tasks = defaultdict(list)
-
-                for article, feed in zip(articles, feeds):
-                    language_group_tasks[feed.language].append((article, feed))
-                
-                list_ordered = []
-                [list_ordered.extend(language_group_tasks[key]) for key in language_group_tasks.keys()]
-
-                [FeedManager.run_single_article(di, article, feed) for article, feed in list_ordered]
-
-            logger.info("ALL SINGLE TASKS DONE")
+            ### Process Rabbit Queue for different languages until empty
+            FeedManager.setup()
+            languages = ["DE", "EN"]
+            [FeedManager.process_all_tasks_by_language(di, language) for language in languages]
             
-            for embedding_type in embedding_types:
+            FeedManager.clear()   # dereference model for memory saving
+            logger.info("ALL SINGLE TASKS DONE")
+
+            embedding_names = [BertProcessorBaseEN.__name__, BertProcessorDistDE.__name__]
+            
+            all_texts = []
+            all_ids = [] # todo stupid workaround
+            for embedding_type in embedding_names:
+                logger.info(f"PROCESS {embedding_type}")
                 articles, embeddings = get_articles_for_feed(di, embedding_type)
                 ids = [a.id for a in articles]
-                texts = [a.text for a in articles]
-                textembeddings = TextEmbedding.load_by_objs([e.load(di) for e in embeddings])
+                all_ids.extend(ids)
+                all_texts.extend([a.text for a in articles])
+                logger.info(f"LOADED {len(embeddings)}")
+                textembeddings = TextEmbedding.load_by_objs([e.blob for e in embeddings])
+                logger.info("Loaded Text Embeddings")
                 FeedManager.process_embedding_batches(di, ids, textembeddings, embedding_type)
-
-            FeedManager.process_text_batches(di, ids, texts)
+                logger.info("Processed Embedding Batches")
+            FeedManager.process_text_batches(di, all_ids, all_texts)
             logger.info("ALL BATCH TASKS DONE")
 
 
@@ -68,14 +79,13 @@ class FeedManager:
     def process_single(db, id, text, language:str):
         #this function performs all processing tasks that are possible with single texts
         start = time.time()
-        single_processors = defaultdict(list, {
-            "EN": [BertProcessorBaseEN()],
-            "DE": [BertProcessorDistDE()]
-        })
-        for processor in single_processors[language]:
-            processor.setup()
+
+        
+        for processor in FeedManager.single_processors[language]:
+
             textembedding = processor.process(text)
             textembedding.save(db, type(processor).__name__, "Article", id)
+
             # hier muss das nur noch gespeichert werden
         logger.info(f"BERT PROCESSOR {time.time() - start:.2f}")
 
@@ -93,16 +103,12 @@ class FeedManager:
         similarties.save(db, processor + "Similarity")
     
 
-    def run_single(db, id, text, language):
-        # if not text:
-        #     text, _, _ = FeedManager.load_text_single(db, id, "EN")
-        FeedManager.process_single(db, id, text, language)
 
-
-    def run_single_article(db, article: Article, feed: Feed):
+    def run_single_article(db: DatabaseInterface, article: Article, feed: Feed, tag: str):
         logger.info(f"LANGUAGE {feed.language}")
         try:
-            FeedManager.run_single(db, article.id, article.text, feed.language)
+            FeedManager.process_single(db, article.id, article.text, feed.language)
+            db.rb.ack_message(tag)
         except:
             logger.error(traceback.format_exc())
 
@@ -119,4 +125,13 @@ class FeedManager:
 if __name__ == "__main__":
 
     FeedManager.main()
+    # with Database() as db, Datalake() as dl, MessageBroker() as rb:
+    #     di = DatabaseInterface(db, dl, rb)
+    #     FeedManager.setup()
+    #     for article in get_articles_clean_language(di, "EN"):
+    #         FeedManager.process_single(di, article.id, article.text, "EN")
+
+        
+    #     for article in get_articles_clean_language(di, "DE"):
+    #         FeedManager.process_single(di, article.id, article.text, "DE")
 

@@ -1,10 +1,11 @@
+import traceback
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from db.async_crud.blob import get_similarities
 from db.crud.blob import get_embeddings, save_embeddings, save_similarities
-from feature.numpy_utils import numpy_2d_array_as_text, text_to_numpy_2d
 
-
+from logger import get_logger
+logger = get_logger()
 
 class TextEmbedding:
     def __init__(self, embedding):
@@ -15,22 +16,18 @@ class TextEmbedding:
         pass
 
     def cosine_similarity(self, index):
-        return SimilarityMatrix(cosine_similarity(self.embedding, self.embedding), np.array(index))
+        return SimilarityMatrix(cosine_similarity(self.embedding, self.embedding).astype(np.float16), np.array(index, dtype=int))
 
     
     def save(self, db, processor, text_type, article_id):
-        save_embeddings(db, numpy_2d_array_as_text(self.embedding), processor, text_type, article_id)
+        save_embeddings(db, self.embedding, processor, text_type, article_id)
 
     def load_by_ids(db, processor, text_type, ids):
-        return TextEmbedding(np.array([text_to_numpy_2d(get_embeddings(db, processor, text_type, id.item())) for id in ids]))
+        return TextEmbedding(np.array([get_embeddings(db, processor, text_type, id.item()) for id in ids]))
 
     
     def load_by_objs(objs):
-        return TextEmbedding(
-            np.array(
-                [text_to_numpy_2d(obj) for obj in objs]
-            )
-        )
+        return TextEmbedding(np.array(objs))
 
 
 class SimilarityMatrix:
@@ -56,12 +53,16 @@ class SimilarityMatrix:
         return SimilarityOutput(self.index[top_n_indices], top_n_scores)
 
     async def load(db, dl, embedding_type):
-
-        similarities, index = await get_similarities(db, dl, embedding_type)
-        return SimilarityMatrix(text_to_numpy_2d(similarities), text_to_numpy_2d(index).astype(int))
+        try:
+            similarities, index = await get_similarities(db, dl, embedding_type)
+        except IndexError:
+            logger.error(traceback.format_exc())
+            return False
+        return SimilarityMatrix(similarities, index)
 
     def save(self, db, type):
-        save_similarities(db, numpy_2d_array_as_text(self.similarities), numpy_2d_array_as_text(self.index), type)
+        save_similarities(db, self.similarities, self.index, type)
+
 
 
 

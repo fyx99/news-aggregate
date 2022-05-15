@@ -1,5 +1,5 @@
 import unittest
-from test import CustomTestcase
+from test.custom_testcase import CustomTestcase
         
 from logger import get_logger
 

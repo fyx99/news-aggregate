@@ -16,9 +16,11 @@ class BertProcessorDistDE:
     def process(self, text):
         #, show_progress_bar=False
         embedding = self.__class__.model.encode(text)
-        embedding_array = np.array(embedding)
-        return TextEmbedding(embedding_array)
+        embedding_half = embedding.astype(np.float16)
+        return TextEmbedding(embedding_half)
 
+    def clear(self):
+        self.__class__.model = None
 
 class BertProcessorBaseEN:
 
@@ -32,7 +34,8 @@ class BertProcessorBaseEN:
     def process(self, text):
         #, show_progress_bar=False
         embedding = self.__class__.model.encode(text)
-        embedding_array = np.array(embedding)
-        return TextEmbedding(embedding_array)
+        embedding_half = embedding.astype(np.float16)
+        return TextEmbedding(embedding_half)
 
-
+    def clear(self):
+        self.__class__.model = None
