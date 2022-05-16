@@ -1,11 +1,8 @@
 import unittest
-from unittest import mock
 from db.crud.article import Article
 from db.crud.interactions import Read, Preference
 from feature.preprocessing.general import SimilarityMatrix
 from recommend.factors.general import FactorSetupInput, FactorProcessInput
-from rss.rsscrawler import RSSCrawler
-from types import SimpleNamespace
 from test.custom_testcase import CustomTestcase
 import numpy as np
 import datetime

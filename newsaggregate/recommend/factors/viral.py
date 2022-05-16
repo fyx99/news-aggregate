@@ -17,6 +17,10 @@ class ViralFactor(BaseFactor):
         # TODO better normalization extremes?
         ViralFactor.read_counts = normalize_array(read_count_array)
 
+        if ViralFactor.read_counts.size == 0:
+            ViralFactor.ready = False
+            return logger.debug("VIRAL FACTOR 0 ELEMENTS")
+
         ViralFactor.ready = True
 
     @timeit

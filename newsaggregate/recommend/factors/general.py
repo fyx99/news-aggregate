@@ -99,6 +99,9 @@ class FactorProcessInput:
 
 
 def normalize_array(array):
+	if array.size == 0:
+		logger.error("ARRAY IS EMPTY")
+		return array
 	min_value = np.min(array)
 	max_value = np.max(array)
 	divisor = (max_value - min_value) if (max_value - min_value) != 0 else 1

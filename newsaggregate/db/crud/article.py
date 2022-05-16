@@ -70,7 +70,7 @@ def get_articles_for_feed(db: DatabaseInterface, type):
                         # order by random()
                         # LIMIT 10000
     rows = db.db.query("""
-                        SELECT a.id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text, e.id as blob_id, text_type, processor, blob
+                        SELECT a.id, url, amp_url, image_url, title, summary, publish_date, feed, title_hash, status, text, publisher, e.id as blob_id, text_type, processor, blob
                         from articles_clean as a
                         inner join embeddings_latest as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = %s where blob is not Null limit 5000
                         """, (type,),

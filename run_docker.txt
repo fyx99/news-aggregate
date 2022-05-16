@@ -38,7 +38,10 @@ docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-agg
 
 
 docker build --target srv -t fxxy/news-aggregate-srv . 
+docker push fxxy/news-aggregate-srv
 docker run --env-file local.env -p 8000:8000 fxxy/news-aggregate-srv
+docker pull fxxy/news-aggregate-srv
+docker run -d --name newsrecommend --env-file /env/drop.env -p 8000:8000 fxxy/news-aggregate-srv
 
 
 k6 run -i 5 /newsaggregate/test/k6.js   
