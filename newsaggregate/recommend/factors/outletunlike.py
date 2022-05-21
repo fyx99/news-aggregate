@@ -12,25 +12,25 @@ class OutletUnlike:
     is_mask = True
 
     @timeit
-    def setup(setup_input: FactorSetupInput):
-
-        OutletUnlike.outlets = set(article.feed for article in setup_input.articles)
-        OutletUnlike.articles = setup_input.articles
-        OutletUnlike.article_index = setup_input.article_index
+    def setup(self, setup_input: FactorSetupInput):
+        super().setup()
+        self.outlets = set(article.feed for article in setup_input.articles)
+        self.articles = setup_input.articles
+        self.article_index = setup_input.article_index
         feed_dict = defaultdict(list)
         [feed_dict[article.feed].append(index) for index, article in enumerate(setup_input.articles)]
-        OutletUnlike.feed_index = feed_dict
+        self.feed_index = feed_dict
 
 
-        OutletUnlike.ready = True
+        self.ready = True
 
     @timeit
-    def process(process_input: FactorProcessInput):
+    def process(self, process_input: FactorProcessInput):
 
         unlike_feeds = [pref.feed_url for pref in process_input.user_preferences]
 
-        article_feeds = np.ones(len(OutletUnlike.article_index.keys()))
+        article_feeds = np.ones(len(self.article_index.keys()))
 
-        [np.put(article_feeds, OutletUnlike.feed_index[feed], 0) for feed in unlike_feeds]
+        [np.put(article_feeds, self.feed_index[feed], 0) for feed in unlike_feeds]
 
         return normalize_array(article_feeds)

@@ -1,6 +1,6 @@
 feedparser
 beautifulsoup4
-boto3
+boto3==1.21.21
 requests
 psycopg2-binary
 numpy
@@ -10,4 +10,5 @@ fastapi
 starlette
 uvicorn
 asyncpg
-aiobotocore
+aiobotocore==2.3.2
+botocore==1.24.21

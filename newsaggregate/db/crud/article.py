@@ -20,17 +20,13 @@ class Article(BaseDataClass):
     image_url: str = ""
     title: str = ""
     summary: str = ""
-    publish_date: str = ""
+    publish_date: any = ""
     feed: str = ""
     title_hash: str = ""
     status: str = ""
     text: str = ""
     publisher: str = ""
 
-    def to_json(self):
-        dict_with_datetime = super().to_json()
-        dict_with_datetime["publish_date"] = dict_with_datetime["publish_date"].strftime("%Y-%m-%d %H:%M:%S")
-        return dict_with_datetime
 
     def article_from_entry(entry, feed):
         return Article(title=entry.title, url=entry.link, summary=entry.summary, publish_date=entry.published_parsed, feed=feed)
@@ -120,9 +116,9 @@ def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
 
 
 def save_rss_article(db: DatabaseInterface, article: Article):
-    insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, publish_date = %s, title_hash = %s  RETURNING id, status"
+    insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, title_hash = %s  RETURNING id, status"
     insert_data = (article.feed, article.url, article.title[:1000], article.summary[:50000], article.publish_date, hash_text(article.title), 
-        article.title, article.summary[:5000], article.publish_date, hash_text(article.title))
+        article.title, article.summary[:5000], hash_text(article.title))
     row = db.db.query(insert_sql, insert_data, result=True)[0]
     db.dl.put_json(f"testing/article_rss/{row['id']}", {"rss": {"url": article.url, "title": article.title, "summary": article.summary, "publish_date": article.publish_date}})
     article.id = row["id"]

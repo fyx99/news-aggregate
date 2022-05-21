@@ -3,13 +3,13 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from starlette.middleware.gzip import GZipMiddleware
-from starlette.requests import Request
-from starlette.responses import Response, JSONResponse
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.requests import Request
+from fastapi.responses import Response, JSONResponse
 
 import uvicorn
 from db.async_s3 import AsyncDatalake
-from recommend.factors.main import setup, process
+from recommend.factors.main import RecommendManager
 
 from recommend.api import router as endpoint_router
 from db.async_postgresql import AsyncDatabase
@@ -45,7 +45,7 @@ app.include_router(endpoint_router, prefix="/api")
 
 async def background_function():
     while True:
-        await setup(db_back, dl)
+        await RecommendManager.setup(db_back, dl)
         await asyncio.sleep(600)    # refresh every 10min
 
 
@@ -73,13 +73,20 @@ async def on_app_shutdown():
 
 
 @app.get("/content/{userId}")
-async def ping(userId):
+async def content(userId):
     """
     """
-    top_articles = await process(db_back, userId)
+    top_articles = await RecommendManager.process(db_back, userId)
     if not top_articles:
         raise HTTPException(status_code=500, detail="NO RECOMMENDATIONS FOUND")
     return JSONResponse(top_articles)
+    
+
+@app.get("/factors")
+async def factors():
+    """
+    """
+    return JSONResponse(await RecommendManager.factor_status())
     
 
 @app.get("/json")

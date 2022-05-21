@@ -12,32 +12,32 @@ class OutletRelatedFactor(BaseFactor):
     
 
     @timeit
-    def setup(setup_input: FactorSetupInput):
-
-        OutletRelatedFactor.outlets = set(article.feed for article in setup_input.articles)
-        OutletRelatedFactor.articles = setup_input.articles
-        OutletRelatedFactor.article_index = setup_input.article_index
+    def setup(self, setup_input: FactorSetupInput):
+        super().setup()
+        self.outlets = set(article.feed for article in setup_input.articles)
+        self.articles = setup_input.articles
+        self.article_index = setup_input.article_index
         feed_dict = defaultdict(list)
         [feed_dict[article.feed].append(index) for index, article in enumerate(setup_input.articles)]
-        OutletRelatedFactor.feed_index = feed_dict
+        self.feed_index = feed_dict
 
-        OutletRelatedFactor.ready = True
+        self.ready = True
 
     @timeit
-    def process(process_input: FactorProcessInput):
+    def process(self, process_input: FactorProcessInput):
 
         read_article_ids = [read.article_id for read in process_input.user_transactions]
         # TODO how to handle weight of read with scroll etc
         read_article_ids = set(read_article_ids)
 
 
-        feed_list = [OutletRelatedFactor.articles[OutletRelatedFactor.article_index[article_id]].feed for article_id in read_article_ids if article_id in OutletRelatedFactor.article_index]
+        feed_list = [self.articles[self.article_index[article_id]].feed for article_id in read_article_ids if article_id in self.article_index]
         feed_count = Counter(feed_list)
 
-        article_feeds = np.zeros(len(OutletRelatedFactor.article_index.keys()))
+        article_feeds = np.zeros(len(self.article_index.keys()))
 
         for feed, count in feed_count.items():
-            article_feeds[OutletRelatedFactor.feed_index[feed]] = count
+            article_feeds[self.feed_index[feed]] = count
 
 
         return normalize_array(article_feeds)

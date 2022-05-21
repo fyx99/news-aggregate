@@ -99,8 +99,8 @@ class RssCrawlManager:
         job_feed: Feed = job["feed"]
         job_article: Feed = job["article"] if "article" in job else None
         if job_type == RSS_CRAWL:
-            articles: List[Article] = RSSCrawler.run_single(db, job_feed)
-
+            articles: List[Article] = list(RSSCrawler.run_single(db, job_feed))
+            logger.debug(f"RETURN: {job_feed.url} ARTICLES {len(articles)}")
             for article in articles:
                 if article.status != "CRAWL":
                     if random.random() > 0.05:
@@ -109,7 +109,7 @@ class RssCrawlManager:
 
         elif job_type == HTML_CRAWL:
             HTMLCrawler.run_single(db, job_article)
-            db.rb.put_task("FEATURE", {"job_type": FEATURE_EXTRACTION, "article": job_article.to_json(), "feed": job_feed.to_json()})
+            db.rb.put_task(f"FEATURE.{job_feed.language}", {"job_type": FEATURE_EXTRACTION, "article": job_article.to_json(), "feed": job_feed.to_json()})
             logger.debug("ADDED JOB TO RABBIT")
 
 

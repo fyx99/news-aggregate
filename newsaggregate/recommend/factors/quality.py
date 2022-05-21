@@ -7,17 +7,17 @@ logger = get_logger()
 class QualityFactor(BaseFactor):
 
     @timeit
-    def setup(setup_input: FactorSetupInput):
-
+    def setup(self, setup_input: FactorSetupInput):
+        super().setup()
 
         texts = [article.text for article in setup_input.articles]
         text_lengths = np.array([max(len(text), 7000) for text in texts])
 
-        QualityFactor.text_quality = normalize_array(text_lengths)
+        self.text_quality = normalize_array(text_lengths)
 
 
-        QualityFactor.ready = True
+        self.ready = True
 
     @timeit
-    def process(process_input: FactorProcessInput):
-        return QualityFactor.text_quality
+    def process(self, process_input: FactorProcessInput):
+        return self.text_quality

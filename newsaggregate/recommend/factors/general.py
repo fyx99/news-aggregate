@@ -10,6 +10,8 @@ from db.crud.interactions import Preference
 from db.async_crud.article import get_articles_clean
 from db.async_crud.interactions import get_read_counts, get_preferences_for_user, get_reads_for_user
 
+from datetime import datetime
+
 from logger import get_logger
 logger = get_logger()
 
@@ -100,13 +102,18 @@ class FactorProcessInput:
 
 def normalize_array(array):
 	if array.size == 0:
-		logger.error("ARRAY IS EMPTY")
+		logger.debug("NORMALIZE ARRAY IS EMPTY")
 		return array
 	min_value = np.min(array)
 	max_value = np.max(array)
 	divisor = (max_value - min_value) if (max_value - min_value) != 0 else 1
 	array_normalized = (array - min_value) / divisor
 	return array_normalized
+
+def normalize_array_exp(array):
+	b = array.max()
+	y = np.exp(array - b)
+	return y / y.sum()
 
 
     
@@ -116,9 +123,14 @@ class BaseFactor():
 
 	ready = False
 	is_mask = False
+	last_update = None
 
-	def setup():
+	def setup(self):
+		self.ready = False
+		self.last_update = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+	def process(self):
 		pass
 
-	def process():
-		pass
+	def json_status(self):
+		return {"name": self.__class__.__name__, "ready": self.ready, "last_update": self.last_update}

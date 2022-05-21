@@ -7,7 +7,8 @@ logger = get_logger()
 class ViralFactor(BaseFactor):
 
     @timeit
-    def setup(setup_input: FactorSetupInput):
+    def setup(self, setup_input: FactorSetupInput):
+        super().setup()
         read_count_raw = setup_input.read_counts
         read_count_array = np.zeros(len(setup_input.article_index.keys()))
         for article_id, read_count in read_count_raw:
@@ -15,14 +16,13 @@ class ViralFactor(BaseFactor):
                 read_count_array[setup_input.article_index[article_id]] = read_count
 
         # TODO better normalization extremes?
-        ViralFactor.read_counts = normalize_array(read_count_array)
+        self.read_counts = normalize_array(read_count_array)
 
-        if ViralFactor.read_counts.size == 0:
-            ViralFactor.ready = False
+        if self.read_counts.size == 0:
             return logger.debug("VIRAL FACTOR 0 ELEMENTS")
 
-        ViralFactor.ready = True
+        self.ready = True
 
     @timeit
-    def process(process_input: FactorProcessInput):
-        return ViralFactor.read_counts
+    def process(self, process_input: FactorProcessInput):
+        return self.read_counts
