@@ -146,7 +146,7 @@ class TestArticleProcessing(CustomTestcase):
         self.assertIn('Lesen Sie mehr zum Thema', tag_texts)
         self.assertIn('27. Februar 2022, 14:31 UhrLesezeit: 1 min', tag_texts)
         self.assertIn('FC Chelsea:Was hinter Abramowitschs Manöver stecktDer Klubeigentümer zieht sich beim FC Chelsea zurück - damit gelingt ihm offenbar ein geschickter strategischer Zug. Denn im Hintergrund droht ihm die Beschlagnahmung all seiner Klubanteile.', tag_texts)
-
+        self.assertTrue(False)
 
         # articles_list = [("", "", data[4]), ("", "", data[5])]
         # case4 = ArticleProcessing.compare_n_tags(articles_list)
