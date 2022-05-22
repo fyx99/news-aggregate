@@ -49,4 +49,4 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       - name: Run Docker Test
-          docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test
+        run: docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test
