@@ -2,7 +2,7 @@ docker build -t fxxy/news-aggregate . ; docker push fxxy/news-aggregate
 
 
 # test
-docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test; docker push fxxy/news-aggregate-test
+docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test
 
 docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file drop.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test;
 
