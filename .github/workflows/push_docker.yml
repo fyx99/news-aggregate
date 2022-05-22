@@ -51,7 +51,10 @@ jobs:
       - name: Run Docker Test
         run: |
           echo "${{ secrets.TEST_ENV }}" >> test.env
+          cat test.env
           docker build --target test -t fxxy/news-aggregate-test .
           CONTAINERID=$(docker run -d --env-file test.env -e LOG_LEVEL=DEBUG fxxy/news-aggregate-test)
           docker wait $CONTAINERID
+          docker logs $CONTAINERID
           STATUS=$(docker container inspect -f '{{.State.ExitCode}}' ${CONTAINERID})
+          exit $STATUS
