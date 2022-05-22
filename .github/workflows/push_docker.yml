@@ -49,4 +49,9 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       - name: Run Docker Test
-        run: docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file local.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test
+        run: |
+          echo "${{ secrets.TEST_ENV }}" >> test.env
+          docker build --target test -t fxxy/news-aggregate-test .
+          CONTAINERID=$(docker run -d --env-file test.env -e LOG_LEVEL=DEBUG fxxy/news-aggregate-test)
+          docker wait $CONTAINERID
+          STATUS=$(docker container inspect -f '{{.State.ExitCode}}' ${CONTAINERID})
