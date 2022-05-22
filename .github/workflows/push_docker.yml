@@ -37,6 +37,7 @@ jobs:
         with:
           context: .
           push: false
+          target: test
           tags: fxxy/news-aggregate-test
           cache-from: type=local,src=/tmp/.buildx-cache
           
