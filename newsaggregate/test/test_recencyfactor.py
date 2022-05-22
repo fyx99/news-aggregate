@@ -20,7 +20,7 @@ class TestRecencyFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput([], [], np.array([]))
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
 
-        factor = RecencyFactor
+        factor = RecencyFactor()
         with self.assertRaises(ValueError):
             factor.setup(factorSetupInput)
         self.assertFalse(factor.ready)
@@ -45,7 +45,7 @@ class TestRecencyFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput(article_list, [], np.array([]))
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
 
-        factor = RecencyFactor
+        factor = RecencyFactor()
         factor.setup(factorSetupInput)
         self.assertTrue(factor.ready)
         result = factor.process(factorProcessInput)

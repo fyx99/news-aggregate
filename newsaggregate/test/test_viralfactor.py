@@ -33,7 +33,7 @@ class TestViralFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput(self.article_list, [], np.array([]))
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
 
-        factor = ViralFactor
+        factor = ViralFactor()
         factor.setup(factorSetupInput)
         self.assertTrue(factor.ready)
         result = factor.process(factorProcessInput)
@@ -45,7 +45,7 @@ class TestViralFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput([], [], np.array([]))
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
 
-        factor = ViralFactor
+        factor = ViralFactor()
         factor.setup(factorSetupInput)
         self.assertFalse(factor.ready)
         result = factor.process(factorProcessInput)
@@ -60,7 +60,7 @@ class TestViralFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput(self.article_list, [], total_read_counts)
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
         self.assertEqual(factorSetupInput.article_ids, [113, 114, 115, 116])        
-        factor = ViralFactor
+        factor = ViralFactor()
         factor.setup(factorSetupInput)
         self.assertTrue(factor.ready)
         result = factor.process(factorProcessInput)
@@ -71,7 +71,7 @@ class TestViralFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput(self.article_list, [], total_read_counts)
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
         self.assertEqual(factorSetupInput.article_ids, [113, 114, 115, 116])        
-        factor = ViralFactor
+        factor = ViralFactor()
         factor.setup(factorSetupInput)
         self.assertTrue(factor.ready)
         result = factor.process(factorProcessInput)
@@ -82,7 +82,7 @@ class TestViralFactor(CustomTestcase):
         factorSetupInput: FactorSetupInput = FactorSetupInput(self.article_list, [], total_read_counts)
         factorProcessInput: FactorProcessInput = FactorProcessInput(None, None, None)
         self.assertEqual(factorSetupInput.article_ids, [113, 114, 115, 116])        
-        factor = ViralFactor
+        factor = ViralFactor()
         factor.setup(factorSetupInput)
         self.assertTrue(factor.ready)
         result = factor.process(factorProcessInput)
@@ -92,6 +92,6 @@ class TestViralFactor(CustomTestcase):
 
 
 if __name__ =="__main__":
-    test = TestViralFactor()
+    test = TestViralFactor()()
     test.setUp()
     test.test_read_counts()
