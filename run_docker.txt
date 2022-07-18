@@ -20,6 +20,9 @@ docker run -m 500m --memory-swap="2500m" -e TASK='FEED' --env-file /env/drop.env
 
 
 
+
+docker build --target lit -t fxxy/news-lit . ; docker run --rm -p 8501:8501  fxxy/news-lit
+
 docker sbom fxxy/news-aggregate-ml
 
 docker run  -e TASK='RSS'   --env-file local.env  fxxy/news-aggregate
@@ -28,6 +31,8 @@ docker run  -e TASK='REPROCESS_TEXT'   --env-file local.env  fxxy/news-aggregate
 
 
 docker run --network="host" --restart=always --name postgres -e POSTGRES_PASSWORD=u3fph3ßü98fg43f34f3 -d postgres:14.1-alpine
+# dieser ist besser da er auch exposed nach außen keine ahnung warum host network
+docker run --restart=always --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=u3fph3ßü98fg43f34f3 -d postgres:14.1-alpine
 
 docker run -d --restart=always --hostname rabbit --name rabbitmq -e RABBITMQ_DEFAULT_USER=dog -e RABBITMQ_DEFAULT_PASS="20849hfibfcn82..SADFC" -p 5672:5672 -p 15672:15672 rabbitmq:3.10.0-rc.4-management
 
@@ -41,10 +46,36 @@ docker build --target srv -t fxxy/news-aggregate-srv .
 docker push fxxy/news-aggregate-srv
 docker run --env-file local.env -p 8000:8000 fxxy/news-aggregate-srv
 docker pull fxxy/news-aggregate-srv
-docker run -d --name newsrecommend --env-file /env/drop.env -p 8000:8000 fxxy/news-aggregate-srv
+docker run -d --name newsrecommend --env-file /env/drop.env --network=dropnetwork -p 8000:8000 fxxy/news-aggregate-srv
 
 
 k6 run -i 5 /newsaggregate/test/k6.js   
 
 k6 run --duration 30s --vus 30 /newsaggregate/test/k6.js   
 k6 run --out csv=C:/Github/Jupyter_Env/k6_result.csv --duration 50s --vus 30 /newsaggregate/test/k6.js   
+
+
+
+
+aws s3 cp s3://hcp-1a9ec634-dfdf-40cd-8a08-d40904f2d00e/pgdumps/dump_16-06-2022.sql dump_16-06-2022.sql
+
+
+docker exec -i postgres psql -U postgres -d newsaggregate < backup.sql
+
+cat dump_16-06-2022.sql | docker exec -i postgres  psql -U postgres
+
+
+
+
+
+
+
+
+
+
+
+docker network create -d bridge dropnetwork
+
+
+docker network connect dropnetwork postgres
+docker network connect dropnetwork rabbitmq

@@ -29,6 +29,18 @@
             "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}/newsaggregate"},
             "envFile": "${workspaceFolder}/local.env"
        
+        },            
+        {
+            "name": "Streamlit",
+            "type": "python",
+            "request": "launch",
+            "module": "streamlit",
+            "args": ["run", "newsaggregate/test/lit2.py"],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}",
+            "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}/newsaggregate"},
+            "envFile": "${workspaceFolder}/local.env"
+       
         },    
         
         {

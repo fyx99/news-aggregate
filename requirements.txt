@@ -12,3 +12,6 @@ uvicorn
 asyncpg
 aiobotocore==2.3.2
 botocore==1.24.21
+streamlit
+altair
+matplotlib

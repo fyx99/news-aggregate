@@ -27,6 +27,13 @@ WORKDIR /app/newsaggregate
 CMD [ "python3", "-u", "-m", "recommend.main"]
 
 
+
+
+FROM ml-base as lit
+COPY . .
+WORKDIR /app/newsaggregate
+CMD [ "streamlit", "run", "test/lit2.py"]
+
 FROM ml-base as ml
 COPY . .
 WORKDIR /app/newsaggregate

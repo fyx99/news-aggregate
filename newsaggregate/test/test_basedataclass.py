@@ -21,7 +21,7 @@ class TestBaseDataClass(CustomTestcase):
         a = TestDataclass(**{"num": 1, "a": "a", "d": datetime(2022, 1, 1), "dic": {"kk": {"tt": datetime(2022, 1, 1)}}, "lis": ["a", "b", 1, None, datetime(2022, 1, 1), {"dd": datetime(2022, 1, 1)}]})
         json_dict = a.to_json()
 
-        self.assertEqual(json_dict["d"], "2022-01-01 00:00:00")
+        self.assertEqual(json_dict["d"], "2022-01-01T00:00:00")
         self.assertEqual(json_dict["num"], 1)
         self.assertEqual(json_dict["a"], "a")
 
