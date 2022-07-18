@@ -25,6 +25,9 @@ RABBIT_CONNECTION_DETAILS = {
 }
 
 
+NEWS_RECOMMEND = {
+    "port": os.environ.get("NR_PORT", default="8000"),
+}
 
 
 TIMEOUT = os.environ.get("TIMEOUT", default=600)

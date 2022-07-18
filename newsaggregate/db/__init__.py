@@ -26,7 +26,8 @@ class BaseDataClass:
             for i, v in enumerate(d):
                 d[i] = BaseDataClass.convert_json_format(v) 
         elif isinstance(d, datetime):
-            d = d.strftime("%Y-%m-%d %H:%M:%S")
+            d = d.isoformat()   #.strftime("%Y-%m-%dT%H:%M:%S")
+            #2022-07-14T09:32:02.970Z
         return d
     
     def to_json_string(self):

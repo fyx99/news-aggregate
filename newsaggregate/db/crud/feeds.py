@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Feed(BaseDataClass):
+    id: str
     publisher: str
     url: str
     category: str
@@ -14,7 +15,7 @@ class Feed(BaseDataClass):
     region: str
 
 def get_feeds(db: DatabaseInterface):
-    rows = db.db.query("SELECT publisher, url, category, language, tier, recommend, region from Feeds", result=True)
+    rows = db.db.query("SELECT id, publisher, url, category, language, tier, recommend, region from Feeds", result=True)
     return [Feed(**r) for r in rows]
     
 

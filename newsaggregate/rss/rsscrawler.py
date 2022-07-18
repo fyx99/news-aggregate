@@ -18,10 +18,11 @@ class RssEntry:
     author: str = ""
     published: str = ""
     published_parsed: any = ""
+    rank: int = 0
 
     def dict_to_entry(entry_dict):
         entry = RssEntry()
-        [setattr(entry, field, entry_dict[field]) for field in ["title", "link", "id", "summary", "author", "published", "published_parsed"] if field in entry_dict]
+        [setattr(entry, field, entry_dict[field]) for field in ["title", "link", "id", "summary", "author", "published", "published_parsed", "rank"] if field in entry_dict]
         return entry
 
 class RSSCrawler:
@@ -36,7 +37,7 @@ class RSSCrawler:
             return []
     
     def get_entries(rss_parsed):
-        return [RssEntry.dict_to_entry(entry_dict) for entry_dict in rss_parsed.entries]
+        return [RssEntry.dict_to_entry({ **entry_dict, "rank": index + 1}) for index, entry_dict in enumerate(rss_parsed.entries)]
     
     def clean_entries(entries: List[RssEntry], rss_feed):
         clean_entries = []
@@ -52,9 +53,9 @@ class RSSCrawler:
                 pass
         return [Article.article_from_entry(e, rss_feed) for e in clean_entries]
 
-    def save_entries(db: DatabaseInterface, articles: List[Article]):
+    def save_entries(db: DatabaseInterface, articles: List[Article], feed: Feed):
         for article in articles:
-            article = save_rss_article(db, article)
+            article = save_rss_article(db, article, feed)
             yield article
     
     def run_single(db: DatabaseInterface, feed: Feed) -> List[RssEntry]:
@@ -66,7 +67,7 @@ class RSSCrawler:
                 return []
             entries = RSSCrawler.get_entries(parsed_feed[0])
             entries_articles = RSSCrawler.clean_entries(entries, feed.url)
-            rss_articles = RSSCrawler.save_entries(db, entries_articles)
+            rss_articles = RSSCrawler.save_entries(db, entries_articles, feed)
             save_feed_last_crawl(db, feed)
             logger.debug(f"RSS TIME {time.time()-start:.2f}")
             return rss_articles

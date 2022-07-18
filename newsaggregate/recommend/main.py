@@ -9,6 +9,7 @@ from fastapi.responses import Response, JSONResponse
 
 import uvicorn
 from db.async_s3 import AsyncDatalake
+from newsaggregate.db.config import NEWS_RECOMMEND
 from recommend.factors.main import RecommendManager
 
 from recommend.api import router as endpoint_router
@@ -99,7 +100,7 @@ async def json():
 if __name__ == "__main__":
     
     
-    uvicorn.run(app, log_level="debug", host="0.0.0.0", port=8000)#, log_config=uvicorn_log_config)
+    uvicorn.run(app, log_level="debug", host="0.0.0.0", port=NEWS_RECOMMEND["port"])#, log_config=uvicorn_log_config)
 
 
 

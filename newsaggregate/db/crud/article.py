@@ -26,6 +26,7 @@ class Article(BaseDataClass):
     status: str = ""
     text: str = ""
     publisher: str = ""
+    icon_url: str = ""
 
 
     def article_from_entry(entry, feed):
@@ -115,7 +116,7 @@ def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
     return article_html
 
 
-def save_rss_article(db: DatabaseInterface, article: Article):
+def save_rss_article(db: DatabaseInterface, article: Article, feed: Feed):
     insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, title_hash = %s  RETURNING id, status"
     insert_data = (article.feed, article.url, article.title[:1000], article.summary[:50000], article.publish_date, hash_text(article.title), 
         article.title, article.summary[:5000], hash_text(article.title))
@@ -123,6 +124,13 @@ def save_rss_article(db: DatabaseInterface, article: Article):
     db.dl.put_json(f"testing/article_rss/{row['id']}", {"rss": {"url": article.url, "title": article.title, "summary": article.summary, "publish_date": article.publish_date}})
     article.id = row["id"]
     article.status = row["status"]
+
+    #insert feedlog
+
+    insert_sql = "INSERT INTO feedlogs (feed_id, rank, article_id) values (%s, %s, %s) ON CONFLICT ON CONSTRAINT feedlogs_feed_rank_article DO NOTHING"
+    row = db.db.query(insert_sql, (feed.id, 1, article.id), result=True)[0]
+
+
     return article
 
 def save_html_article(db: DatabaseInterface, article: Article):
