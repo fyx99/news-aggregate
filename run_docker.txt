@@ -1,4 +1,7 @@
-docker build -t fxxy/news-aggregate . ; docker push fxxy/news-aggregate
+docker build --target RSS -t fxxy/news-aggregate-rss . ;                     docker push fxxy/news-aggregate-rss ;
+docker build --target FEED -t fxxy/news-aggregate-feed . ;                   docker push fxxy/news-aggregate-feed ;
+docker build --target REPROCESS_TEXT -t fxxy/news-aggregate-reprtxt . ;      docker push fxxy/news-aggregate-reprtxt ;
+docker build --target srv -t fxxy/news-aggregate-srv . ;                     docker push fxxy/news-aggregate-srv
 
 
 # test
@@ -6,8 +9,7 @@ docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env
 
 docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env-file drop.env -e LOG_LEVEL=INFO fxxy/news-aggregate-test;
 
-# run ml local
-docker build --target ml -t fxxy/news-aggregate-ml . ; docker run  -e TASK='FEED' --env-file local.env  fxxy/news-aggregate-ml
+
 
 docker run --env-file local.env fxxy/news-aggregate
 docker run -e TASK='FEED' --env-file local.env fxxy/news-aggregate
@@ -37,9 +39,6 @@ docker run --restart=always --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=u3
 docker run -d --restart=always --hostname rabbit --name rabbitmq -e RABBITMQ_DEFAULT_USER=dog -e RABBITMQ_DEFAULT_PASS="20849hfibfcn82..SADFC" -p 5672:5672 -p 15672:15672 rabbitmq:3.10.0-rc.4-management
 
 
-# old
-docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-aggregate-ml
-
 
 
 docker build --target srv -t fxxy/news-aggregate-srv . 
@@ -68,6 +67,11 @@ cat dump_16-06-2022.sql | docker exec -i postgres  psql -U postgres
 
 
 
+# old
+docker build --target ml -t fxxy/news-aggregate-ml . ; docker push fxxy/news-aggregate-ml
+
+
+
 
 
 
@@ -79,3 +83,7 @@ docker network create -d bridge dropnetwork
 
 docker network connect dropnetwork postgres
 docker network connect dropnetwork rabbitmq
+
+
+# run ml local
+docker build --target ml -t fxxy/news-aggregate-ml . ; docker run  -e TASK='FEED' --env-file local.env  fxxy/news-aggregate-ml

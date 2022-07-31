@@ -1,6 +1,7 @@
 import unittest
 from unittest import mock
 from db.crud.feeds import Feed
+from rss.util import Utils
 from rss.rsscrawler import RSSCrawler
 from test.test_utils import get_datalake_test_data, mock_data, test_data_func
 from types import SimpleNamespace
@@ -36,6 +37,19 @@ class TestRSSCrawler(CustomTestcase):
 
 
 
+    def test_clean_text_whites(self):
+        text = """Liveblog zum Ukraine-Krieg
+
+                    Schweiz nimmt keine 'Verletzten'  is'nt aus der Ukraine auf\n  nervige extra‘ “zitate„      """
+
+        clean_text = Utils.clean_text(text)
+        self.assertEqual(clean_text, """Liveblog zum Ukraine-Krieg Schweiz nimmt keine 'Verletzten' is'nt aus der Ukraine auf nervige extra" "zitate\"""")
+      
+    
+
+
+
+
 
 if __name__ =="__main__":
-    TestRSSCrawler().test_parse_feed_2()
+    TestRSSCrawler().test_clean_text_whites()

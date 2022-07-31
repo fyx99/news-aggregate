@@ -106,7 +106,7 @@ def normalize_array(array):
 		return array
 	min_value = np.min(array)
 	max_value = np.max(array)
-	divisor = (max_value - min_value) if (max_value - min_value) != 0 else 1
+	divisor = (max_value - min_value) or 1
 	array_normalized = (array - min_value) / divisor
 	return array_normalized
 

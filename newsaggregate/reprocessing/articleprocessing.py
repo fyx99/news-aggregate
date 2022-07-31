@@ -146,7 +146,7 @@ class ArticleProcessing:
         for index_a in range(len(articles_list) - 1):
             index_b = index_a + 1
 
-            html_a = html_b if html_b != None else get_article_html(db, articles_list[index_a][0])
+            html_a = html_b or get_article_html(db, articles_list[index_a][0])
             html_b = get_article_html(db, articles_list[index_b][0])
 
             if html_a == None or html_b == None:

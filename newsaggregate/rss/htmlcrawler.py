@@ -129,8 +129,8 @@ class HTMLCrawler:
         article_text = article_text.strip()
         article_h1 = soup.findAll("h1")
         article_title = article_h1[0].get_text() if len(article_h1) else ""
-        article_title = article_title.strip()
-        return article_text, article_title
+        article_title_clean = Utils.clean_text(article_title)
+        return article_text, article_title_clean
 
 
     def run_single(db: DatabaseInterface, article: Article):

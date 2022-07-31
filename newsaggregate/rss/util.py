@@ -14,8 +14,13 @@ class Utils:
         parser = "html.parser"
         text = BeautifulSoup(text, parser).get_text()
         text = " ".join(text.split())
-        text = re.sub('[^A-Za-z0-9äöüß.,!?#+-]+', ' ', text)
+        text = re.sub('[^A-Za-z0-9äöüß.,!?#+-:"*;`´\'“„‘’]+', ' ', text)
+        text = re.sub('’', '"', text)
+        text = re.sub('‘', '"', text)
+        text = re.sub('“', '"', text)
+        text = re.sub('„', '"', text)
         text = text.strip()
+        #text = re.sub('\s+',' ', text)
         return text
     def clean_date(struct_date):
         return datetime.fromtimestamp(time.mktime(struct_date))

@@ -1,7 +1,7 @@
 from collections import defaultdict
 import traceback
 import numpy as np
-from db.crud.article import Article, get_article, get_articles_for_feed, get_articles_clean_language
+from db.crud.article import FeedArticle, Article, get_article, get_articles_for_feed, get_articles_clean_language
 from db.crud.feeds import Feed
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
@@ -35,7 +35,7 @@ class FeedManager:
             task = db.rb.get_task(f"FEATURE.{language}")
             if not task:
                 break
-            FeedManager.run_single_article(db, Article(**task["article"]), Feed(**task["feed"]), task["delivery_tag"])
+            FeedManager.run_single_article(db, FeedArticle(**task["article"]), Feed(**task["feed"]), task["delivery_tag"])
     
     def main():
         with Database() as db, Datalake() as dl, MessageBroker() as rb:
@@ -112,15 +112,7 @@ class FeedManager:
         except:
             logger.error(traceback.format_exc())
 
-    
-    def run_batch(db, ids):
-        texts = []
-        for id in ids:
-            article, _, _ = FeedManager.load_text_single(db, id)
-            texts.append(article)
-        FeedManager.process_batch(db, np.array(ids).astype(int), texts)
-        return
-    
+
 
 if __name__ == "__main__":
 

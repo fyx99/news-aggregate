@@ -20,6 +20,7 @@ class Article(BaseDataClass):
     image_url: str = ""
     title: str = ""
     summary: str = ""
+    publish_date: any = ""
     update_date: any = ""
     feed: str = ""
     title_hash: str = ""
@@ -59,7 +60,7 @@ def get_articles_for_reprocessing(db: DatabaseInterface):
     return [(r["id"], r["url"]) for r in rows]
 
 
-def get_articles_for_feed(db: DatabaseInterface, type):
+def get_articles_for_feed(db: DatabaseInterface, type, limit=None):
     
                         #     SELECT id, url, amp_url, image_url, title, summary, update_date, feed, title_hash, status, text from Articles FROM articles as aa 
                         # left join feeds as f on feed = f.url
@@ -68,10 +69,10 @@ def get_articles_for_feed(db: DatabaseInterface, type):
                         # order by random()
                         # LIMIT 10000
     rows = db.db.query("""
-                        SELECT a.id, url, amp_url, image_url, title, summary, update_date, feed, title_hash, status, text, publisher, e.id as blob_id, text_type, processor, blob
+                        SELECT a.id, url, amp_url, image_url, title, summary, a.update_date, feed, title_hash, status, text, publisher, e.id as blob_id, text_type, processor, blob
                         from articles_clean as a
-                        inner join embeddings_latest as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = %s where blob is not Null limit 5000
-                        """, (type,),
+                        inner join embeddings_latest as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = %s where blob is not Null limit %s
+                        """, (type, limit or 5000),
                         result=True)
     return ([Article(r["id"], r["url"], r["amp_url"], r["image_url"], r["title"], r["summary"], r["update_date"], r["feed"], r["title_hash"], r["status"], r["text"], r["publisher"]) for r in rows],
             [Embedding(r["blob_id"], r["processor"], r["text_type"], r["id"], npy_to_numpy_array(r["blob"])) for r in rows])
@@ -101,7 +102,7 @@ def get_article_html(db: DatabaseInterface, key: str):
         payload = db.dl.get_json(f"testing/article_html/{key}")
     except:
         return None
-    return payload["html"] if "html" in payload else None
+    return payload.get("html", None)
 
 def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
     rows = [(i, "www.example.com") for i in ids]
@@ -118,8 +119,8 @@ def get_articles_for_reprocessing_id_list(db: DatabaseInterface, ids):
 
 
 def save_rss_article(db: DatabaseInterface, article: FeedArticle):
-    insert_sql = "INSERT INTO Articles (feed, url, title, summary, update_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, title_hash = %s  RETURNING id, status"
-    insert_data = (article.feed, article.url, article.title[:1000], article.summary[:50000], article.update_date, hash_text(article.title), 
+    insert_sql = "INSERT INTO Articles (feed, url, title, summary, publish_date, title_hash, status) values (%s, %s, %s, %s, %s, %s, 'CRAWL') ON CONFLICT ON CONSTRAINT articles_url_key DO UPDATE SET title = %s, summary = %s, title_hash = %s  RETURNING id, status"
+    insert_data = (article.feed, article.url, article.title[:1000], article.summary[:50000], article.publish_date, hash_text(article.title), 
         article.title, article.summary[:5000], hash_text(article.title))
     row = db.db.query(insert_sql, insert_data, result=True)[0]
     db.dl.put_json(f"testing/article_rss/{row['id']}", {"rss": {"url": article.url, "title": article.title, "summary": article.summary, "update_date": article.update_date}})

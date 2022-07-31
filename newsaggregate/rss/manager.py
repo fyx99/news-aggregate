@@ -94,10 +94,10 @@ class RssCrawlManager:
             refresh_article_materialized_views(di)
             logger.info("REFRESH DONE")
 
-    def process_job(db: DatabaseInterface, job):
+    def process_job(db: DatabaseInterface, job: dict):
         job_type: str = job["job_type"]
         job_feed: Feed = job["feed"]
-        job_article: Article = job["article"] if "article" in job else None
+        job_article: Article = job.get("article")
         if job_type == RSS_CRAWL:
             articles: List[Article] = list(RSSCrawler.run_single(db, job_feed))
             logger.debug(f"RETURN: {job_feed.url} ARTICLES {len(articles)}")

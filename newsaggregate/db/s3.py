@@ -55,11 +55,13 @@ class Datalake:
             logger.error("*** CONNECTION PROBLEM " + repr(e))
 
 
-    def put_json(self, path, json_data=()):
+    def put_json(self, path, json_data=(), propagate_error=False):
         # query db with reconnect error handling
         try:
             self.connection.put_object(Body=json.dumps(json_data), Bucket=self.bucket, Key=path)
         except Exception as e:
+            if propagate_error:
+                raise Exception("Error in Put JSON")
             logger.error(traceback.format_exc())
 
     def get_json(self, path):
