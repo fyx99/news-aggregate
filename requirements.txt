@@ -16,3 +16,4 @@ streamlit
 altair
 matplotlib
 paramiko
+diff_match_patch

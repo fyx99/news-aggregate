@@ -1,3 +1,4 @@
+from typing import List
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 import re, json, time, difflib
@@ -66,6 +67,8 @@ class ArticleProcessing:
     
     def attrs_similar(x, y):
         #logger.info(x,y )
+        x = x.attrs
+        y = y.attrs
         matches = {k: x[k] for k in x if k in y and x[k] == y[k]}
         if len(matches.keys()) == len(x.keys()):
             return True
@@ -76,6 +79,10 @@ class ArticleProcessing:
         if element_count > 1:
             return False
         return True
+
+    def tag_depth(tag):
+        depth = sum([1 for parent in tag.parents])
+        return depth
 
     def identify_useless_parent(tag1, tag2):
         #logger.info("identify usedless")
@@ -95,7 +102,7 @@ class ArticleProcessing:
             parent1, parent2, = parent1.parent, parent2.parent
             parent1_text, parent2_text = parent1.get_text(), parent2.get_text()
 
-            while parent1 and parent2 and parent1.parent and parent2.parent and (parent1.name != parent2.name or not ArticleProcessing.attrs_similar(parent1.attrs, parent2.attrs)):
+            while parent1 and parent2 and parent1.parent and parent2.parent and (parent1.name != parent2.name or not ArticleProcessing.attrs_similar(parent1, parent2)):
                 if len(parent1_text) > len(parent2_text):
                     parent2 = parent2.parent
                     parent2_text = parent2.get_text()
@@ -150,6 +157,7 @@ class ArticleProcessing:
             html_b = get_article_html(db, articles_list[index_b][0])
 
             if html_a == None or html_b == None:
+                logger.debug("HTML MISSING FOR REPROCESSING")
                 continue
            
             soup_a = BeautifulSoup(locate_article(BeautifulSoup(html_a, "html.parser")).__str__(), "html.parser")
@@ -178,18 +186,43 @@ class ArticleProcessing:
         return ratio > 0.8
 
 
-    def compare_two_tags(soup1, soup2, min_ratio=0.8, min_len=5, allow_sampling=True):
-        p_list1 = [p for p in soup1.findAll("p")]
-        p_list2 = [p for p in soup2.findAll("p")]
+    def identify_unique_attributes(t1: Tag, t2: Tag):
+        d1 = ArticleProcessing.tag_depth(t1)
+        d2 = ArticleProcessing.tag_depth(t2)
+
+        # focus_tag1 = t1
+        # focus_tag2 = t2
+
+        # while(d1 != d2):
+        #     if d1 > d2:
+        #         focus_tag1 = focus_tag1.parent
+        #     else:
+        #         focus_tag2 = focus_tag2.parent
+        if d1 == d2 and ArticleProcessing.check_if_node_is_same(t1.parent, t2.parent) and ArticleProcessing.check_if_node_is_same(t1, t2):
+            # means we have some paragraphs that should always contain unique content 
+            return [t1]
+
+        return []
+
+    def check_if_node_is_same(t1, t2):
+        return t1.name == t2.name and ArticleProcessing.attrs_similar(t1, t2)
+
+    def check_if_tag_is_child_of_tag(tag, potential_parent):
+        for parent in tag.parents:
+            if parent.name == potential_parent.name and ArticleProcessing.attrs_similar(parent, potential_parent):
+                return True
+        return False
+
+    def compare_two_tags(soup1: BeautifulSoup, soup2: BeautifulSoup, min_ratio=0.6, min_len=5, allow_sampling=False):
+        p_list1: List[Tag] = [p for p in soup1.findAll("p")]
+        p_list2: List[Tag] = [p for p in soup2.findAll("p")]
         matches = []
         # logger.info(difflib.SequenceMatcher(None, "".join([p.get_text() for p in p_list1]), "".join([p.get_text() for p in p_list2])).ratio())
         # logger.info("".join([p.get_text() for p in p_list1]))
         # logger.info("".join([p.get_text() for p in p_list2]))
         full_text1 = "".join([p.get_text() for p in p_list1])
         full_text2 = "".join([p.get_text() for p in p_list2])
-        if "€ 19,99 pro Monat" in full_text1 and "€ 19,99 pro Monat" in full_text2:
-            #logger.info("pay")
-            a = 1
+
         if ArticleProcessing.too_similar(full_text1, full_text2):
             #logger.info("skip")
             return []
@@ -200,24 +233,48 @@ class ArticleProcessing:
         if len(p_list1) * len(p_list2) > max_iterations:
             sampling_factor = max_iterations / (len(p_list1) * len(p_list2))
 
-        for t1 in p_list1:
-            for t2 in p_list2:
+        ignore_tag_list: List[Tag] = []
+
+        idx = 0
+        
+        for i, t1 in enumerate(p_list1):
+            j = 0
+            while j < len(p_list2):
+                t2 = p_list2[j]
+                
+                idx += 1
                 if not allow_sampling or not sampling_factor or random() < sampling_factor:
                     start = time.time()
+                    if idx == 3:
+                        a = 2
+                    # check here if this tag is part of already checked area of graph
+                    if any((ArticleProcessing.check_if_tag_is_child_of_tag(t1, e.parent) and ArticleProcessing.attrs_similar(t1, e)) for e in ignore_tag_list):
+                        # continue in outer look
+                        break
+                    elif any((ArticleProcessing.check_if_tag_is_child_of_tag(t2, e.parent) and ArticleProcessing.attrs_similar(t2, e)) for e in ignore_tag_list):
+                        # continue in inner look
+                        del p_list2[j]
+                        continue
+                    j += 1
+
                     t1_txt, t2_txt = t1.get_text(), t2.get_text()
                     ratio = difflib.SequenceMatcher(None, t1_txt, t2_txt).ratio()
+                    
                     if ratio < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
-                        #logger.info(time.time()-start)
+                        # not similar enough to look at
+                        ignore_tag_list.extend(ArticleProcessing.identify_unique_attributes(t1, t2))
                         continue
                     useless_parent1, useless_parent2 = ArticleProcessing.identify_useless_parent(t1, t2)
-                    if "data-article-el" in useless_parent1.attrs and (useless_parent1.attrs["data-article-el"][0] in [ "body"] or useless_parent1.attrs["data-article-el"] == "body"):
-                        a = 1
+
                     if useless_parent1 and useless_parent2:
                         useless_parent_id_child1, identifyable1 = ArticleProcessing.identifiable_child(useless_parent1, soup2)
                         #useless_parent_id_child2, identifyable2 = ArticleProcessing.identifiable_child(useless_parent2, soup1)
 
                         matches.append(ArticleProcessing.element_saveable(useless_parent_id_child1, identifyable1))
+                        ignore_tag_list.append(useless_parent_id_child1) if identifyable1 else None     #only append this if it is identifyable
                     #logger.info(time.time()-start)
+               
+
         return matches
 
 
@@ -243,7 +300,7 @@ class ArticleProcessing:
         logger.info(f"start with {len(articles_publisher.keys())} groups")
         publisher_patterns = {}
         for publisher, articles_list in articles_publisher.items():
-            if len(articles_list) > 20:
+            if len(articles_list) > 19:
                 
                 start = time.time()
                 # old n param , min(len(articles_list) * 2, 1000)

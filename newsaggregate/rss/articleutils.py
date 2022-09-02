@@ -5,7 +5,7 @@ def locate_article(soup):
     if len(article_hits) == 1:
         return article_hits[0]
     #exactly one article in content
-    content = soup.find("div", {"class": "content"})
+    content = soup.find("div", {"class": "content"}) or soup.find("div", {"id": "content"})
     content_article_hits = content.findAll("article") if content else []
     if len(content_article_hits) == 1:
         return content_article_hits[0]

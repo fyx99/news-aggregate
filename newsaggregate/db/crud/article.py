@@ -51,10 +51,12 @@ def get_random_articles(db: DatabaseInterface, limit=200):
 
 def get_articles_for_reprocessing(db: DatabaseInterface):
     #where feed = (select feed from articles  group by feed having count(url) > 100 order by random() limit 1)
+    #(select feed from articles_recent group by feed having count(url) > 100 order by random() limit 1) 
+    db.db.query("""select setseed(0.5);""")
     rows = db.db.query("""
                         SELECT id, url from articles_recent 
-                        where feed = (select feed from articles_recent group by feed having count(url) > 100 order by random() limit 1) 
-                        order by random() limit 200;
+                        where feed = 'https://www.dailymail.co.uk/articles.rss'
+                        order by random() limit 20;
                         """,
                         result=True)
     return [(r["id"], r["url"]) for r in rows]

@@ -1,6 +1,10 @@
+from typing import List
 from db.databaseinstance import DatabaseInterface
 from dataclasses import dataclass
+import json
 
+from logger import get_logger
+logger = get_logger()
 
 @dataclass       
 class Match:
@@ -23,7 +27,14 @@ def save_unnecessary_text_pattern(db: DatabaseInterface, match: Match):
     insert_data = (match.url_pattern, match.tag_name, match.tag_attrs, match.tag_identifyable, match.tag_text, match.tag_identifyable, match.tag_text)
     db.db.query(insert_sql, insert_data)
 
-def get_unnecessary_text_pattern(db: DatabaseInterface):
+def get_unnecessary_text_pattern(db: DatabaseInterface) -> List[Match]:
     insert_sql = "SELECT url_pattern, tag_name, tag_attrs, tag_text, tag_identifyable from UnnecessaryText where tag_identifyable = 'TRUE'"
     rows = db.db.query(insert_sql, result=True)
-    return [Match(**r) for r in rows]
+    patterns = []
+    for pattern in rows:
+        try:
+            loaded_pattern = json.loads(pattern["tag_attrs"])
+            patterns.append(Match(**{**pattern, "tag_attrs": loaded_pattern}))
+        except:
+            logger.debug(f"""FAILED LOADING PATTERN {pattern["tag_attrs"]}""")
+    return patterns

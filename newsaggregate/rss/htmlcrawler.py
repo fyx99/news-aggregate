@@ -2,7 +2,7 @@ from collections import defaultdict
 import difflib
 import re
 import traceback
-from typing import List
+from typing import Dict, List
 from bs4 import BeautifulSoup, Tag
 import requests
 import json
@@ -10,6 +10,8 @@ from db.config import HTTP_TIMEOUT
 from db.crud.article import Article, save_article, set_article_status
 from db.crud.textpattern import get_unnecessary_text_pattern
 from db.databaseinstance import DatabaseInterface
+from db.postgresql import Database
+from db.crud.textpattern import Match
 from rss.articleutils import locate_article
 import time
 import urllib.request
@@ -25,7 +27,7 @@ from rss.util import Utils
 
 class HTMLCrawler:
 
-    patterns = defaultdict(list)
+    patterns: Dict[str, List[Match]] = defaultdict(list)
 
     def get_patterns(db):
         patterns_list = get_unnecessary_text_pattern(db)
@@ -108,10 +110,10 @@ class HTMLCrawler:
         return HTMLCrawler.any_news_article(markups_flat)
 
     
-    def clean_unnecessary(soup, url):
+    def clean_unnecessary(soup: BeautifulSoup, url):
         for pattern in HTMLCrawler.patterns[Utils.get_domain(url)]:
             if pattern.tag_identifyable == "TRUE":
-                ps = soup.find_all(pattern.tag_name, attrs=pattern.tag_attrs)
+                ps: List[Tag] = soup.find_all(pattern.tag_name, attrs=pattern.tag_attrs)
                 combined_text =  re.sub('\s+',' ', "".join([p.get_text() for p in ps]))[:1000]
                 if len(combined_text) > 500:
                     a = 1
@@ -168,3 +170,13 @@ class HTMLCrawler:
             logger.error("ERROR FOR " + article.url + " " + repr(e)) 
             logger.error(traceback.format_exc())   
             
+
+if __name__ == "__main__":
+
+    with Database() as db:
+        di = DatabaseInterface(db) 
+        HTMLCrawler.get_patterns(di)
+
+
+    url = "https://www.dailymail.co.uk/femail/article-11102177/This-cooling-mask-help-skin-survive-heatwave-fight-blemishes.html"
+    HTMLCrawler.run_single(di, Article(url=url))
