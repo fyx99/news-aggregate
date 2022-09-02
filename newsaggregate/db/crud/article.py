@@ -27,7 +27,7 @@ class Article(BaseDataClass):
     status: str = ""
     text: str = ""
     publisher: str = ""
-    icon_url: str = ""
+    icon_url: str = "" 
  
 @dataclass
 class FeedArticle(Article):
@@ -71,7 +71,7 @@ def get_articles_for_feed(db: DatabaseInterface, type, limit=None):
     rows = db.db.query("""
                         SELECT a.id, url, amp_url, image_url, title, summary, a.update_date, feed, title_hash, status, text, publisher, e.id as blob_id, text_type, processor, blob
                         from articles_clean as a
-                        inner join embeddings_latest as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = %s where blob is not Null limit %s
+                        inner join embeddings as e on a.id = e.article_id and e.text_type = 'Article' and e.processor = %s where blob is not Null limit %s
                         """, (type, limit or 5000),
                         result=True)
     return ([Article(r["id"], r["url"], r["amp_url"], r["image_url"], r["title"], r["summary"], r["update_date"], r["feed"], r["title_hash"], r["status"], r["text"], r["publisher"]) for r in rows],
@@ -138,12 +138,18 @@ def save_html_article(db: DatabaseInterface, article: Article):
     insert_data = (article.amp_url, article.image_url, article.status, article.title[:1000], article.text[:300000], hash_text(article.title), article.id)
     db.db.query(insert_sql, insert_data)
 
+def save_html_keywords(db: DatabaseInterface, article: Article, keywords):
+    #insert keywords
+    insert_sql = "INSERT INTO Keywords (article_id, keyword) values (%s, %s) ON CONFLICT ON CONSTRAINT keywords_unique DO NOTHING"
+    [db.db.query(insert_sql, (article.id, kw)) for kw in keywords]
 
-def save_article(db: DatabaseInterface, markup, html, article: Article):
+
+def save_article(db: DatabaseInterface, article: Article, markup, html, keywords):
     db.dl.put_json(f"testing/article_markup/{article.id}", {"markup": markup})
     db.dl.put_json(f"testing/article_html/{article.id}", {"html": html})
     db.dl.put_json(f"testing/article_text/{article.id}", {"text": article.text, "title": article.title})
     save_html_article(db, article)
+    save_html_keywords(db, article, keywords)
 
 
 def set_article_status(db: DatabaseInterface, article: Article):

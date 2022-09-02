@@ -102,9 +102,8 @@ class RssCrawlManager:
             articles: List[Article] = list(RSSCrawler.run_single(db, job_feed))
             logger.debug(f"RETURN: {job_feed.url} ARTICLES {len(articles)}")
             for article in articles:
-                if article.status != "CRAWL":
-                    if random.random() > 0.05:
-                        continue
+                if article.status != "CRAWL" and random.random() > 0.02:
+                    continue
                 Manager.add_job({"job_type": HTML_CRAWL, "feed": job_feed, "article": article})
 
         elif job_type == HTML_CRAWL:

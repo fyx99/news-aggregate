@@ -9,7 +9,7 @@ from fastapi.responses import Response, JSONResponse
 
 import uvicorn
 from db.async_s3 import AsyncDatalake
-from newsaggregate.db.config import NEWS_RECOMMEND
+from db.config import NEWS_RECOMMEND
 from recommend.factors.main import RecommendManager
 
 from recommend.api import router as endpoint_router

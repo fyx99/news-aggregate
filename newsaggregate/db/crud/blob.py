@@ -31,12 +31,15 @@ def get_similarities(db: DatabaseInterface, type):
 
 def save_embeddings(db: DatabaseInterface, embedding, processor, text_type, article_id):
     blob = numpy_array_as_npy(embedding)
-    blob_id = db.db.query("insert into embeddings (id, processor, text_type, article_id, blob) values (nextval('blob_id'), %s, %s, %s, %s) returning id", (processor, text_type, article_id, psycopg2.Binary(blob)), result=True)[0]["id"]
+    blob_id = db.db.query("""insert into embeddings (id, processor, text_type, article_id, blob) values (nextval('blob_id'), %s, %s, %s, %s) 
+            ON CONFLICT ON CONSTRAINT processor_text_type_article DO UPDATE SET blob = %s, update_date = CURRENT_TIMESTAMP
+            returning id""", 
+        (processor, text_type, article_id, psycopg2.Binary(blob), psycopg2.Binary(blob)), result=True)[0]["id"]
     db.dl.put_obj(f"testing/embedding/{blob_id}", blob)
 
 
 def get_embeddings(db: DatabaseInterface, processor, text_type, article_id):
-    blob = db.db.query("select blob from embeddings where processor = %s and text_type = %s and article_id = %s order by update_date desc limit 1", (processor, text_type, article_id), result=True)[0]["blob"]
+    blob = db.db.query("select blob from embeddings where processor = %s and text_type = %s and article_id = %s limit 1", (processor, text_type, article_id), result=True)[0]["blob"]
     return npy_to_numpy_array(blob)
 
 def get_embedding_by_id(db: DatabaseInterface, blob_id):

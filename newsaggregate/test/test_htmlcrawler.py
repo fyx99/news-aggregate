@@ -16,7 +16,7 @@ class TestHTMLCrawler(CustomTestcase):
 
 
     def test_get_html(self):
-        html, active = HTMLCrawler.get_html('https://www.bbc.com/news/uk-politics-58552389')
+        html, active = HTMLCrawler.get_html("https://www.bbc.com/news/uk-politics-58552389")
         self.assertTrue(isinstance(html, str))
         
     def test_find_tag_with_names(self):
@@ -29,13 +29,13 @@ class TestHTMLCrawler(CustomTestcase):
         tag = TestTag("meta", { "content": "url1", "name": "facebook:image" })
         self.assertEqual(HTMLCrawler.find_tag_with_names(tag, ["twitter:image", "twitter:image:src"]), False)
     
-    def test_get_metadata(self):
+    def test_get_image_url(self):
         text = """<!DOCTYPE html><html><meta property="og:image" content="imageurl1" /><picture class="bw-image"/></html>"""
-        self.assertEqual(HTMLCrawler.get_metadata(text)['image_url'], "imageurl1")
+        self.assertEqual(HTMLCrawler.get_metadata(text)[0], "imageurl1")
         text = """<!DOCTYPE html><html><meta property="twitter:image" content="imageurl2" /><picture class="bw-image"/></html>"""
-        self.assertEqual(HTMLCrawler.get_metadata(text)['image_url'], "imageurl2")
+        self.assertEqual(HTMLCrawler.get_metadata(text)[0], "imageurl2")
         text = """<!DOCTYPE html><html><meta property="twitter:image" content="imageurl2" /><meta property="og:image" content="imageurl1" /></html>"""
-        self.assertEqual(HTMLCrawler.get_metadata(text)['image_url'], "imageurl2")
+        self.assertEqual(HTMLCrawler.get_metadata(text)[0], "imageurl2")
     
     def test_get_json_plus_metadata(self):
         text = """<!DOCTYPE html><html><script type="application/ld+json">
@@ -129,5 +129,25 @@ class TestHTMLCrawler(CustomTestcase):
         self.assertEqual(HTMLCrawler.patterns["url_pattern4"][0].tag_name, "tag_name5")
 
 
+
+    def test_keyword_extract(self):
+        test5 = """<!DOCTYPE html><body>
+             <meta name="keywords" content="SABMiller, AB InBev, ISIN_BE0003793107, Reuters, Europ&auml;ische Kommission, Brauerfusion, &Uuml;bernahme"/>
+           </body>"""
+
+        _, _, keywords = HTMLCrawler.get_metadata(test5)
+        self.assertEqual(keywords[0], "SABMiller")
+        self.assertEqual(keywords[3], "Reuters")
+
+        test5 = """<!DOCTYPE html><body><meta name="keywords" content=""/></body>"""
+        _, _, keywords = HTMLCrawler.get_metadata(test5)
+        self.assertEqual(keywords, [])
+
+        test5 = """<!DOCTYPE html><body><meta name="keywords" content=" "/></body>"""
+        _, _, keywords = HTMLCrawler.get_metadata(test5)
+        self.assertEqual(keywords, [])
+
+
+
 if __name__ =="__main__":
-    TestHTMLCrawler().test_get_patterns()
+    TestHTMLCrawler().test_keyword_extract()

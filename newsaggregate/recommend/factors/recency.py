@@ -11,7 +11,7 @@ class RecencyFactor(BaseFactor):
     def setup(self, setup_input: FactorSetupInput):
         super().setup()
 
-        publish_dates = [article.publish_date for article in setup_input.articles]
+        publish_dates = [article.update_date for article in setup_input.articles]
         publish_timestamps = np.array([datetime.timestamp() for datetime in publish_dates])
 
         self.publish_dates = normalize_array(normalize_array_exp(publish_timestamps))

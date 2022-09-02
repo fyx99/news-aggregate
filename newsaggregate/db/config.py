@@ -26,7 +26,7 @@ RABBIT_CONNECTION_DETAILS = {
 
 
 NEWS_RECOMMEND = {
-    "port": os.environ.get("NR_PORT", default="8000"),
+    "port": int(os.environ.get("NR_PORT", default="8000")),
 }
 
 

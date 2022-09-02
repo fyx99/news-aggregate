@@ -11,9 +11,9 @@ docker build --target test -t fxxy/news-aggregate-test . ; docker run --rm --env
 
 
 
-docker run --env-file local.env fxxy/news-aggregate
-docker run -e TASK='FEED' --env-file local.env fxxy/news-aggregate
-docker run -e TASK='FEED' --env-file /env/drop.env fxxy/news-aggregate
+docker run --env-file local.env fxxy/news-aggregate-rss
+#docker run -e TASK='FEED' --env-file local.env fxxy/news-aggregate-feed
+#docker run -e TASK='FEED' --env-file /env/drop.env fxxy/news-aggregate-feed
 
 
 

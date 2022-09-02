@@ -2,7 +2,8 @@ from collections import defaultdict
 import difflib
 import re
 import traceback
-from bs4 import BeautifulSoup
+from typing import List
+from bs4 import BeautifulSoup, Tag
 import requests
 import json
 from db.config import HTTP_TIMEOUT
@@ -51,7 +52,7 @@ class HTMLCrawler:
             return "INACTIVE"
 
     
-    def find_tag_with_names(tag, names):
+    def find_tag_with_names(tag: Tag, names):
         if tag.name == "meta":
             for attr in tag.attrs.values():
                 if attr in names:
@@ -62,15 +63,19 @@ class HTMLCrawler:
         parser = "html.parser"
         soup = BeautifulSoup(text, parser)
     
-        image_tags = soup.findAll(lambda t: HTMLCrawler.find_tag_with_names(t, ["twitter:image", "twitter:image:src", "og:image", "og:image:url"]))
+        image_tags: List[Tag] = soup.findAll(lambda t: HTMLCrawler.find_tag_with_names(t, ["twitter:image", "twitter:image:src", "og:image", "og:image:url"]))
         image_url = image_tags[0].attrs["content"] if len(image_tags) else ""
         
-        amp_tag = soup.findAll("link", {"rel": "amphtml"})
-        amp_url = amp_tag[0].attrs["href"] if len(amp_tag) else ""
-        return {
-            "image_url": image_url,
-            "amp_url": amp_url
-        }
+        amp_tag: List[Tag] = soup.findAll("link", {"rel": "amphtml"})
+        amp_url = amp_tag[0].attrs["href"] if amp_tag else ""
+
+        keyword_tag: List[Tag] = soup.findAll(lambda t: HTMLCrawler.find_tag_with_names(t, ["keywords", "news_keywords"]))
+        keywords_raw = keyword_tag[0].attrs["content"].split(",") if keyword_tag else []
+        keywords = [str(e).strip() for e in keywords_raw]
+        keywords = [e for e in keywords  if e != ""]
+
+        return image_url, amp_url, keywords
+
     
     def parse_json_tags(json_scripts):
         json_parsed = []
@@ -145,8 +150,7 @@ class HTMLCrawler:
             parser = "html.parser"
             soup = BeautifulSoup(html, parser)
             markups = HTMLCrawler.get_json_plus_metadata(soup)
-            meta = HTMLCrawler.get_metadata(html)
-            article.image_url, article.amp_url = (meta["image_url"], meta["amp_url"])
+            article.image_url, article.amp_url, keywords = HTMLCrawler.get_metadata(html)
 
             article.text, article.title = HTMLCrawler.parse_article(soup, article.url)
             parse_html_time = time.time() - start - get_html_time
@@ -157,7 +161,7 @@ class HTMLCrawler:
                 status = img_status
 
             img_html_time = time.time() - start - get_html_time - parse_html_time
-            save_article(db, markups, html, article)
+            save_article(db, article, markups, html, keywords)
             save_article_time = time.time() - start - parse_html_time - get_html_time - img_html_time
             logger.debug(f"HTML {get_html_time=:.2f} {parse_html_time=:.2f} {img_html_time=:.2f} {save_article_time=:.2f}")
         except Exception as e:
