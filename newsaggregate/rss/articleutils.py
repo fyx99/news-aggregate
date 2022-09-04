@@ -1,6 +1,12 @@
 
-def locate_article(soup):
+def locate_article(soup, article_locator=None):
     #exactly one article
+
+    if article_locator:
+        specified = soup.find(article_locator.tag_name, article_locator.tag_attrs)
+        if specified:
+            return specified
+
     article_hits = soup.findAll("article")
     if len(article_hits) == 1:
         return article_hits[0]
@@ -13,7 +19,7 @@ def locate_article(soup):
     # content = soup.find("h1")
 
     def most_text_paragraphs_in_articles(articles):
-        articles_char_len = [len(" ".join([p.get_text() for p in soup.findAll("p")])) for soup in articles]
+        articles_char_len = [len(" ".join([p.get_text() for p in article_soup.findAll("p")])) for article_soup in articles]
         if not len(articles_char_len):
             return None, -1
         index = articles_char_len.index(max(articles_char_len)) 

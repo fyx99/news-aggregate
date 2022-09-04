@@ -33,9 +33,16 @@ def diff_ratio(a, b):
 
     d = sum([l for a,b,l,w in matches_indexes if a==b or (la - a + l) == (lb - b + l)])
     
-    
-    return  0.33333333334*(2.0*m / t) + 0.66666666666*((2.0*d / t)**(1/7))
+    simple_ratio = (2.0*m / t)
+    index_ratio = ((2.0*d / t)**(1/7))
+    if max(simple_ratio, index_ratio) > 0.8:
+        return max(simple_ratio, index_ratio)
+    return 0.5*simple_ratio + 0.5*index_ratio
 
 
 if __name__ == "__main__":
-    print(diff_ratio("", ""))
+    print(diff_ratio("ad8pübusö üpiubs öldcöious", "bad8pübusö üpiubs öldcöiousd"))
+    print(diff_ratio("ad8pübusö üpiubs öldcöious", "v3rv3vqaev"))
+    print(diff_ratio("", "5"))
+    print(diff_ratio("By Callum Wells For Mailonline", "By EMILY CRAIG HEALTH REPORTER For Mailonline"))
+    print(diff_ratio("By Callum Wells For Mailonline", "By Callum Wells For Mailonline"))

@@ -84,7 +84,7 @@ class RssCrawlManager:
         # execute
         with Database() as db, Datalake() as dl, MessageBroker() as rb:
             di = DatabaseInterface(db, dl, rb)
-            HTMLCrawler.get_patterns(di)
+            HTMLCrawler.preload(di)
             add_initial_rss_crawl_jobs(di)
             #add_random_status_crawl_jobs(di)
             Manager.run(di)

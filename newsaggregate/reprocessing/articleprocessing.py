@@ -10,6 +10,7 @@ from db.crud.textpattern import Match, save_unnecessary_text_pattern
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
 from db.s3 import Datalake
+from reprocessing.diff import diff_ratio
 
 from rss.articleutils import locate_article
 from rss.util import Utils
@@ -65,12 +66,12 @@ class ArticleProcessing:
         components.reverse()
         return '/%s' % '/'.join(components)
     
-    def attrs_similar(x, y):
+    def attrs_similar(x: Tag, y: Tag):
         #logger.info(x,y )
         x = x.attrs
         y = y.attrs
         matches = {k: x[k] for k in x if k in y and x[k] == y[k]}
-        if len(matches.keys()) == len(x.keys()):
+        if len(x.keys()) > 0 and len(matches.keys()) == len(x.keys()):
             return True
         return False
     
@@ -90,8 +91,8 @@ class ArticleProcessing:
         parent2 = tag2
         parent1_text, parent2_text = parent1.get_text(), parent2.get_text()
         result_elements = tag1, tag2
-        while parent1 and parent2 and  parent1.parent and parent2.parent and difflib.SequenceMatcher(None, parent1_text, parent2_text).ratio() > 0.8:
-            # logger.info(f"Ratio: {difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio()}")
+        while parent1 and parent2 and  parent1.parent and parent2.parent and diff_ratio(parent1_text, parent2_text) > 0.8:
+            # logger.info(f"Ratio: {diff_ratio(parent1.get_text(), parent2.get_text())}")
             # logger.info(f"Parent1: {parent1.name}, {parent1.attrs}")
             # logger.info(f"Parent2: {parent2.name}, {parent2.attrs}")
 
@@ -111,7 +112,7 @@ class ArticleProcessing:
                     #logger.info("go parent1 up")
                     parent1 = parent1.parent
                     parent1_text = parent1.get_text()
-            # logger.info(difflib.SequenceMatcher(None, parent1.get_text(), parent2.get_text()).ratio())
+            # logger.info(diff_ratio(parent1.get_text(), parent2.get_text()))
             # logger.info(len(parent1.parent.get_text()) , len(parent1.get_text()) , len(parent2.parent.get_text()) , len(parent2.get_text()))
         return result_elements
     
@@ -146,7 +147,7 @@ class ArticleProcessing:
         return index_a, index_b
     
 
-    def compare_n_tags(db: DatabaseInterface, articles_list, match_min_occurence=2):
+    def compare_n_tags(db: DatabaseInterface, articles_list, match_min_occurence=4):
         matches = []
         html_a, html_b = None, None
         
@@ -180,7 +181,7 @@ class ArticleProcessing:
         
 
     def too_similar(txt1, txt2):
-        ratio = difflib.SequenceMatcher(None, txt1, txt2).ratio()
+        ratio = diff_ratio(txt1, txt2)
         if len(txt1) > 1500 or len(txt2) > 1500:
             return ratio > 0.75
         return ratio > 0.8
@@ -217,9 +218,7 @@ class ArticleProcessing:
         p_list1: List[Tag] = [p for p in soup1.findAll("p")]
         p_list2: List[Tag] = [p for p in soup2.findAll("p")]
         matches = []
-        # logger.info(difflib.SequenceMatcher(None, "".join([p.get_text() for p in p_list1]), "".join([p.get_text() for p in p_list2])).ratio())
-        # logger.info("".join([p.get_text() for p in p_list1]))
-        # logger.info("".join([p.get_text() for p in p_list2]))
+
         full_text1 = "".join([p.get_text() for p in p_list1])
         full_text2 = "".join([p.get_text() for p in p_list2])
 
@@ -228,41 +227,56 @@ class ArticleProcessing:
             return []
 
         # if too many entrys just random samples
-        max_iterations = 200
+        max_iterations = 400
         sampling_factor = False
         if len(p_list1) * len(p_list2) > max_iterations:
             sampling_factor = max_iterations / (len(p_list1) * len(p_list2))
 
         ignore_tag_list: List[Tag] = []
 
-        idx = 0
+        idix = 0
         
         for i, t1 in enumerate(p_list1):
             j = 0
             while j < len(p_list2):
                 t2 = p_list2[j]
+
                 
-                idx += 1
+                
+                idix += 1
                 if not allow_sampling or not sampling_factor or random() < sampling_factor:
                     start = time.time()
-                    if idx == 3:
-                        a = 2
+
+
                     # check here if this tag is part of already checked area of graph
-                    if any((ArticleProcessing.check_if_tag_is_child_of_tag(t1, e.parent) and ArticleProcessing.attrs_similar(t1, e)) for e in ignore_tag_list):
+                    def check_in_ignore_list(tag):
+                        for e in ignore_tag_list:
+                            if ArticleProcessing.check_if_tag_is_child_of_tag(tag, e) or (ArticleProcessing.check_if_tag_is_child_of_tag(tag, e.parent) and ArticleProcessing.attrs_similar(tag, e)):
+                                return True
+                        return False
+
+                    if check_in_ignore_list(t1):
                         # continue in outer look
+                        #print(time.time()-start, "break")
                         break
-                    elif any((ArticleProcessing.check_if_tag_is_child_of_tag(t2, e.parent) and ArticleProcessing.attrs_similar(t2, e)) for e in ignore_tag_list):
+                    elif check_in_ignore_list(t2):
                         # continue in inner look
                         del p_list2[j]
+                        #print(time.time()-start, "continue")
                         continue
-                    j += 1
+                    
 
                     t1_txt, t2_txt = t1.get_text(), t2.get_text()
-                    ratio = difflib.SequenceMatcher(None, t1_txt, t2_txt).ratio()
+                    ratio = diff_ratio(t1_txt, t2_txt)
+
+                    if "Zur optimalen Darstellung" in t1_txt and "Zur optimalen Darstellung" in t2_txt:
+                        a = 1
                     
                     if ratio < min_ratio or len(t1_txt) < min_len or len(t1_txt) < min_len:
                         # not similar enough to look at
                         ignore_tag_list.extend(ArticleProcessing.identify_unique_attributes(t1, t2))
+                        #print(time.time()-start, "not similar")
+                        j += 1
                         continue
                     useless_parent1, useless_parent2 = ArticleProcessing.identify_useless_parent(t1, t2)
 
@@ -272,8 +286,9 @@ class ArticleProcessing:
 
                         matches.append(ArticleProcessing.element_saveable(useless_parent_id_child1, identifyable1))
                         ignore_tag_list.append(useless_parent_id_child1) if identifyable1 else None     #only append this if it is identifyable
+                        #print(time.time()-start, "similar")
                     #logger.info(time.time()-start)
-               
+                j += 1
 
         return matches
 

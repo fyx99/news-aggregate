@@ -15,7 +15,7 @@ from test.custom_testcase import CustomTestcase
 
 class TestArticleProcessing2(CustomTestcase):
 
-    def test1():
+    def test1(self):
         return
 
 

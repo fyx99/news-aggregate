@@ -12,6 +12,7 @@ from db.crud.textpattern import get_unnecessary_text_pattern
 from db.databaseinstance import DatabaseInterface
 from db.postgresql import Database
 from db.crud.textpattern import Match
+from db.crud.articlelocators import get_article_locators, ArticleLocator
 from rss.articleutils import locate_article
 import time
 import urllib.request
@@ -24,19 +25,32 @@ logger = get_logger()
 
 from rss.util import Utils
 
+headers = {
+    "User-Agent": "Googlebot/2.1 (+http://www.google.com/bot.html)"
+}
+#{"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}
 
 class HTMLCrawler:
 
     patterns: Dict[str, List[Match]] = defaultdict(list)
+    article_locators: Dict[str, ArticleLocator] = {}
 
     def get_patterns(db):
         patterns_list = get_unnecessary_text_pattern(db)
         HTMLCrawler.patterns = defaultdict(list)
         [HTMLCrawler.patterns[pattern.url_pattern].append(pattern) for pattern in patterns_list]
 
+    def get_article_locators(db):
+        article_locators_list = get_article_locators(db)
+        HTMLCrawler.article_locators = {al.url_pattern: al for al in article_locators_list}
+
+    def preload(db):
+        HTMLCrawler.get_patterns(db)
+        HTMLCrawler.get_article_locators(db)
+
     def get_html(url):
         try:
-            res = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}, timeout=HTTP_TIMEOUT)
+            res = requests.get(url, headers=headers, timeout=HTTP_TIMEOUT)
             if res.status_code == 200:
                 return res.text, "ACTIVE"
             return res.text, "INACTIVE"
@@ -45,7 +59,7 @@ class HTMLCrawler:
 
     def get_url_status_code(url):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"})
+            req = urllib.request.Request(url, headers=headers)
             res = urllib.request.urlopen(req, timeout=HTTP_TIMEOUT).getcode()
             if res == 200:
                 return "ACTIVE"
@@ -126,8 +140,9 @@ class HTMLCrawler:
         return soup
         
 
-    def parse_article(soup, url):
-        article = locate_article(soup)
+    def parse_article(soup: BeautifulSoup, url: str):
+        
+        article = locate_article(soup, HTMLCrawler.article_locators.get(Utils.get_domain(url), None))
         article = HTMLCrawler.clean_unnecessary(article, url)
         if not article:
             raise Exception("No Article")
@@ -175,8 +190,8 @@ if __name__ == "__main__":
 
     with Database() as db:
         di = DatabaseInterface(db) 
-        HTMLCrawler.get_patterns(di)
+        HTMLCrawler.preload(di)
 
 
-    url = "https://www.dailymail.co.uk/femail/article-11102177/This-cooling-mask-help-skin-survive-heatwave-fight-blemishes.html"
+    url = "https://www.mdr.de/nachrichten/sachsen/leipzig/leipzig-leipzig-land/lastenraeder-mieten-ausleihe-modell-oeko-verkehrswende-100.html"
     HTMLCrawler.run_single(di, Article(url=url))
