@@ -35,15 +35,14 @@ def move_old_articles(db: DatabaseInterface):
     logger.info(f"BATCH OF {len(rows)} OLD ARTICLES MOVED")
 
 
-def main():
+def cleanup():
     with Database() as db, Datalake() as dl:
         di = DatabaseInterface(db, dl)
 
-        #delete_old_embeddings(di)
+        delete_old_embeddings(di)
         move_old_articles(di)
 
-    return
 
 
 if __name__ == "__main__":
-    main()
+    cleanup()

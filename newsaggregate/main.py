@@ -17,5 +17,8 @@ if __name__ == '__main__':
     elif task == "REPROCESS_TEXT":
         from reprocessing.articleprocessing import ArticleProcessingManager
         ArticleProcessingManager.main()
+    elif task == "CLEANUP":
+        from db.cleanup import cleanup
+        cleanup()
     else:
         logger.info("Not a valid task")

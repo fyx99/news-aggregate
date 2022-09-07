@@ -1,11 +1,4 @@
-FROM python:3.8-slim-buster AS base
-WORKDIR /app
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-
-
-
-
+# BASE 
 FROM python:3.8-slim-buster AS ml-base
 WORKDIR /app
 RUN pip3 install torch==1.9.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
@@ -19,6 +12,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
+# TEST
 
 FROM ml-base-requirements as test
 COPY . .
@@ -26,18 +20,22 @@ WORKDIR /app/newsaggregate
 CMD [ "python3", "-m", "unittest"]
 
 
-FROM ml-base-requirements as srv
+# DIFFERENT TAGS
+FROM ml-base-requirements as SRV
 COPY . .
 WORKDIR /app/newsaggregate
 CMD [ "python3", "-u", "-m", "recommend.main"]
-
-
-
 
 FROM ml-base-requirements as lit
 COPY . .
 WORKDIR /app/newsaggregate
 CMD [ "streamlit", "run", "test/lit2.py"]
+
+FROM ml-base-requirements as CLEANUP
+COPY . .
+WORKDIR /app/newsaggregate
+ENV TASK=CLEANUP
+CMD [ "python3", "-u", "-m", "main"]
 
 FROM ml-base-requirements as RSS
 COPY . .
@@ -51,7 +49,6 @@ COPY . .
 WORKDIR /app/newsaggregate
 ENV TASK=FEED
 CMD [ "python3", "-u", "-m", "main"]
-
 
 FROM ml-base-requirements as REPROCESS_TEXT
 COPY . .

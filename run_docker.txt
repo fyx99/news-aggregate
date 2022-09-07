@@ -1,7 +1,8 @@
-docker build --target RSS -t fxxy/news-aggregate-rss . ;                     docker push fxxy/news-aggregate-rss ;
-docker build --target FEED -t fxxy/news-aggregate-feed . ;                   docker push fxxy/news-aggregate-feed ;
-docker build --target REPROCESS_TEXT -t fxxy/news-aggregate-reprtxt . ;      docker push fxxy/news-aggregate-reprtxt ;
-docker build --target srv -t fxxy/news-aggregate-srv . ;                     docker push fxxy/news-aggregate-srv
+docker build --target RSS               -t fxxy/news-aggregate-rss .     ;                       docker push fxxy/news-aggregate-rss ;
+docker build --target FEED              -t fxxy/news-aggregate-feed .    ;                       docker push fxxy/news-aggregate-feed ;
+docker build --target REPROCESS_TEXT    -t fxxy/news-aggregate-reprtxt . ;                      docker push fxxy/news-aggregate-reprtxt ;
+docker build --target SRV               -t fxxy/news-aggregate-srv .     ;                       docker push fxxy/news-aggregate-srv;
+docker build --target CLEANUP           -t fxxy/news-aggregate-cleanup . ;                   docker push fxxy/news-aggregate-cleanup;
 
 
 # test
