@@ -79,7 +79,7 @@ class Manager:
             except Exception:
                 logger.info("UNEXPECTED EXCEPTION IN PROCESSING JOB")
             Manager.q.task_done()
-            
+```            
 3. Preprocessing Jobs
 You can add jobs for RSS crawling and HTML crawling manually by running:
 
