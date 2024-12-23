@@ -46,7 +46,7 @@ Start RabbitMQ container:
 ```bash
 docker run -d --restart=always --hostname rabbit --name rabbitmq -e RABBITMQ_DEFAULT_USER=dog -e RABBITMQ_DEFAULT_PASS="20849hfibfcn82..SADFC" -p 5672:5672 -p 15672:15672 rabbitmq:3.10.0-rc.4-management
 ```
-2. Running the Manager
+## 2. Running the Manager
 The Manager class controls the job queue and handles the job processing. The jobs are processed by multiple threads that can be run as shown below:
 
 ```python
@@ -92,16 +92,15 @@ def add_random_status_crawl_jobs(db: DatabaseInterface):
     article_feeds = get_random_articles(db)
     [Manager.add_job({"job_type": "HTML_CRAWL", "article": article, "feed": feed}) for article, feed in article_feeds]
 ```
-Dependencies
+## Dependencies
 Core Dependencies
-BeautifulSoup: For parsing HTML content.
-requests: For making HTTP requests.
-psycopg2: PostgreSQL database adapter.
-S3: For storing archives and models.
-RabbitMQ: For job queuing.
-threading: For managing concurrent job processing.
-ML & NLP Dependencies
-Sentence-Transformers: For feature extraction using pre-trained BERT models.
+**BeautifulSoup:** For parsing HTML content.
+**requests:** For making HTTP requests.
+**psycopg2:** PostgreSQL database adapter.
+**S3:** For storing archives and models.
+**RabbitMQ:** For job queuing.
+**threading:** For managing concurrent job processing.
+**Sentence-Transformers:** For feature extraction using pre-trained BERT models [bert-base-nli-stsb-mean-tokens](https://huggingface.co/sentence-transformers/bert-base-nli-stsb-mean-tokens).
 
 Example:
 
@@ -109,12 +108,5 @@ Example:
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('bert-base-nli-stsb-mean-tokens')
 ```
-torch: For running the BERT-based models in Sentence-Transformers.
+**torch:** For running the BERT-based models in Sentence-Transformers.
 
-Installation
-To install the necessary dependencies, create a virtual environment and install the Python packages:
-
-```bash
-pip install -r requirements.txt
-Or, if using Docker, the dependencies are included in the Dockerfile.
-```
